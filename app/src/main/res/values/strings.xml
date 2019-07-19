@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">WiseBuild</string>
+    <string name="add_part">Добавить комплектующее</string>
 </resources>
