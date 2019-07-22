@@ -1,4 +1,4 @@
-package ru.abbysoft.wisebuild.ru.abbysoft.wisebuild.model;
+package ru.abbysoft.wisebuild.model;
 
 import android.media.Image;
 

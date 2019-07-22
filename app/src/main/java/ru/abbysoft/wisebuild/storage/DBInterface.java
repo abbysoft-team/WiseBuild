@@ -1,4 +1,4 @@
-package ru.abbysoft.wisebuild.ru.abbysoft.wisebuild.storage;
+package ru.abbysoft.wisebuild.storage;
 
 import java.util.ArrayList;
 
