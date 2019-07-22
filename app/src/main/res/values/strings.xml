@@ -12,4 +12,5 @@
     <string name="price">Price</string>
     <string name="add_photo">Add photo</string>
     <string name="save">Save</string>
+    <string name="creating_part_message">Creating new</string>
 </resources>

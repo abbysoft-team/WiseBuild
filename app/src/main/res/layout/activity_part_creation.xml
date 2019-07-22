@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/new_component_image"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginTop="20dp"
@@ -104,11 +104,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
+        android:onClick="addImage"
         android:text="@string/add_photo"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintEnd_toEndOf="@+id/new_component_image"
+        app:layout_constraintStart_toStartOf="@+id/new_component_image"
+        app:layout_constraintTop_toBottomOf="@+id/new_component_image" />
 
     <Button
         android:id="@+id/save_component_button"
