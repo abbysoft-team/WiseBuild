@@ -7,4 +7,9 @@
     <string name="memory">Memory</string>
     <string name="add_part_category_choose_tooltip">What kind of part do you want to add?</string>
     <string name="part_creation_activity">Part parameters</string>
+    <string name="part_name">Part name</string>
+    <string name="description">Description</string>
+    <string name="price">Price</string>
+    <string name="add_photo">Add photo</string>
+    <string name="save">Save</string>
 </resources>
