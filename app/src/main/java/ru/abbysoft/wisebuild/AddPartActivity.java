@@ -2,6 +2,7 @@ package ru.abbysoft.wisebuild;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -47,5 +48,9 @@ public class AddPartActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PartCreationActivity.class);
         intent.putExtra(PartCreationActivity.PART_TYPE_EXTRA, partType);
         startActivity(intent);
+    }
+
+    public static void createIntentFrom(Context context) {
+        context.startActivity(new Intent(context, AddPartActivity.class));
     }
 }
