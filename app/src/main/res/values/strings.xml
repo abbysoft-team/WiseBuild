@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">WiseBuild</string>
     <string name="add_part">Добавить комплектующее</string>
+    <string name="add_part_activity_label">Add part</string>
+    <string name="motherboard">Motherboard</string>
+    <string name="cpu">CPU</string>
+    <string name="memory">Memory</string>
+    <string name="add_part_category_choose_tooltip">What kind of part do you want to add?</string>
+    <string name="part_creation_activity">Part parameters</string>
 </resources>

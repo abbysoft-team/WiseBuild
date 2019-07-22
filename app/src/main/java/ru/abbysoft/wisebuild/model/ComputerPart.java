@@ -45,8 +45,19 @@ public abstract class ComputerPart {
     }
 
     public enum ComputerPartType {
-        CPU,
-        MEMORY_MODULE,
-        MOTHERBOARD,
+        CPU("CPU"),
+        MEMORY_MODULE("Memory module"),
+        MOTHERBOARD("Motherboard"),
+        ;
+
+        private final String readableName;
+
+        ComputerPartType(String name) {
+            this.readableName = name;
+        }
+
+        public String getReadableName() {
+            return readableName;
+        }
     }
 }

@@ -2,7 +2,7 @@ package ru.abbysoft.wisebuild.storage;
 
 import java.util.ArrayList;
 
-import ru.abbysoft.wisebuild.ru.abbysoft.wisebuild.model.ComputerPart;
+import ru.abbysoft.wisebuild.model.ComputerPart;
 
 /**
  * Interface for DB realisation
