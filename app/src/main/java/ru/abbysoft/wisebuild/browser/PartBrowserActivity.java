@@ -1,14 +1,18 @@
-package ru.abbysoft.wisebuild;
+package ru.abbysoft.wisebuild.browser;
 
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
+
+import ru.abbysoft.wisebuild.AddPartActivity;
+import ru.abbysoft.wisebuild.R;
 
 public class PartBrowserActivity extends AppCompatActivity {
 
@@ -28,6 +32,16 @@ public class PartBrowserActivity extends AppCompatActivity {
         });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void setUpRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+//        RecyclerView.Adapter adapter = new PartBrowserAdapter();
     }
 
     public void addPartButtonClicked(View view) {
