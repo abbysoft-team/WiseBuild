@@ -17,13 +17,13 @@ public class MemoryModule extends ComputerPart {
      * @param capacityMb capacity in MB
      */
     public MemoryModule(String name, MemoryType type, int capacityMb) {
-        super(name);
+        super(name, ComputerPartType.MEMORY_MODULE);
 
         this.type = type;
         this.capacityMb = capacityMb;
     }
 
-    public MemoryType getType() {
+    public MemoryType getMemoryType() {
         return type;
     }
 

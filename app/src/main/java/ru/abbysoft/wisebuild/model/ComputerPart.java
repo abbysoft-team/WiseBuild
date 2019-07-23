@@ -1,7 +1,6 @@
 package ru.abbysoft.wisebuild.model;
 
 import android.graphics.Bitmap;
-import android.media.Image;
 
 /**
  * Abstract computer part component
@@ -12,9 +11,11 @@ public abstract class ComputerPart {
     private volatile String description;
     private volatile Bitmap photo;
     private volatile long priceUsd;
+    private final ComputerPartType type;
 
-    protected ComputerPart(String name) {
+    protected ComputerPart(String name, ComputerPartType type) {
         this.name = name;
+        this.type = type;
     }
 
     public String getName() {
@@ -43,6 +44,10 @@ public abstract class ComputerPart {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public ComputerPartType getType() {
+        return type;
     }
 
     public enum ComputerPartType {

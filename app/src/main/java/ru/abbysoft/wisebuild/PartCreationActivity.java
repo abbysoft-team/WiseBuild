@@ -1,7 +1,9 @@
 package ru.abbysoft.wisebuild;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,6 +34,8 @@ import ru.abbysoft.wisebuild.model.CPU;
 import ru.abbysoft.wisebuild.model.ComputerPart;
 import ru.abbysoft.wisebuild.model.MemoryModule;
 import ru.abbysoft.wisebuild.model.Motherboard;
+import ru.abbysoft.wisebuild.storage.DBFactory;
+import ru.abbysoft.wisebuild.storage.DBInterface;
 
 /**
  * Specify parameters for new component
@@ -211,6 +215,8 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
         }
 
         // actuall saving
+        DBFactory.getDatabase().storePart(part);
+        showSaveSuccessMessage();
     }
 
     private ComputerPart getCPUPart(String name) {
@@ -303,5 +309,20 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private void showSaveSuccessMessage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Part created successfully");
+        builder.setTitle("Done");
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

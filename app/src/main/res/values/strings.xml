@@ -18,4 +18,5 @@
     <string name="type">Type</string>
     <string name="socket">Socket</string>
     <string name="fields_invalid">One or more fields invalid</string>
+    <string name="ok">Ok</string>
 </resources>

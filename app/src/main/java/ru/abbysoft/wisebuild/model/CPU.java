@@ -10,7 +10,7 @@ public class CPU extends ComputerPart {
     private final int cores;
 
     public CPU(String name, String manufacturer, int cores) {
-        super(name);
+        super(name, ComputerPartType.CPU);
 
         this.manufacturer = manufacturer;
         this.cores = cores;
