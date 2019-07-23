@@ -9,6 +9,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".PartCreationActivity"
+            android:label="@string/part_creation_activity"
+            android:parentActivityName=".AddPartActivity">
+            <meta-data
+                android:name="android.suppport.PARENT_ACTIVITY"
+                android:value="ru.abbysoft.wisebuild.AddPartActivity" />
+        </activity>
+        <activity
+            android:name=".AddPartActivity"
+            android:label="@string/add_part_activity_label"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.suppport.PARENT_ACTIVITY"
+                android:value="ru.abbysoft.wisebuild.MainActivity" />
+        </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

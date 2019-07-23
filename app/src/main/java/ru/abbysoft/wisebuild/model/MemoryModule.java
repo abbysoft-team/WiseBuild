@@ -1,4 +1,4 @@
-package ru.abbysoft.wisebuild.ru.abbysoft.wisebuild.model;
+package ru.abbysoft.wisebuild.model;
 
 /**
  * MemoryModule part
@@ -16,14 +16,14 @@ public class MemoryModule extends ComputerPart {
      * @param type type of memory
      * @param capacityMb capacity in MB
      */
-    MemoryModule(String name, MemoryType type, int capacityMb) {
-        super(name);
+    public MemoryModule(String name, MemoryType type, int capacityMb) {
+        super(name, ComputerPartType.MEMORY_MODULE);
 
         this.type = type;
         this.capacityMb = capacityMb;
     }
 
-    public MemoryType getType() {
+    public MemoryType getMemoryType() {
         return type;
     }
 

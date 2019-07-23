@@ -1,4 +1,4 @@
-package ru.abbysoft.wisebuild.ru.abbysoft.wisebuild.model;
+package ru.abbysoft.wisebuild.model;
 
 /**
  * Motherboard part
@@ -7,8 +7,8 @@ public class Motherboard extends ComputerPart {
 
     private final SocketType socketType;
 
-    Motherboard(String name, SocketType socketType) {
-        super(name);
+    public Motherboard(String name, SocketType socketType) {
+        super(name, ComputerPartType.MOTHERBOARD);
 
         this.socketType = socketType;
     }

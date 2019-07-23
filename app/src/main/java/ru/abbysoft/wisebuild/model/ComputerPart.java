@@ -1,6 +1,6 @@
-package ru.abbysoft.wisebuild.ru.abbysoft.wisebuild.model;
+package ru.abbysoft.wisebuild.model;
 
-import android.media.Image;
+import android.graphics.Bitmap;
 
 /**
  * Abstract computer part component
@@ -9,11 +9,13 @@ public abstract class ComputerPart {
 
     private final String name;
     private volatile String description;
-    private volatile Image photo;
+    private volatile Bitmap photo;
     private volatile long priceUsd;
+    private final ComputerPartType type;
 
-    protected ComputerPart(String name) {
+    protected ComputerPart(String name, ComputerPartType type) {
         this.name = name;
+        this.type = type;
     }
 
     public String getName() {
@@ -24,11 +26,11 @@ public abstract class ComputerPart {
         return description;
     }
 
-    public Image getPhoto() {
+    public Bitmap getPhoto() {
         return photo;
     }
 
-    public void setPhoto(Image photo) {
+    public void setPhoto(Bitmap photo) {
         this.photo = photo;
     }
 
@@ -44,9 +46,24 @@ public abstract class ComputerPart {
         this.description = description;
     }
 
+    public ComputerPartType getType() {
+        return type;
+    }
+
     public enum ComputerPartType {
-        CPU,
-        MEMORY_MODULE,
-        MOTHERBOARD,
+        CPU("CPU"),
+        MEMORY_MODULE("Memory module"),
+        MOTHERBOARD("Motherboard"),
+        ;
+
+        private final String readableName;
+
+        ComputerPartType(String name) {
+            this.readableName = name;
+        }
+
+        public String getReadableName() {
+            return readableName;
+        }
     }
 }
