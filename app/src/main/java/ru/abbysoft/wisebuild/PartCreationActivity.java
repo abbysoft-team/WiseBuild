@@ -11,20 +11,24 @@ import android.os.ParcelFileDescriptor;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
+import ru.abbysoft.wisebuild.model.CPU;
 import ru.abbysoft.wisebuild.model.ComputerPart;
 import ru.abbysoft.wisebuild.model.MemoryModule;
 import ru.abbysoft.wisebuild.model.Motherboard;
@@ -34,7 +38,7 @@ import ru.abbysoft.wisebuild.model.Motherboard;
  *
  * @author apopov
  */
-public class PartCreationActivity extends AppCompatActivity {
+public class PartCreationActivity extends AppCompatActivity implements Validator.ValidationListener {
 
     public static final String PART_TYPE_EXTRA = "PART_TYPE";
     private static final int NEW_IMAGE_PICKED = 1;
@@ -42,12 +46,27 @@ public class PartCreationActivity extends AppCompatActivity {
 
     private volatile ComputerPart.ComputerPartType partType;
     private ImageView imageView;
+
     private TextView additionalParamLabel1;
     private TextView additionalParamLabel2;
     private TextView additionalParamSpinnerLabel;
+
+    @NotEmpty
     private EditText additionalParamField1;
+
+    @NotEmpty
     private EditText additionalParamField2;
+
     private Spinner additionalParamSpinner;
+
+    @NotEmpty
+    private EditText nameField;
+
+    private EditText descriptionField;
+    private EditText priceField;
+
+    private Bitmap currentImage;
+    private Validator validator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +74,9 @@ public class PartCreationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_part_creation);
 
         imageView = findViewById(R.id.new_component_image);
+        nameField = findViewById(R.id.part_name_field);
+        descriptionField = findViewById(R.id.part_description_field);
+        priceField = findViewById(R.id.part_price_field);
         additionalParamLabel1 = findViewById(R.id.additional_parameter_1_label);
         additionalParamLabel2 = findViewById(R.id.additional_parameter_2_label);
         additionalParamField1 = findViewById(R.id.additional_parameter_1_field);
@@ -64,6 +86,7 @@ public class PartCreationActivity extends AppCompatActivity {
 
         getPassedExtras();
         addAdditionalFields();
+        addValidators();
     }
 
     private void getPassedExtras() {
@@ -143,6 +166,10 @@ public class PartCreationActivity extends AppCompatActivity {
         additionalParamSpinner.setAdapter(adapter);
     }
 
+    private void addValidators() {
+        validator = new Validator(this);
+        validator.setValidationListener(this);
+    }
 
     /**
      * Save component with current parameters
@@ -150,7 +177,62 @@ public class PartCreationActivity extends AppCompatActivity {
      * @param view button
      */
     public void savePart(View view) {
+        validator.validate();
 
+
+        String name = nameField.getText().toString().trim();
+        String description = descriptionField.getText().toString().trim();
+        Integer price = null;
+        if (!priceField.getText().toString().trim().isEmpty()) {
+            price = Integer.parseInt(priceField.getText().toString());
+        }
+
+        ComputerPart part = null;
+        switch (partType) {
+            case CPU:
+                part = getCPUPart(name);
+                break;
+            case MOTHERBOARD:
+                part = getMotherboardPart(name);
+                break;
+            case MEMORY_MODULE:
+                part = getMemoryPart(name);
+                break;
+
+                default:
+                    break;
+        }
+
+        part.setDescription(description);
+        part.setPhoto(currentImage);
+
+        if (price != null) {
+            part.setPriceUsd(price);
+        }
+
+        // actuall saving
+    }
+
+    private ComputerPart getCPUPart(String name) {
+        String manufacturer = additionalParamField1.getText().toString();
+        int cores = Integer.parseInt(additionalParamField2.getText().toString());
+
+        return new CPU(name, manufacturer, cores);
+    }
+
+    private ComputerPart getMotherboardPart(String name) {
+        Motherboard.SocketType socket =
+                (Motherboard.SocketType) additionalParamSpinner.getSelectedItem();
+
+        return new Motherboard(name, socket);
+    }
+
+    private ComputerPart getMemoryPart(String name) {
+        int capacity = Integer.parseInt(additionalParamField1.getText().toString());
+        MemoryModule.MemoryType type =
+                (MemoryModule.MemoryType) additionalParamSpinner.getSelectedItem();
+
+        return new MemoryModule(name, type, capacity);
     }
 
     /**
@@ -172,6 +254,8 @@ public class PartCreationActivity extends AppCompatActivity {
                 return;
             }
             imageView.setImageBitmap(picture);
+
+            currentImage = picture;
         }
     }
 
@@ -200,6 +284,24 @@ public class PartCreationActivity extends AppCompatActivity {
             Log.e(LOG_TAG, "Cannot load image");
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @Override
+    public void onValidationSucceeded() {
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
+
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+            } else {
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            }
         }
     }
 }

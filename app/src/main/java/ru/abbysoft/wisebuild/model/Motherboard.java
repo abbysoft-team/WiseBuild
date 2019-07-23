@@ -7,7 +7,7 @@ public class Motherboard extends ComputerPart {
 
     private final SocketType socketType;
 
-    Motherboard(String name, SocketType socketType) {
+    public Motherboard(String name, SocketType socketType) {
         super(name);
 
         this.socketType = socketType;

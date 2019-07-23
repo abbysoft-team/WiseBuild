@@ -1,5 +1,6 @@
 package ru.abbysoft.wisebuild.model;
 
+import android.graphics.Bitmap;
 import android.media.Image;
 
 /**
@@ -9,7 +10,7 @@ public abstract class ComputerPart {
 
     private final String name;
     private volatile String description;
-    private volatile Image photo;
+    private volatile Bitmap photo;
     private volatile long priceUsd;
 
     protected ComputerPart(String name) {
@@ -24,11 +25,11 @@ public abstract class ComputerPart {
         return description;
     }
 
-    public Image getPhoto() {
+    public Bitmap getPhoto() {
         return photo;
     }
 
-    public void setPhoto(Image photo) {
+    public void setPhoto(Bitmap photo) {
         this.photo = photo;
     }
 

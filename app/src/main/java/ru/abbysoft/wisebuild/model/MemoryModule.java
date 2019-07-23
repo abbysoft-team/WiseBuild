@@ -16,7 +16,7 @@ public class MemoryModule extends ComputerPart {
      * @param type type of memory
      * @param capacityMb capacity in MB
      */
-    MemoryModule(String name, MemoryType type, int capacityMb) {
+    public MemoryModule(String name, MemoryType type, int capacityMb) {
         super(name);
 
         this.type = type;
