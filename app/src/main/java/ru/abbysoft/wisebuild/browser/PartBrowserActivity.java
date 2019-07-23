@@ -13,6 +13,7 @@ import android.view.View;
 
 import ru.abbysoft.wisebuild.AddPartActivity;
 import ru.abbysoft.wisebuild.R;
+import ru.abbysoft.wisebuild.storage.DBFactory;
 
 public class PartBrowserActivity extends AppCompatActivity {
 
@@ -32,16 +33,18 @@ public class PartBrowserActivity extends AppCompatActivity {
         });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setUpRecyclerView();
     }
 
     private void setUpRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.partRecyclerView);
         recyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-//        RecyclerView.Adapter adapter = new PartBrowserAdapter();
+        RecyclerView.Adapter adapter = new PartBrowserAdapter(DBFactory.getDatabase(), this);
+        recyclerView.setAdapter(adapter);
     }
 
     public void addPartButtonClicked(View view) {

@@ -22,4 +22,6 @@
     <string name="title_activity_part_list">Part browser</string>
     <string name="browse_parts">Browse parts</string>
     <string name="action_settings">Settings</string>
+    <string name="part_photo">Part photo</string>
+    <string name="unknown">Unknown</string>
 </resources>

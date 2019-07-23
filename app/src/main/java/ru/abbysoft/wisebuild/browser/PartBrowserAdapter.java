@@ -1,12 +1,16 @@
 package ru.abbysoft.wisebuild.browser;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +27,7 @@ import ru.abbysoft.wisebuild.storage.DBInterface;
 class PartBrowserAdapter extends RecyclerView.Adapter<PartBrowserAdapter.ViewHolder> {
     private DBInterface db;
     private List<ComputerPart> parts;
+    private Context context;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         View view;
@@ -40,8 +45,9 @@ class PartBrowserAdapter extends RecyclerView.Adapter<PartBrowserAdapter.ViewHol
         }
     }
 
-    PartBrowserAdapter(DBInterface database) {
+    PartBrowserAdapter(DBInterface database, Context context) {
         db = database;
+        this.context = context;
         parts = database.getAllComponents();
     }
 
@@ -59,7 +65,45 @@ class PartBrowserAdapter extends RecyclerView.Adapter<PartBrowserAdapter.ViewHol
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ComputerPart part = parts.get(position);
         holder.name.setText(part.getName());
-        holder.price.setText(Integer.toString((int) part.getPriceUsd()));
+
+        String unknownString = this.context.getString(R.string.unknown);
+        String priceText = part.getPriceUsd() != 0 ?
+                Integer.toString((int) part.getPriceUsd()) : unknownString;
+
+        holder.price.setText(priceText);
+
+        if (part.getPhoto() != null) {
+            holder.photo.setImageBitmap(part.getPhoto());
+        } else {
+            holder.photo.setImageResource(getDrawableResourceForPartType(part.getType()));
+        }
+
+        holder.view.setOnClickListener((View view) -> {
+            onPartClicked(position);
+        });
+    }
+
+    private void onPartClicked(int position) {
+        ComputerPart part = parts.get(position);
+
+        Toast toast = Toast.makeText(
+                context,
+                "Part " + position + " clicked! Part info not implemented yet.",
+                Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    private int getDrawableResourceForPartType(ComputerPart.ComputerPartType type) {
+        switch (type) {
+            case CPU:
+                return R.drawable.default_cpu_image;
+            case MEMORY_MODULE:
+                return R.drawable.default_ram_image;
+            case MOTHERBOARD:
+                return R.drawable.default_motherboard_image;
+        }
+
+        return R.drawable.default_cpu_image;
     }
 
     @Override
