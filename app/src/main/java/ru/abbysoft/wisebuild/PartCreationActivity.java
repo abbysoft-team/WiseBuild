@@ -315,12 +315,7 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Part created successfully");
         builder.setTitle("Done");
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        });
+        builder.setPositiveButton(R.string.ok, ((dialogInterface, i) -> finish()));
 
         AlertDialog dialog = builder.create();
         dialog.show();
