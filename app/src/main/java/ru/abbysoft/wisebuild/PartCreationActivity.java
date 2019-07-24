@@ -345,7 +345,7 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
         }
         double rate = bigImage.getWidth() * 1.0 / bigImage.getHeight();
         return Bitmap.createScaledBitmap(
-                bigImage, MAX_IMAGE_SIZE, ((int) rate * MAX_IMAGE_SIZE), false);
+                bigImage, MAX_IMAGE_SIZE, ((int) (rate * MAX_IMAGE_SIZE)), false);
     }
 
     @Override
