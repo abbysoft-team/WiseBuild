@@ -10,7 +10,9 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewManager;
@@ -88,9 +90,39 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
         additionalParamSpinnerLabel = findViewById(R.id.additional_param_spinner_label);
         additionalParamSpinner = findViewById(R.id.additional_param_spinner);
 
+        configurePriceField();
+
         getPassedExtras();
         addAdditionalFields();
         addValidators();
+    }
+
+    private void configurePriceField() {
+        priceField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String text = priceField.getText().toString();
+
+                if (text.isEmpty()) {
+                    return;
+                }
+                if (text.startsWith("$")) {
+                    return;
+                }
+                if (text.contains("$")) {
+                    text = text.replace("$", "");
+                }
+
+                text = "$" + text;
+                priceField.setText(text);
+                priceField.setSelection(text.length());
+            }
+        });
     }
 
     private void getPassedExtras() {
