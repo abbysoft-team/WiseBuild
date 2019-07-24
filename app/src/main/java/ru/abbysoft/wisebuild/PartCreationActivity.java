@@ -101,7 +101,8 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
         TextView headerMessage = findViewById(R.id.part_creation_label);
 
         // TODO placeholders?
-        headerMessage.setText(getString(R.string.creating_part_message) + partType.getReadableName());
+        headerMessage.setText(
+                getString(R.string.creating_part_message, partType.getReadableName()));
     }
 
     private void addAdditionalFields() {

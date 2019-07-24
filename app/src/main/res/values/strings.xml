@@ -12,7 +12,7 @@
     <string name="price">Price</string>
     <string name="add_photo">Add photo</string>
     <string name="save">Save</string>
-    <string name="creating_part_message">New </string>
+    <string name="creating_part_message">New %s</string>
     <string name="manufacturer">Manufacturer</string>
     <string name="num_of_cores">Num of cores</string>
     <string name="type">Type</string>
