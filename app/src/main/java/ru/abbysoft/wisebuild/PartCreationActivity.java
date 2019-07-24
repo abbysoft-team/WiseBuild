@@ -27,7 +27,6 @@ import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -76,6 +75,7 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
     private Bitmap currentImage;
     private Uri currentImageUri;
     private Validator validator;
+    private boolean validationResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +163,10 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
         ((ViewManager)additionalParamSpinner.getParent())
                 .removeView(additionalParamSpinner);
 
+
+//        validator.put(additionalParamField1, new NotEmptyQuickRule());
+//        validator.put(additionalParamField2, new NotEmptyQuickRule());
+
         additionalParamLabel1.setText(getString(R.string.manufacturer));
         additionalParamLabel2.setText(getString(R.string.num_of_cores));
 
@@ -172,6 +176,8 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
     private void addFieldsForMemory() {
         ((ViewManager)additionalParamField2.getParent()).removeView(additionalParamField2);
         ((ViewManager)additionalParamLabel2.getParent()).removeView(additionalParamLabel2);
+
+//        validator.put(additionalParamField1, new NotEmptyQuickRule());
 
         additionalParamLabel1.setText(getString(R.string.num_of_cores));
         additionalParamField1.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -218,7 +224,9 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
      */
     public void savePart(View view) {
         validator.validate();
-
+        if (!validationResult) {
+            return;
+        }
 
         String name = nameField.getText().toString().trim();
         String description = descriptionField.getText().toString().trim();
@@ -350,6 +358,7 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
 
     @Override
     public void onValidationSucceeded() {
+        validationResult = true;
     }
 
     @Override
@@ -364,6 +373,8 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
         }
+
+        validationResult = false;
     }
 
     private void showSaveSuccessMessage() {
@@ -403,12 +414,5 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
         }
 
         loadImage(imageUri);
-    }
-
-
-    private void saveCurrentImage(Bundle outState) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        currentImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        outState.putByteArray(IMAGE_URL_BUNDLED, stream.toByteArray());
     }
 }
