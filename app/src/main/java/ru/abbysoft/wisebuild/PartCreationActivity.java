@@ -119,7 +119,7 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
                 }
 
                 text = "$" + text;
-                priceField.setText(text);
+                priceField.setText(text.trim());
                 priceField.setSelection(text.length());
             }
         });
