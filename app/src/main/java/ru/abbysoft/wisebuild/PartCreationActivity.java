@@ -1,5 +1,6 @@
 package ru.abbysoft.wisebuild;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,6 +27,7 @@ import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -48,6 +50,7 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
     private static final int NEW_IMAGE_PICKED = 1;
     private static final String LOG_TAG = "PART_CREATION_ACTIVITY";
     private static final int MAX_IMAGE_SIZE = 1000;
+    private static final String IMAGE_URL_BUNDLED = "Bundled image";
 
     private volatile ComputerPart.ComputerPartType partType;
     private ImageView imageView;
@@ -71,6 +74,7 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
     private EditText priceField;
 
     private Bitmap currentImage;
+    private Uri currentImageUri;
     private Validator validator;
 
     @Override
@@ -287,15 +291,21 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == NEW_IMAGE_PICKED) {
-            Bitmap picture = getPicture(data.getData());
-            if (picture == null) {
-                return;
-            }
-            picture = resizeBitmap(picture);
-            imageView.setImageBitmap(picture);
 
-            currentImage = picture;
+            loadImage(data.getData());
         }
+    }
+
+    private void loadImage(Uri imageUri) {
+        Bitmap picture = getPicture(imageUri);
+        if (picture == null) {
+            return;
+        }
+        picture = resizeBitmap(picture);
+        imageView.setImageBitmap(picture);
+
+        currentImage = picture;
+        currentImageUri = imageUri;
     }
 
     private Bitmap getPicture(Uri selectedImage) {
@@ -364,5 +374,41 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (currentImageUri != null) {
+            outState.putParcelable(IMAGE_URL_BUNDLED, currentImageUri);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        setBundledImage(savedInstanceState);
+    }
+
+    private void setBundledImage(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            return;
+        }
+
+        Uri imageUri = savedInstanceState.getParcelable(IMAGE_URL_BUNDLED);
+        if (imageUri == null) {
+            return;
+        }
+
+        loadImage(imageUri);
+    }
+
+
+    private void saveCurrentImage(Bundle outState) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        currentImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        outState.putByteArray(IMAGE_URL_BUNDLED, stream.toByteArray());
     }
 }
