@@ -3,7 +3,6 @@ package ru.abbysoft.wisebuild;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,7 +36,6 @@ import ru.abbysoft.wisebuild.model.ComputerPart;
 import ru.abbysoft.wisebuild.model.MemoryModule;
 import ru.abbysoft.wisebuild.model.Motherboard;
 import ru.abbysoft.wisebuild.storage.DBFactory;
-import ru.abbysoft.wisebuild.storage.DBInterface;
 
 /**
  * Specify parameters for new component
@@ -49,6 +47,7 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
     public static final String PART_TYPE_EXTRA = "PART_TYPE";
     private static final int NEW_IMAGE_PICKED = 1;
     private static final String LOG_TAG = "PART_CREATION_ACTIVITY";
+    private static final int MAX_IMAGE_SIZE = 1000;
 
     private volatile ComputerPart.ComputerPartType partType;
     private ImageView imageView;
@@ -292,6 +291,7 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
             if (picture == null) {
                 return;
             }
+            picture = resizeBitmap(picture);
             imageView.setImageBitmap(picture);
 
             currentImage = picture;
@@ -324,6 +324,18 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
             e.printStackTrace();
             return null;
         }
+    }
+
+    private Bitmap resizeBitmap(Bitmap bigImage) {
+        if (bigImage.getHeight() <= MAX_IMAGE_SIZE) {
+            return bigImage;
+        }
+        if (bigImage.getWidth() <= MAX_IMAGE_SIZE) {
+            return bigImage;
+        }
+        double rate = bigImage.getWidth() * 1.0 / bigImage.getHeight();
+        return Bitmap.createScaledBitmap(
+                bigImage, MAX_IMAGE_SIZE, ((int) rate * MAX_IMAGE_SIZE), false);
     }
 
     @Override
