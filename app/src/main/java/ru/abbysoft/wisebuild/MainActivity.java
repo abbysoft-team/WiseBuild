@@ -53,4 +53,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PartBrowserActivity.class);
         startActivity(intent);
     }
+
+    public void createAssemblyButtonClicked(View view) {
+        CreateAssemblyActivity.launchActivityFrom(this);
+    }
 }

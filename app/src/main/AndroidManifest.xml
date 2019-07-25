@@ -9,6 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".CreateAssemblyActivity"
+            android:label="@string/create_assembly_label"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ru.abbysoft.wisebuild.MainActivity" />
+        </activity>
         <activity
             android:name=".browser.PartBrowserActivity"
             android:label="@string/title_activity_part_list"

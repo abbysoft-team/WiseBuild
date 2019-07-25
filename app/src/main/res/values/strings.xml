@@ -25,4 +25,6 @@
     <string name="part_photo">Part photo</string>
     <string name="unknown">Unknown</string>
     <string name="component_creation">Create new component</string>
+    <string name="create_assembly">create assembly</string>
+    <string name="create_assembly_label">Choose parts</string>
 </resources>
