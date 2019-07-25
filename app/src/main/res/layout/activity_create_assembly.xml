@@ -8,9 +8,243 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/create_assembly_back_description"
         app:srcCompat="@drawable/add_assembly"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:layout_editor_absoluteY="16dp" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="72dp"
+        android:layout_height="71dp"
+        android:background="@drawable/border"
+        app:layout_constraintBottom_toBottomOf="@+id/assembly_add_cpu_button"
+        app:layout_constraintEnd_toEndOf="@+id/assembly_add_cpu_button"
+        app:layout_constraintStart_toStartOf="@+id/assembly_add_cpu_button"
+        app:layout_constraintTop_toTopOf="@+id/assembly_add_cpu_button" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="72dp"
+        android:layout_height="71dp"
+        android:background="@drawable/border"
+        app:layout_constraintBottom_toBottomOf="@+id/assembly_add_memory_button"
+        app:layout_constraintEnd_toEndOf="@+id/assembly_add_memory_button"
+        app:layout_constraintStart_toStartOf="@+id/assembly_add_memory_button"
+        app:layout_constraintTop_toTopOf="@+id/assembly_add_memory_button" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="71dp"
+        android:layout_height="71dp"
+        android:background="@drawable/border"
+        app:layout_constraintBottom_toBottomOf="@+id/assembly_add_motherboard_button"
+        app:layout_constraintEnd_toEndOf="@+id/assembly_add_motherboard_button"
+        app:layout_constraintStart_toStartOf="@+id/assembly_add_motherboard_button"
+        app:layout_constraintTop_toTopOf="@+id/assembly_add_motherboard_button" />
+
+    <ImageButton
+        android:id="@+id/assembly_add_cpu_button"
+        android:layout_width="71dp"
+        android:layout_height="71dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="204dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@android:drawable/ic_input_add"
+        android:text="@string/cpu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.123"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/assembly_add_memory_button"
+        android:layout_width="71dp"
+        android:layout_height="71dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="180dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@android:drawable/ic_input_add"
+        android:text="@string/cpu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.691"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+    <ImageButton
+        android:id="@+id/assembly_add_motherboard_button"
+        android:layout_width="71dp"
+        android:layout_height="71dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="220dp"
+        android:background="@android:drawable/ic_input_add"
+        android:text="@string/cpu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.024"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="71dp"
+        android:layout_height="17dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="center"
+        android:text="@string/memory"
+        app:layout_constraintBottom_toTopOf="@+id/assembly_add_memory_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.691"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="89dp"
+        android:layout_height="17dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:gravity="center"
+        android:text="@string/motherboard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/assembly_add_motherboard_button" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="72dp"
+        android:layout_height="17dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:gravity="center"
+        android:text="@string/cpu"
+        app:layout_constraintBottom_toTopOf="@+id/assembly_add_cpu_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.126"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:text="@string/save_assembly"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:textSize="24dp"
+        android:gravity="center"
+        android:text="@string/assembly_activity_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+    <TextView
+        android:id="@+id/assembly_cpu_cores"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="4"
+        app:layout_constraintBottom_toTopOf="@+id/assembly_cpu_freq"
+        app:layout_constraintStart_toEndOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/cores_threads"
+        app:layout_constraintBottom_toTopOf="@+id/textView9"
+        app:layout_constraintStart_toEndOf="@+id/assembly_cpu_cores" />
+
+    <TextView
+        android:id="@+id/assembly_cpu_freq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="2.2ghz"
+        app:layout_constraintBottom_toTopOf="@+id/textView4"
+        app:layout_constraintStart_toEndOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="freq"
+        app:layout_constraintBottom_toBottomOf="@+id/assembly_cpu_freq"
+        app:layout_constraintStart_toEndOf="@+id/assembly_cpu_freq" />
+
+    <TextView
+        android:id="@+id/assembly_cpu_cache"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="6mb"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/assembly_cpu_freq" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="cache"
+        app:layout_constraintBottom_toBottomOf="@+id/assembly_cpu_cache"
+        app:layout_constraintStart_toEndOf="@+id/assembly_cpu_cache" />
+
+    <TextView
+        android:id="@+id/assembly_cpu_socket"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="6dp"
+        android:text="lga2011"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/assembly_cpu_cache" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="6dp"
+        android:text="@string/socket"
+        app:layout_constraintStart_toEndOf="@+id/assembly_cpu_socket"
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
