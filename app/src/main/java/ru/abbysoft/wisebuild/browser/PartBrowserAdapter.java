@@ -70,7 +70,7 @@ class PartBrowserAdapter extends RecyclerView.Adapter<PartBrowserAdapter.ViewHol
         String priceText = part.getPriceUsd() != 0 ?
                 Integer.toString((int) part.getPriceUsd()) : unknownString;
 
-        holder.price.setText(priceText);
+        holder.price.setText(String.format(context.getString(R.string.price_value),priceText));
 
         if (part.getPhoto() != null) {
             holder.photo.setImageBitmap(part.getPhoto());
