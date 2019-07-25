@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view addPartButton
      */
     public void addPartButtonClicked(View view) {
-        AddPartActivity.createIntentFrom(this);
+        AddPartActivity.createIntentFrom(this, getClass());
     }
 
     public void browsePartsButtonClicked(View view) {
