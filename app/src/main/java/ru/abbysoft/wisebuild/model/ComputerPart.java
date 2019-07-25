@@ -54,7 +54,7 @@ public abstract class ComputerPart {
         CPU("CPU"),
         MEMORY_MODULE("Memory module"),
         MOTHERBOARD("Motherboard"),
-        ;
+        ASSEMBLED_PC("Assembled PC");
 
         private final String readableName;
 
