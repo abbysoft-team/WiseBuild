@@ -2,12 +2,9 @@ package ru.abbysoft.wisebuild.browser;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +36,7 @@ class PartBrowserAdapter extends RecyclerView.Adapter<PartBrowserAdapter.ViewHol
             super(itemView);
             view = itemView;
 
-            name = view.findViewById(R.id.part_name);
+            name = view.findViewById(R.id.assembly_part_name);
             price = view.findViewById(R.id.part_price);
             photo = view.findViewById(R.id.part_photo);
         }

@@ -42,7 +42,7 @@
             tools:srcCompat="@mipmap/ic_launcher_round" />
 
         <TextView
-            android:id="@+id/part_name"
+            android:id="@+id/assembly_part_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
