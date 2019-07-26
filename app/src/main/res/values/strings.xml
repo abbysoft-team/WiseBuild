@@ -31,4 +31,6 @@
     <string name="save_assembly">Save assembly</string>
     <string name="assembly_activity_header">Choose parts for new PC assembly, when you\'re done push Save button in bottom of the screen</string>
     <string name="cores_threads">cores</string>
+    <string name="performance_score">performance score</string>
+    <string name="total">total:</string>
 </resources>
