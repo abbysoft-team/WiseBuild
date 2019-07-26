@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import ru.abbysoft.wisebuild.assembly.CreateAssemblyActivity;
 import ru.abbysoft.wisebuild.browser.PartBrowserActivity;
 import ru.abbysoft.wisebuild.model.CPU;
 import ru.abbysoft.wisebuild.model.MemoryModule;
