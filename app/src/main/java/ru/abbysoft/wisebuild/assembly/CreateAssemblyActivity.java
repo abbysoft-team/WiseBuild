@@ -46,7 +46,7 @@ public class CreateAssemblyActivity extends AppCompatActivity {
         recyclerLayout = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(recyclerLayout);
 
-        recyclerAdapter = new CreateAssemblyAdapter(getInitialParts());
+        recyclerAdapter = new CreateAssemblyAdapter(getInitialParts(), this);
         recyclerView.setAdapter(recyclerAdapter);
     }
 
