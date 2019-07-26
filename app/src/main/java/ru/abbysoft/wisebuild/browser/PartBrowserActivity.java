@@ -21,10 +21,10 @@ public class PartBrowserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_part_list);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_part_fab);
+        FloatingActionButton fab = findViewById(R.id.add_part_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,6 +48,6 @@ public class PartBrowserActivity extends AppCompatActivity {
     }
 
     public void addPartButtonClicked(View view) {
-        AddPartActivity.createIntentFrom(this);
+        AddPartActivity.createIntentFrom(this, getClass());
     }
 }

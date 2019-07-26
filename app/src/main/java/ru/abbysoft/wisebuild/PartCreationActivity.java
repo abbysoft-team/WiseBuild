@@ -1,16 +1,18 @@
 package ru.abbysoft.wisebuild;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewManager;
@@ -35,7 +37,6 @@ import ru.abbysoft.wisebuild.model.ComputerPart;
 import ru.abbysoft.wisebuild.model.MemoryModule;
 import ru.abbysoft.wisebuild.model.Motherboard;
 import ru.abbysoft.wisebuild.storage.DBFactory;
-import ru.abbysoft.wisebuild.storage.DBInterface;
 
 /**
  * Specify parameters for new component
@@ -47,6 +48,8 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
     public static final String PART_TYPE_EXTRA = "PART_TYPE";
     private static final int NEW_IMAGE_PICKED = 1;
     private static final String LOG_TAG = "PART_CREATION_ACTIVITY";
+    private static final int MAX_IMAGE_SIZE = 1000;
+    private static final String IMAGE_URL_BUNDLED = "Bundled image";
 
     private volatile ComputerPart.ComputerPartType partType;
     private ImageView imageView;
@@ -70,7 +73,9 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
     private EditText priceField;
 
     private Bitmap currentImage;
+    private Uri currentImageUri;
     private Validator validator;
+    private boolean validationResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +93,39 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
         additionalParamSpinnerLabel = findViewById(R.id.additional_param_spinner_label);
         additionalParamSpinner = findViewById(R.id.additional_param_spinner);
 
+        configurePriceField();
+
         getPassedExtras();
         addAdditionalFields();
         addValidators();
+    }
+
+    private void configurePriceField() {
+        priceField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String text = priceField.getText().toString();
+
+                if (text.isEmpty()) {
+                    return;
+                }
+                if (text.startsWith("$")) {
+                    return;
+                }
+                if (text.contains("$")) {
+                    text = text.replace("$", "");
+                }
+
+                text = "$" + text;
+                priceField.setText(text.trim());
+                priceField.setSelection(text.length());
+            }
+        });
     }
 
     private void getPassedExtras() {
@@ -101,7 +136,8 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
         TextView headerMessage = findViewById(R.id.part_creation_label);
 
         // TODO placeholders?
-        headerMessage.setText(getString(R.string.creating_part_message) + partType.getReadableName());
+        headerMessage.setText(
+                getString(R.string.creating_part_message, partType.getReadableName()));
     }
 
     private void addAdditionalFields() {
@@ -127,6 +163,10 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
         ((ViewManager)additionalParamSpinner.getParent())
                 .removeView(additionalParamSpinner);
 
+
+//        validator.put(additionalParamField1, new NotEmptyQuickRule());
+//        validator.put(additionalParamField2, new NotEmptyQuickRule());
+
         additionalParamLabel1.setText(getString(R.string.manufacturer));
         additionalParamLabel2.setText(getString(R.string.num_of_cores));
 
@@ -136,6 +176,8 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
     private void addFieldsForMemory() {
         ((ViewManager)additionalParamField2.getParent()).removeView(additionalParamField2);
         ((ViewManager)additionalParamLabel2.getParent()).removeView(additionalParamLabel2);
+
+//        validator.put(additionalParamField1, new NotEmptyQuickRule());
 
         additionalParamLabel1.setText(getString(R.string.num_of_cores));
         additionalParamField1.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -182,7 +224,9 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
      */
     public void savePart(View view) {
         validator.validate();
-
+        if (!validationResult) {
+            return;
+        }
 
         String name = nameField.getText().toString().trim();
         String description = descriptionField.getText().toString().trim();
@@ -255,14 +299,21 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == NEW_IMAGE_PICKED) {
-            Bitmap picture = getPicture(data.getData());
-            if (picture == null) {
-                return;
-            }
-            imageView.setImageBitmap(picture);
 
-            currentImage = picture;
+            loadImage(data.getData());
         }
+    }
+
+    private void loadImage(Uri imageUri) {
+        Bitmap picture = getPicture(imageUri);
+        if (picture == null) {
+            return;
+        }
+        picture = resizeBitmap(picture);
+        imageView.setImageBitmap(picture);
+
+        currentImage = picture;
+        currentImageUri = imageUri;
     }
 
     private Bitmap getPicture(Uri selectedImage) {
@@ -293,8 +344,21 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
         }
     }
 
+    private Bitmap resizeBitmap(Bitmap bigImage) {
+        if (bigImage.getHeight() <= MAX_IMAGE_SIZE) {
+            return bigImage;
+        }
+        if (bigImage.getWidth() <= MAX_IMAGE_SIZE) {
+            return bigImage;
+        }
+        double rate = bigImage.getWidth() * 1.0 / bigImage.getHeight();
+        return Bitmap.createScaledBitmap(
+                bigImage, MAX_IMAGE_SIZE, ((int) (rate * MAX_IMAGE_SIZE)), false);
+    }
+
     @Override
     public void onValidationSucceeded() {
+        validationResult = true;
     }
 
     @Override
@@ -309,20 +373,46 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
         }
+
+        validationResult = false;
     }
 
     private void showSaveSuccessMessage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Part created successfully");
         builder.setTitle("Done");
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        });
+        builder.setPositiveButton(R.string.ok, ((dialogInterface, i) -> finish()));
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (currentImageUri != null) {
+            outState.putParcelable(IMAGE_URL_BUNDLED, currentImageUri);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        setBundledImage(savedInstanceState);
+    }
+
+    private void setBundledImage(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            return;
+        }
+
+        Uri imageUri = savedInstanceState.getParcelable(IMAGE_URL_BUNDLED);
+        if (imageUri == null) {
+            return;
+        }
+
+        loadImage(imageUri);
     }
 }

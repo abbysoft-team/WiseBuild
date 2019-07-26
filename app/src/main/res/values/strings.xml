@@ -12,7 +12,7 @@
     <string name="price">Price</string>
     <string name="add_photo">Add photo</string>
     <string name="save">Save</string>
-    <string name="creating_part_message">New </string>
+    <string name="creating_part_message">New %s</string>
     <string name="manufacturer">Manufacturer</string>
     <string name="num_of_cores">Num of cores</string>
     <string name="type">Type</string>
@@ -24,4 +24,6 @@
     <string name="action_settings">Settings</string>
     <string name="part_photo">Part photo</string>
     <string name="unknown">Unknown</string>
+    <string name="price_value">%1$s $</string>
+    <string name="component_creation">Create new component</string>
 </resources>
