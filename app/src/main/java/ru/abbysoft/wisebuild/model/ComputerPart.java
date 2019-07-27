@@ -3,7 +3,6 @@ package ru.abbysoft.wisebuild.model;
 import android.graphics.Bitmap;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -11,6 +10,13 @@ import java.util.List;
  * Abstract computer part component
  */
 public abstract class ComputerPart {
+
+    private static long nextID = 0;
+
+    /**
+     * unique part identifier
+     */
+    private final long id;
 
     private final String name;
     private volatile String description;
@@ -21,6 +27,7 @@ public abstract class ComputerPart {
     protected ComputerPart(String name, ComputerPartType type) {
         this.name = name;
         this.type = type;
+        this.id = nextID++;
     }
 
     public String getName() {
@@ -53,6 +60,10 @@ public abstract class ComputerPart {
 
     public ComputerPartType getType() {
         return type;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public enum ComputerPartType {
