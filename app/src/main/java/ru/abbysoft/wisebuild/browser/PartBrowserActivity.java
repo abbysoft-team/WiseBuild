@@ -31,14 +31,11 @@ public class PartBrowserActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.add_part_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addPartButtonClicked(view);
-            }
-        });
+        fab.setOnClickListener(this::addPartButtonClicked);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         setUpRecyclerView();
     }
 
