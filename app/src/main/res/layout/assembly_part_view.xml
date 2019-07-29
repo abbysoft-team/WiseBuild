@@ -29,20 +29,24 @@
                 android:id="@+id/assembly_part_param2_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
                 android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="@+id/assembly_part_param1_container"
+                app:layout_constraintBottom_toBottomOf="@+id/assembly_part_photo"
+                app:layout_constraintStart_toEndOf="@+id/assembly_part_photo"
                 app:layout_constraintTop_toBottomOf="@+id/assembly_part_param1_container">
 
                 <TextView
-                    android:id="@+id/assembly_part_param1"
+                    android:id="@+id/assembly_part_param2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="6mb" />
 
                 <TextView
-                    android:id="@+id/assembly_part_param1_label"
+                    android:id="@+id/assembly_part_param2_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
@@ -62,14 +66,14 @@
                 app:layout_constraintTop_toTopOf="@+id/assembly_part_photo">
 
                 <TextView
-                    android:id="@+id/assembly_part_param2"
+                    android:id="@+id/assembly_part_param1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="2/2" />
 
                 <TextView
-                    android:id="@+id/assembly_part_param2_label"
+                    android:id="@+id/assembly_part_param1_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,11 +18,14 @@ import java.util.Set;
 import ru.abbysoft.wisebuild.R;
 import ru.abbysoft.wisebuild.model.ComputerPart;
 
-public class CreateAssemblyActivity extends AppCompatActivity {
+public class CreateAssemblyActivity extends AppCompatActivity implements PartListener {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerAdapter;
     private RecyclerView.LayoutManager recyclerLayout;
+
+    private TextView totalPriceView;
+    private long totalPrice;
 
     /**
      * Create intent and launch this activity
@@ -37,6 +41,9 @@ public class CreateAssemblyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_assembly);
 
+        totalPriceView = findViewById(R.id.assembly_total_price);
+        totalPriceView.setText("$0");
+
         configureRecyclerView();
     }
 
@@ -47,7 +54,8 @@ public class CreateAssemblyActivity extends AppCompatActivity {
         recyclerLayout = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(recyclerLayout);
 
-        recyclerAdapter = new CreateAssemblyAdapter(getInitialParts(), this);
+        recyclerAdapter =
+                new CreateAssemblyAdapter(getInitialParts(), this, this);
         recyclerView.setAdapter(recyclerAdapter);
     }
 
@@ -62,4 +70,11 @@ public class CreateAssemblyActivity extends AppCompatActivity {
         return parts;
     }
 
+    @Override
+    public void partReceived(ComputerPart part) {
+        totalPrice += part.getPriceUsd();
+
+        String text = "$" + totalPrice;
+        totalPriceView.setText(text);
+    }
 }

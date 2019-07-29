@@ -12,7 +12,6 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,13 +32,15 @@ public class CreateAssemblyAdapter
 
     private final Map<ComputerPart.ComputerPartType, Set<ComputerPart>> parts;
     private final Activity activity;
+    private int totalPriceUSD;
+    private PartListener partListener;
 
     /**
      * ViewHolder for assembly part
      */
-    public static class AssemblyPartViewHolder extends RecyclerView.ViewHolder {
-        private static final int PARAMETER_COUNT = 3;
-        private static final String LOG_TAG = AssemblyPartViewHolder.class.toString();
+    public class AssemblyPartViewHolder extends RecyclerView.ViewHolder {
+        private final int PARAMETER_COUNT = 4;
+        private final String LOG_TAG = AssemblyPartViewHolder.class.toString();
 
         private final ViewGroup layoutContainer;
         private final TextView partName;
@@ -112,6 +113,8 @@ public class CreateAssemblyAdapter
             currentPart = part;
 
             updateView();
+
+            partListener.partReceived(currentPart);
         }
 
         private void updateView() {
@@ -174,8 +177,6 @@ public class CreateAssemblyAdapter
 
         private void setEmptyView() {
             currentPart = null;
-
-
         }
 
         private void configureView() {
@@ -187,11 +188,14 @@ public class CreateAssemblyAdapter
      * Create new assembly adapter
      * @param parts set of parts by type
      * @param activity activity from which behalf would be generated intents
+     * @param partListener new part added callback
      */
     public CreateAssemblyAdapter(Map<ComputerPart.ComputerPartType, Set<ComputerPart>> parts,
-                                 Activity activity) {
+                                 Activity activity,
+                                 PartListener partListener) {
         this.parts = parts;
         this.activity = activity;
+        this.partListener = partListener;
     }
 
     @NonNull
@@ -217,12 +221,12 @@ public class CreateAssemblyAdapter
     }
 
     /**
-     * Add new part of specified type
-     * @param type type of part
-     * @param part new part
+     * New part added for one of types
+     *
+     * @param part part being added
      */
-    public void addNewPart(ComputerPart.ComputerPartType type, ComputerPart part) {
-        Set<ComputerPart> partsOfType = parts.get(type);
-        partsOfType.add(part);
+    public void partAdded(ComputerPart part) {
+        totalPriceUSD += part.getPriceUsd();
+
     }
 }
