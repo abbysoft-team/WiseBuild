@@ -197,7 +197,7 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
 
     private void addFieldsForMotherboard() {
         LayoutUtils.removeViewFromLayout(additionalParamField1);
-        LayoutUtils.removeViewFromLayout(additionalParamField1);
+        LayoutUtils.removeViewFromLayout(additionalParamField2);
         LayoutUtils.removeViewFromLayout(additionalParamLabel1);
         LayoutUtils.removeViewFromLayout(additionalParamLabel2);
 
