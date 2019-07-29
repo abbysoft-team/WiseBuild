@@ -1,6 +1,7 @@
 package ru.abbysoft.wisebuild.assembly;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,10 +35,15 @@ public class CreateAssemblyAdapter
      * ViewHolder for assembly part
      */
     public static class AssemblyPartViewHolder extends RecyclerView.ViewHolder {
+        private static final int PARAMETER_COUNT = 3;
+        private static final String LOG_TAG = AssemblyPartViewHolder.class.toString();
+
         private final ViewGroup layoutContainer;
         private final TextView partName;
         private final TextView partPrice;
         private final TextView partType;
+        private final ArrayList<TextView> parameterLabels;
+        private final ArrayList<TextView> parameters;
         private final ViewGroup noPartContainer;
         private final ViewGroup partContainer;
         private Set<ComputerPart> parts;
@@ -44,8 +51,16 @@ public class CreateAssemblyAdapter
         private ComputerPart currentPart;
         private Activity activity;
 
+        /**
+         * Create view holder
+         *
+         * @param itemView view
+         */
         public AssemblyPartViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            parameterLabels = new ArrayList<>(PARAMETER_COUNT);
+            parameters = new ArrayList<>(PARAMETER_COUNT);
 
             partName = itemView.findViewById(R.id.assembly_part_name);
             partPrice = itemView.findViewById(R.id.assembly_part_price);
@@ -54,12 +69,32 @@ public class CreateAssemblyAdapter
             noPartContainer = itemView.findViewById(R.id.assembly_no_part_card);
             layoutContainer = itemView.findViewById(R.id.assembly_layout);
 
+            try {
+                initParameterViews(itemView);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "cannot init parameter fields");
+                e.printStackTrace();
+            }
+
             // hide main card unless part is loaded, until that moment
             // show card with add button
             LayoutUtils.removeViewFromLayout(partContainer);
 
             AppCompatImageButton addPart = itemView.findViewById(R.id.assembly_add_part_button);
             addPart.setOnClickListener((view -> addNewPart()));
+        }
+
+        private void initParameterViews(View view) throws NoSuchFieldException, IllegalAccessException {
+            final String viewIdPrefix = "assembly_part_param";
+            final String labelPostfix = "_label";
+            int viewId;
+            for (int i = 1; i <= PARAMETER_COUNT; i++) {
+                viewId = R.id.class.getField(viewIdPrefix + i).getInt(null);
+                parameters.add(view.findViewById(viewId));
+
+                viewId = R.id.class.getField(viewIdPrefix + i + labelPostfix).getInt(null);
+                parameterLabels.add(view.findViewById(viewId));
+            }
         }
 
         private void addNewPart() {
@@ -82,6 +117,7 @@ public class CreateAssemblyAdapter
 
             partName.setText(currentPart.getName());
             partPrice.setText(String.valueOf(currentPart.getPriceUsd()));
+
         }
 
         /**

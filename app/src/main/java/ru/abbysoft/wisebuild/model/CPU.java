@@ -23,4 +23,8 @@ public class CPU extends ComputerPart {
     public int getCores() {
         return cores;
     }
+
+    @Override
+    protected void initParameters() {
+    }
 }

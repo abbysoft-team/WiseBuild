@@ -31,6 +31,11 @@ public class MemoryModule extends ComputerPart {
         return capacityMb;
     }
 
+    @Override
+    protected void initParameters() {
+
+    }
+
     public enum MemoryType {
         DDR,
         DDR2,

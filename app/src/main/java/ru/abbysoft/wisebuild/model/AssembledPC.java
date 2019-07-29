@@ -55,4 +55,9 @@ public class AssembledPC extends ComputerPart {
 
         memoryModules.add(module);
     }
+
+    @Override
+    protected void initParameters() {
+        // assembled PC doesn't need any parameters
+    }
 }

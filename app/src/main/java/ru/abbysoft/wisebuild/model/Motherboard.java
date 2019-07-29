@@ -13,6 +13,11 @@ public class Motherboard extends ComputerPart {
         this.socketType = socketType;
     }
 
+    @Override
+    protected void initParameters() {
+
+    }
+
     public enum SocketType {
         LGA1155,
         LGA2011,
