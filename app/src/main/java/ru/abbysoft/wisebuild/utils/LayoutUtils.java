@@ -1,6 +1,7 @@
 package ru.abbysoft.wisebuild.utils;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewManager;
 
 /**
@@ -15,5 +16,15 @@ public class LayoutUtils {
      */
     public static void removeViewFromLayout(View view) {
         ((ViewManager)view.getParent()).removeView(view);
+    }
+
+    /**
+     * Add view to layout and make visible
+     *
+     * @param view component to be added
+     * @param layout new parent of view
+     */
+    public static void addViewToLayout(View view, ViewGroup layout) {
+        layout.addView(view);
     }
 }

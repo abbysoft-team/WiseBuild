@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,9 +14,9 @@ import java.util.Map;
 import java.util.Set;
 
 import ru.abbysoft.wisebuild.R;
-import ru.abbysoft.wisebuild.browser.PartBrowserActivity;
 import ru.abbysoft.wisebuild.model.ComputerPart;
 import ru.abbysoft.wisebuild.utils.LayoutUtils;
+import ru.abbysoft.wisebuild.utils.ModelUtils;
 
 /**
  * Adapter for create assembly activity
@@ -34,6 +33,7 @@ public class CreateAssemblyAdapter
      * ViewHolder for assembly part
      */
     public static class AssemblyPartViewHolder extends RecyclerView.ViewHolder {
+        private final ViewGroup layoutContainer;
         private final TextView partName;
         private final TextView partPrice;
         private final TextView partType;
@@ -52,6 +52,7 @@ public class CreateAssemblyAdapter
             partType = itemView.findViewById(R.id.assembly_part_type);
             partContainer = itemView.findViewById(R.id.assembly_card);
             noPartContainer = itemView.findViewById(R.id.assembly_no_part_card);
+            layoutContainer = itemView.findViewById(R.id.assembly_layout);
 
             // hide main card unless part is loaded, until that moment
             // show card with add button
@@ -64,7 +65,23 @@ public class CreateAssemblyAdapter
         private void addNewPart() {
             assert (activity != null);
 
-            PartBrowserActivity.launchForPickPartFrom(activity, type);
+            //PartBrowserActivity.launchForPickPartFrom(activity, type);
+
+            // mocking data received from PartBrowser,
+            // unless it not implemented
+            ComputerPart part = ModelUtils.generateRandomPart(type);
+            parts.add(part);
+            currentPart = part;
+
+            updateView();
+        }
+
+        private void updateView() {
+            LayoutUtils.removeViewFromLayout(noPartContainer);
+            LayoutUtils.addViewToLayout(partContainer, layoutContainer);
+
+            partName.setText(currentPart.getName());
+            partPrice.setText(String.valueOf(currentPart.getPriceUsd()));
         }
 
         /**

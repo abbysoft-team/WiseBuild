@@ -10,6 +10,7 @@ import android.os.Bundle;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -55,7 +56,7 @@ public class CreateAssemblyActivity extends AppCompatActivity {
         for (ComputerPart.ComputerPartType type :
                 ComputerPart.ComputerPartType.getEntriesWithoutAssembly()) {
 
-            parts.put(type, Collections.emptySet());
+            parts.put(type, new HashSet<>());
         }
 
         return parts;
