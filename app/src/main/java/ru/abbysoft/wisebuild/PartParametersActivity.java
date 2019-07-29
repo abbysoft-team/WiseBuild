@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -44,16 +45,21 @@ import ru.abbysoft.wisebuild.utils.LayoutUtils;
  *
  * @author apopov
  */
-public class PartCreationActivity extends AppCompatActivity implements Validator.ValidationListener {
+public class PartParametersActivity extends AppCompatActivity implements Validator.ValidationListener {
 
     public static final String PART_TYPE_EXTRA = "PART_TYPE";
+    public static final String PART_ID_EXTRA = "PART ID";
+
     private static final int NEW_IMAGE_PICKED = 1;
     private static final String LOG_TAG = "PART_CREATION_ACTIVITY";
     private static final int MAX_IMAGE_SIZE = 1000;
     private static final String IMAGE_URL_BUNDLED = "Bundled image";
 
     private volatile ComputerPart.ComputerPartType partType;
+    private long partId;
     private ImageView imageView;
+
+    private TextView headerMessage;
 
     private TextView additionalParamLabel1;
     private TextView additionalParamLabel2;
@@ -93,12 +99,20 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
         additionalParamField2 = findViewById(R.id.additional_parameter_2_field);
         additionalParamSpinnerLabel = findViewById(R.id.additional_param_spinner_label);
         additionalParamSpinner = findViewById(R.id.additional_param_spinner);
+        headerMessage = findViewById(R.id.part_creation_label);
+
 
         configurePriceField();
 
         getPassedExtras();
+
         addAdditionalFields();
-        addValidators();
+
+        if (partBeingCreated()) {
+            configureViewForCreation();
+        } else {
+            configureViewForExistingPart();
+        }
     }
 
     private void configurePriceField() {
@@ -132,13 +146,8 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
     private void getPassedExtras() {
         Intent intent = getIntent();
 
+        partId = intent.getLongExtra(PART_ID_EXTRA, -1);
         partType = (ComputerPart.ComputerPartType) intent.getSerializableExtra(PART_TYPE_EXTRA);
-
-        TextView headerMessage = findViewById(R.id.part_creation_label);
-
-        // TODO placeholders?
-        headerMessage.setText(
-                getString(R.string.creating_part_message, partType.getReadableName()));
     }
 
     private void addAdditionalFields() {
@@ -216,6 +225,23 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
     private void addValidators() {
         validator = new Validator(this);
         validator.setValidationListener(this);
+    }
+
+    private boolean partBeingCreated() {
+        return partId == -1;
+    }
+
+    private void configureViewForCreation() {
+        addValidators();
+
+        headerMessage.setText(
+                getString(R.string.creating_part_message, partType.getReadableName()));
+    }
+
+    private void configureViewForExistingPart() {
+        ComputerPart part = DBFactory.getDatabase().getPart(partId);
+
+        headerMessage.setText(part);
     }
 
     /**
@@ -415,5 +441,18 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
         }
 
         loadImage(imageUri);
+    }
+
+    /**
+     * Launch detailed information for specific part
+     *
+     * @param partId part id in db which parameters should be displayed
+     * @param context context
+     */
+    public static void launchForViewParametersOf(long partId, Context context) {
+        Intent intent = new Intent(context, PartParametersActivity.class);
+        intent.putExtra(PART_ID_EXTRA, partId);
+
+        context.startActivity(intent);
     }
 }
