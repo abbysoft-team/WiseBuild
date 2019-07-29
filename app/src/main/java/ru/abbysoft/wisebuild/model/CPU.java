@@ -36,4 +36,9 @@ public class CPU extends ComputerPart {
 
         return parameters;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s with %d cores", manufacturer, getName(), cores);
+    }
 }

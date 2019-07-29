@@ -62,4 +62,10 @@ public class AssembledPC extends ComputerPart {
     public List<PartParameter> getParameters() {
         return Collections.emptyList();
     }
+
+    @Override
+    public String toString() {
+        return String.format("PC (%s) { CPU [%s], Memory [%s], Motherboard [%s]",
+                getName(), cpu.toString(), memoryModules.get(0).toString(), motherboard.toString());
+    }
 }

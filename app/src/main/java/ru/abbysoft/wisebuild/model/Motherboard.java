@@ -26,6 +26,12 @@ public class Motherboard extends ComputerPart {
         return parameters;
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s %s", getName(), socketType.name());
+    }
+
+
     public enum SocketType {
         LGA1155,
         LGA2011,
