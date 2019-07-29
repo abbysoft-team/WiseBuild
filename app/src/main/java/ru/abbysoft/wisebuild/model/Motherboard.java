@@ -1,5 +1,9 @@
 package ru.abbysoft.wisebuild.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Motherboard part
  */
@@ -14,8 +18,12 @@ public class Motherboard extends ComputerPart {
     }
 
     @Override
-    protected void initParameters() {
+    public List<PartParameter> getParameters() {
+        ArrayList<PartParameter> parameters = new ArrayList<>(1);
 
+        parameters.add(new PartParameter("type", socketType.name()));
+
+        return parameters;
     }
 
     public enum SocketType {

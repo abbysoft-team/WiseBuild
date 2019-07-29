@@ -23,38 +23,21 @@ public abstract class ComputerPart {
     private volatile long priceUsd;
     private final ComputerPartType type;
 
-    /**
-     * This is additional parameters of any concrete part
-     *
-     * Derived classes must use addParam() to specify this
-     * parameters. This will be used by gui in order to display
-     * some features of this part.
-     */
-    private final List<PartParameter> parameters;
-
     protected ComputerPart(String name, ComputerPartType type) {
         this.name = name;
         this.type = type;
         this.id = nextID++;
-
-        parameters = new ArrayList<>();
-        initParameters();
     }
 
     /**
-     * This function must init part parameters.
+     * Return additional parameters of any concrete part
      *
-     * Part parameters used by gui in order to display
-     * some key parameters that part provide.
-     *
-     * Each concrete ComputerPart type must specify their own
-     * parameters.
-     *
-     * Ex. CPU part type can init following part parameters:
-     * {freq, num. of cores, manufacturer etc}. This parameters will
-     * be displayed in gui.
+     * Derived classes must use addParam() to specify this
+     * parameters. This will be used by gui in order to display
+     * some features of this part.
+     * @return parameters of part
      */
-    protected abstract void initParameters();
+    public abstract List<PartParameter> getParameters();
 
     public String getName() {
         return name;
@@ -90,10 +73,6 @@ public abstract class ComputerPart {
 
     public long getId() {
         return id;
-    }
-
-    public void addParameter(String name, Object value) {
-        this.parameters.add(new PartParameter(name, value));
     }
 
     public enum ComputerPartType {

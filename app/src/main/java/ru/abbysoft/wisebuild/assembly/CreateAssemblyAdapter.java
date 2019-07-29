@@ -12,11 +12,14 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import ru.abbysoft.wisebuild.R;
 import ru.abbysoft.wisebuild.model.ComputerPart;
+import ru.abbysoft.wisebuild.model.PartParameter;
 import ru.abbysoft.wisebuild.utils.LayoutUtils;
 import ru.abbysoft.wisebuild.utils.ModelUtils;
 
@@ -118,6 +121,32 @@ public class CreateAssemblyAdapter
             partName.setText(currentPart.getName());
             partPrice.setText(String.valueOf(currentPart.getPriceUsd()));
 
+            updateParameters();
+        }
+
+        private void updateParameters() {
+            removeExtraParametersViews();
+            fillParameters();
+        }
+
+        private void removeExtraParametersViews() {
+            int requiredParameters = currentPart.getParameters().size();
+            for (int i = requiredParameters; i < parameterLabels.size(); i++) {
+                LayoutUtils.removeViewFromLayout(parameterLabels.get(i));
+                LayoutUtils.removeViewFromLayout(parameters.get(i));
+            }
+        }
+
+        private void fillParameters() {
+            List<PartParameter> partParameters = currentPart.getParameters();
+            int parameterCount = partParameters.size();
+
+            PartParameter nextParameter;
+            for (int i = 0; i < parameterCount; i++) {
+                nextParameter = partParameters.get(i);
+                parameterLabels.get(i).setText(nextParameter.getName());
+                parameters.get(i).setText(nextParameter.getValue().toString());
+            }
         }
 
         /**

@@ -24,8 +24,8 @@ public class PartParameter {
     }
 
     /**
-     * Get class of parameter value
-     * @return class of parameter value
+     * Get class of value
+     * @return class
      */
     public Class getValueClass() {
         return value.getClass();

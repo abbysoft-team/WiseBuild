@@ -1,6 +1,8 @@
 package ru.abbysoft.wisebuild.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import ru.abbysoft.wisebuild.exception.SlotLimitException;
 
@@ -57,7 +59,7 @@ public class AssembledPC extends ComputerPart {
     }
 
     @Override
-    protected void initParameters() {
-        // assembled PC doesn't need any parameters
+    public List<PartParameter> getParameters() {
+        return Collections.emptyList();
     }
 }
