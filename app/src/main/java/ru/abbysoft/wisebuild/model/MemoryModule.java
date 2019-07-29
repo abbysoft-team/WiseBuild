@@ -1,5 +1,8 @@
 package ru.abbysoft.wisebuild.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * MemoryModule part
  *
@@ -31,10 +34,38 @@ public class MemoryModule extends ComputerPart {
         return capacityMb;
     }
 
+    @Override
+    public List<PartParameter> getParameters() {
+        ArrayList<PartParameter> parameters = new ArrayList<>(2);
+
+        parameters.add(new PartParameter("type", type.getName()));
+        parameters.add(new PartParameter("capacity (mb)", capacityMb));
+
+        return parameters;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s with %d mb of %s memory", getName(), getCapacityMb(), type.name);
+    }
+
+    /**
+     * Memory type
+     */
     public enum MemoryType {
-        DDR,
-        DDR2,
-        DDR3,
-        DDR4
+        DDR("DDR"),
+        DDR2("DDR2"),
+        DDR3("DDR3"),
+        DDR4("DDR4");
+
+        private String name;
+
+        MemoryType(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }

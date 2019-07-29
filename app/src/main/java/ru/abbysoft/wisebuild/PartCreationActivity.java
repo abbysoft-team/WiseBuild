@@ -37,6 +37,7 @@ import ru.abbysoft.wisebuild.model.ComputerPart;
 import ru.abbysoft.wisebuild.model.MemoryModule;
 import ru.abbysoft.wisebuild.model.Motherboard;
 import ru.abbysoft.wisebuild.storage.DBFactory;
+import ru.abbysoft.wisebuild.utils.LayoutUtils;
 
 /**
  * Specify parameters for new component
@@ -195,10 +196,10 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
     }
 
     private void addFieldsForMotherboard() {
-        ((ViewManager)additionalParamField1.getParent()).removeView(additionalParamField1);
-        ((ViewManager)additionalParamField2.getParent()).removeView(additionalParamField2);
-        ((ViewManager)additionalParamLabel1.getParent()).removeView(additionalParamLabel1);
-        ((ViewManager)additionalParamLabel2.getParent()).removeView(additionalParamLabel2);
+        LayoutUtils.removeViewFromLayout(additionalParamField1);
+        LayoutUtils.removeViewFromLayout(additionalParamField1);
+        LayoutUtils.removeViewFromLayout(additionalParamLabel1);
+        LayoutUtils.removeViewFromLayout(additionalParamLabel2);
 
         additionalParamSpinnerLabel.setText(getString(R.string.socket));
 

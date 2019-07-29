@@ -2,10 +2,20 @@ package ru.abbysoft.wisebuild.model;
 
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Abstract computer part component
  */
 public abstract class ComputerPart {
+
+    private static long nextID = 0;
+
+    /**
+     * unique part identifier
+     */
+    private final long id;
 
     private final String name;
     private volatile String description;
@@ -16,7 +26,18 @@ public abstract class ComputerPart {
     protected ComputerPart(String name, ComputerPartType type) {
         this.name = name;
         this.type = type;
+        this.id = nextID++;
     }
+
+    /**
+     * Return additional parameters of any concrete part
+     *
+     * Derived classes must use addParam() to specify this
+     * parameters. This will be used by gui in order to display
+     * some features of this part.
+     * @return parameters of part
+     */
+    public abstract List<PartParameter> getParameters();
 
     public String getName() {
         return name;
@@ -50,20 +71,41 @@ public abstract class ComputerPart {
         return type;
     }
 
+    public long getId() {
+        return id;
+    }
+
     public enum ComputerPartType {
-        CPU("CPU"),
-        MEMORY_MODULE("Memory module"),
-        MOTHERBOARD("Motherboard"),
-        ;
+        CPU("CPU", ru.abbysoft.wisebuild.model.CPU.class),
+        MEMORY_MODULE("Memory module", MemoryModule.class),
+        MOTHERBOARD("Motherboard", Motherboard.class),
+
+        ASSEMBLED_PC("Assembled PC", AssembledPC.class);
 
         private final String readableName;
+        private final Class objectClass;
 
-        ComputerPartType(String name) {
+        ComputerPartType(String name, Class objectClass) {
             this.readableName = name;
+            this.objectClass = objectClass;
+        }
+
+        public static List<ComputerPartType> getEntriesWithoutAssembly() {
+            List<ComputerPartType> partTypes = new ArrayList<>(values().length-1);
+            for (ComputerPartType type : values()) {
+                if (type != ASSEMBLED_PC) {
+                    partTypes.add(type);
+                }
+            }
+            return partTypes;
         }
 
         public String getReadableName() {
             return readableName;
+        }
+
+        public Class getObjectClass() {
+            return objectClass;
         }
     }
 }

@@ -1,5 +1,8 @@
 package ru.abbysoft.wisebuild.browser;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -13,9 +16,12 @@ import android.view.View;
 
 import ru.abbysoft.wisebuild.AddPartActivity;
 import ru.abbysoft.wisebuild.R;
+import ru.abbysoft.wisebuild.model.ComputerPart;
 import ru.abbysoft.wisebuild.storage.DBFactory;
 
 public class PartBrowserActivity extends AppCompatActivity {
+
+    private static final int PICK_PART_REQUEST = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +31,11 @@ public class PartBrowserActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.add_part_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addPartButtonClicked(view);
-            }
-        });
+        fab.setOnClickListener(this::addPartButtonClicked);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         setUpRecyclerView();
     }
 
@@ -49,5 +52,19 @@ public class PartBrowserActivity extends AppCompatActivity {
 
     public void addPartButtonClicked(View view) {
         AddPartActivity.createIntentFrom(this, getClass());
+    }
+
+    /**
+     * Launch this activity from given context in order to recieve
+     * part back from part browser
+     *
+     * @param activity activity from which to launch this activity
+     * @param type type of part to be picked
+     */
+    public static void launchForPickPartFrom(Activity activity,
+                                             ComputerPart.ComputerPartType type) {
+
+        Intent intent = new Intent(activity, PartBrowserActivity.class);
+        activity.startActivityForResult(intent, PICK_PART_REQUEST);
     }
 }

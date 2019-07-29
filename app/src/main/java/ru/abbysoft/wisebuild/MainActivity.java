@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import ru.abbysoft.wisebuild.assembly.CreateAssemblyActivity;
 import ru.abbysoft.wisebuild.browser.PartBrowserActivity;
 import ru.abbysoft.wisebuild.model.CPU;
 import ru.abbysoft.wisebuild.model.MemoryModule;
@@ -52,5 +53,9 @@ public class MainActivity extends AppCompatActivity {
     public void browsePartsButtonClicked(View view) {
         Intent intent = new Intent(this, PartBrowserActivity.class);
         startActivity(intent);
+    }
+
+    public void createAssemblyButtonClicked(View view) {
+        CreateAssemblyActivity.launchActivityFrom(this);
     }
 }

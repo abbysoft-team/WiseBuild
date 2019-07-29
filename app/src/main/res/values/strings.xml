@@ -26,4 +26,13 @@
     <string name="unknown">Unknown</string>
     <string name="price_value">%1$s $</string>
     <string name="component_creation">Create new component</string>
+    <string name="create_assembly">create assembly</string>
+    <string name="create_assembly_label">Choose parts</string>
+    <string name="create_assembly_back_description">background</string>
+    <string name="save_assembly">Save assembly</string>
+    <string name="assembly_activity_header">Choose parts for new PC assembly, when you\'re done push Save button in bottom of the screen</string>
+    <string name="cores_threads">cores</string>
+    <string name="performance_score">performance score</string>
+    <string name="total">total:</string>
+    <string name="cannot_continue">Cannot continue</string>
 </resources>

@@ -1,5 +1,9 @@
 package ru.abbysoft.wisebuild.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Motherboard part
  */
@@ -12,6 +16,21 @@ public class Motherboard extends ComputerPart {
 
         this.socketType = socketType;
     }
+
+    @Override
+    public List<PartParameter> getParameters() {
+        ArrayList<PartParameter> parameters = new ArrayList<>(1);
+
+        parameters.add(new PartParameter("type", socketType.name()));
+
+        return parameters;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s", getName(), socketType.name());
+    }
+
 
     public enum SocketType {
         LGA1155,
