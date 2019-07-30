@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -23,7 +24,7 @@ public class BrowserActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_part_list);
+        setContentView(R.layout.browser);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -40,6 +41,9 @@ public class BrowserActivity extends AppCompatActivity {
     private void setUpViewPager() {
         ViewPager viewPager = findViewById(R.id.browserViewPager);
         viewPager.setAdapter(new BrowserPagerAdapter(getSupportFragmentManager()));
+
+        TabLayout tabs = findViewById(R.id.browserTabs);
+        tabs.setupWithViewPager(viewPager);
     }
 
     public void addPartButtonClicked(View view) {
@@ -48,7 +52,7 @@ public class BrowserActivity extends AppCompatActivity {
 
     /**
      * Launch this activity from given context in order to recieve
-     * part back from part browser
+     * part back from part browser_content
      *
      * @param activity activity from which to launch this activity
      * @param type type of part to be picked

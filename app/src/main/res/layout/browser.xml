@@ -34,16 +34,18 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_part_list" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/browser_content" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_part_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        android:tint="#FFFFFFFF"
         android:onClick="addPartButtonClicked"
-        app:layout_anchor="@id/app_bar"
+        android:tint="#FFFFFFFF"
+        app:layout_anchor="@+id/include"
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@drawable/ic_add" />
 

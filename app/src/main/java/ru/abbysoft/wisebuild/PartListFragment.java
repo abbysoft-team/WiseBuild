@@ -69,6 +69,6 @@ public class PartListFragment extends Fragment {
                              ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_part_list, container, false);
+        return inflater.inflate(R.layout.part_list_fragment, container, false);
     }
 }

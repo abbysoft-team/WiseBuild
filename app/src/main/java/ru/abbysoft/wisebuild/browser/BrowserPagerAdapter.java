@@ -1,5 +1,6 @@
 package ru.abbysoft.wisebuild.browser;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -20,5 +21,11 @@ public class BrowserPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() { // number of categories
         return ComputerPart.ComputerPartType.values().length;
+    }
+
+    @Nullable
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return ComputerPart.ComputerPartType.values()[position].getReadableName();
     }
 }
