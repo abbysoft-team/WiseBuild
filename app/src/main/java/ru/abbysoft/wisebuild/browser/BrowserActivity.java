@@ -13,13 +13,16 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.view.View;
 
-import ru.abbysoft.wisebuild.AddPartActivity;
+import ru.abbysoft.wisebuild.PartCreationActivity;
 import ru.abbysoft.wisebuild.R;
 import ru.abbysoft.wisebuild.model.ComputerPart;
 
 public class BrowserActivity extends AppCompatActivity {
 
     private static final int PICK_PART_REQUEST = 0;
+
+    private ViewPager viewPager;
+    private TabLayout tabs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +42,16 @@ public class BrowserActivity extends AppCompatActivity {
     }
 
     private void setUpViewPager() {
-        ViewPager viewPager = findViewById(R.id.browserViewPager);
+        this.viewPager = findViewById(R.id.browserViewPager);
         viewPager.setAdapter(new BrowserPagerAdapter(getSupportFragmentManager()));
 
-        TabLayout tabs = findViewById(R.id.browserTabs);
+        this.tabs = findViewById(R.id.browserTabs);
         tabs.setupWithViewPager(viewPager);
     }
 
     public void addPartButtonClicked(View view) {
-        AddPartActivity.createIntentFrom(this, getClass());
+        PartCreationActivity.launch(this,
+                ComputerPart.ComputerPartType.values()[viewPager.getCurrentItem()]);
     }
 
     /**
