@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void openRandomPartButtonClicked(View view) {
         ComputerPart randomOne = ModelUtils.generateRandomPart();
+        DBFactory.getDatabase().storePart(randomOne);
 
         PartParametersActivity.launchForViewParametersOf(randomOne.getId(), this);
     }

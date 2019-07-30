@@ -10,7 +10,7 @@
     <string name="part_name">Part name</string>
     <string name="description">Description</string>
     <string name="price">Price</string>
-    <string name="add_photo">Add photo</string>
+    <string name="add_photo">Change photo</string>
     <string name="save">Save</string>
     <string name="creating_part_message">New %s</string>
     <string name="manufacturer">Manufacturer</string>

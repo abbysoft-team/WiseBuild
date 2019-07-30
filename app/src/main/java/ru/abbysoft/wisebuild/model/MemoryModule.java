@@ -38,8 +38,8 @@ public class MemoryModule extends ComputerPart {
     public List<PartParameter> getParameters() {
         ArrayList<PartParameter> parameters = new ArrayList<>(2);
 
-        parameters.add(new PartParameter("type", type.getName()));
-        parameters.add(new PartParameter("capacity (mb)", capacityMb));
+        parameters.add(new PartParameter("Type", type.getName()));
+        parameters.add(new PartParameter("Capacity (mb)", capacityMb));
 
         return parameters;
     }

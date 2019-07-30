@@ -16,8 +16,10 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -37,6 +39,7 @@ import ru.abbysoft.wisebuild.model.CPU;
 import ru.abbysoft.wisebuild.model.ComputerPart;
 import ru.abbysoft.wisebuild.model.MemoryModule;
 import ru.abbysoft.wisebuild.model.Motherboard;
+import ru.abbysoft.wisebuild.model.PartParameter;
 import ru.abbysoft.wisebuild.storage.DBFactory;
 import ru.abbysoft.wisebuild.utils.LayoutUtils;
 import ru.abbysoft.wisebuild.utils.MiscUtils;
@@ -101,7 +104,7 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         additionalParamSpinnerLabel = findViewById(R.id.additional_param_spinner_label);
         additionalParamSpinner = findViewById(R.id.additional_param_spinner);
         headerMessage = findViewById(R.id.part_creation_label);
-        
+
         configurePriceField();
 
         getPassedExtras();
@@ -110,9 +113,9 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
             return;
         }
 
-        addAdditionalFields();
-
         if (partBeingCreated()) {
+            addAdditionalFields();
+
             configureViewForCreation();
         } else {
             configureViewForExistingPart();
@@ -257,7 +260,54 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
     }
 
     private void configureViewForExistingPart() {
-        headerMessage.setText(part.getName());
+        headerMessage.setText(part.getType().getReadableName());
+        nameField.setText(part.getName());
+        descriptionField.setText(descriptionField.getText());
+        String price = "$" + part.getPriceUsd();
+        priceField.setText(price);
+
+        hideUnusedViews();
+        addPartParameterFields();
+
+        // disable fields for editing
+        nameField.setKeyListener(null);
+        descriptionField.setKeyListener(null);
+        priceField.setKeyListener(null);
+    }
+
+    private void hideUnusedViews() {
+        Button saveButton = findViewById(R.id.save_component_button);
+        saveButton.setVisibility(View.INVISIBLE);
+        Button addPhotoButton = findViewById(R.id.add_photo_button);
+        addPhotoButton.setVisibility(View.INVISIBLE);
+        LayoutUtils.removeViewFromLayout(additionalParamField1);
+        LayoutUtils.removeViewFromLayout(additionalParamField2);
+        LayoutUtils.removeViewFromLayout(additionalParamLabel1);
+        LayoutUtils.removeViewFromLayout(additionalParamLabel2);
+        LayoutUtils.removeViewFromLayout(additionalParamSpinner);
+        LayoutUtils.removeViewFromLayout(additionalParamSpinnerLabel);
+    }
+
+    private void addPartParameterFields() {
+        List<PartParameter> parameters = part.getParameters();
+        ViewGroup container = findViewById(R.id.part_creation_parameters_container);
+        for (PartParameter parameter : parameters) {
+            addParameterField(parameter, container);
+        }
+    }
+
+    private void addParameterField(PartParameter parameter, ViewGroup container) {
+        TextView labelView = new TextView(this);
+        labelView.setText(parameter.getName());
+        labelView.setLayoutParams(additionalParamLabel1.getLayoutParams());
+
+        EditText editText = new EditText(this);
+        editText.setText(parameter.getValue().toString());
+        editText.setKeyListener(null);
+        editText.setLayoutParams(additionalParamField1.getLayoutParams());
+
+        container.addView(labelView);
+        container.addView(editText);
     }
 
     /**
