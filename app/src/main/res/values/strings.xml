@@ -35,5 +35,9 @@
     <string name="performance_score">performance score</string>
     <string name="total">total:</string>
     <string name="cannot_continue">Cannot continue</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pc">PC</string>
     <string name="open_random_part">open random part</string>
 </resources>

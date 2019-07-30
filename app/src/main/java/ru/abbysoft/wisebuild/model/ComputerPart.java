@@ -79,7 +79,6 @@ public abstract class ComputerPart {
         CPU("CPU", ru.abbysoft.wisebuild.model.CPU.class),
         MEMORY_MODULE("Memory module", MemoryModule.class),
         MOTHERBOARD("Motherboard", Motherboard.class),
-
         ASSEMBLED_PC("Assembled PC", AssembledPC.class);
 
         private final String readableName;
