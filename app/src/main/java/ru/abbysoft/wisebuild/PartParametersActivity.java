@@ -39,6 +39,7 @@ import ru.abbysoft.wisebuild.model.MemoryModule;
 import ru.abbysoft.wisebuild.model.Motherboard;
 import ru.abbysoft.wisebuild.storage.DBFactory;
 import ru.abbysoft.wisebuild.utils.LayoutUtils;
+import ru.abbysoft.wisebuild.utils.MiscUtils;
 
 /**
  * Specify parameters for new component
@@ -56,7 +57,7 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
     private static final String IMAGE_URL_BUNDLED = "Bundled image";
 
     private volatile ComputerPart.ComputerPartType partType;
-    private long partId;
+    private ComputerPart part;
     private ImageView imageView;
 
     private TextView headerMessage;
@@ -100,11 +101,14 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         additionalParamSpinnerLabel = findViewById(R.id.additional_param_spinner_label);
         additionalParamSpinner = findViewById(R.id.additional_param_spinner);
         headerMessage = findViewById(R.id.part_creation_label);
-
-
+        
         configurePriceField();
 
         getPassedExtras();
+
+        if (isExtrasNotValid()) {
+            return;
+        }
 
         addAdditionalFields();
 
@@ -146,12 +150,32 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
     private void getPassedExtras() {
         Intent intent = getIntent();
 
-        partId = intent.getLongExtra(PART_ID_EXTRA, -1);
+        part = getPartFromDB(intent.getLongExtra(PART_ID_EXTRA, -1));
         partType = (ComputerPart.ComputerPartType) intent.getSerializableExtra(PART_TYPE_EXTRA);
+
+        if (part == null && partType == null) {
+            partNotFound();
+        }
+    }
+
+    private ComputerPart getPartFromDB(long id) {
+        ComputerPart part = DBFactory.getDatabase().getPart(id);
+
+        return part;
+    }
+
+    private void partNotFound() {
+        MiscUtils.showErrorDialogAndFinish("Error", "Part not found", this);
+    }
+
+    private boolean isExtrasNotValid() {
+        return part == null && partType == null;
     }
 
     private void addAdditionalFields() {
-        switch (partType) {
+        ComputerPart.ComputerPartType type = partType == null ? part.getType() : partType;
+
+        switch (type) {
             case CPU:
                 addFieldsForCPU();
                 break;
@@ -173,10 +197,6 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         ((ViewManager)additionalParamSpinner.getParent())
                 .removeView(additionalParamSpinner);
 
-
-//        validator.put(additionalParamField1, new NotEmptyQuickRule());
-//        validator.put(additionalParamField2, new NotEmptyQuickRule());
-
         additionalParamLabel1.setText(getString(R.string.manufacturer));
         additionalParamLabel2.setText(getString(R.string.num_of_cores));
 
@@ -186,8 +206,6 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
     private void addFieldsForMemory() {
         ((ViewManager)additionalParamField2.getParent()).removeView(additionalParamField2);
         ((ViewManager)additionalParamLabel2.getParent()).removeView(additionalParamLabel2);
-
-//        validator.put(additionalParamField1, new NotEmptyQuickRule());
 
         additionalParamLabel1.setText(getString(R.string.num_of_cores));
         additionalParamField1.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -228,7 +246,7 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
     }
 
     private boolean partBeingCreated() {
-        return partId == -1;
+        return part == null;
     }
 
     private void configureViewForCreation() {
@@ -239,9 +257,7 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
     }
 
     private void configureViewForExistingPart() {
-        ComputerPart part = DBFactory.getDatabase().getPart(partId);
-
-        headerMessage.setText(part);
+        headerMessage.setText(part.getName());
     }
 
     /**

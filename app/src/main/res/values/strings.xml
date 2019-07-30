@@ -34,4 +34,5 @@
     <string name="performance_score">performance score</string>
     <string name="total">total:</string>
     <string name="cannot_continue">Cannot continue</string>
+    <string name="open_random_part">open random part</string>
 </resources>

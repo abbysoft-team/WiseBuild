@@ -108,7 +108,7 @@ public class CreateAssemblyAdapter
 
             // mocking data received from PartBrowser,
             // unless it not implemented
-            ComputerPart part = ModelUtils.generateRandomPart(type);
+            ComputerPart part = ModelUtils.generateRandomPartOfType(type);
             parts.add(part);
             currentPart = part;
 
