@@ -1,7 +1,6 @@
 package ru.abbysoft.wisebuild.browser;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,17 +8,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.view.View;
 
 import ru.abbysoft.wisebuild.AddPartActivity;
 import ru.abbysoft.wisebuild.R;
 import ru.abbysoft.wisebuild.model.ComputerPart;
-import ru.abbysoft.wisebuild.storage.DBFactory;
 
-public class PartBrowserActivity extends AppCompatActivity {
+public class BrowserActivity extends AppCompatActivity {
 
     private static final int PICK_PART_REQUEST = 0;
 
@@ -36,18 +33,13 @@ public class PartBrowserActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        setUpRecyclerView();
+
+        setUpViewPager();
     }
 
-    private void setUpRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.partRecyclerView);
-        recyclerView.setHasFixedSize(true);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        RecyclerView.Adapter adapter = new PartBrowserAdapter(DBFactory.getDatabase(), this);
-        recyclerView.setAdapter(adapter);
+    private void setUpViewPager() {
+        ViewPager viewPager = findViewById(R.id.browserViewPager);
+        viewPager.setAdapter(new BrowserPagerAdapter(getSupportFragmentManager()));
     }
 
     public void addPartButtonClicked(View view) {
@@ -64,7 +56,7 @@ public class PartBrowserActivity extends AppCompatActivity {
     public static void launchForPickPartFrom(Activity activity,
                                              ComputerPart.ComputerPartType type) {
 
-        Intent intent = new Intent(activity, PartBrowserActivity.class);
+        Intent intent = new Intent(activity, BrowserActivity.class);
         activity.startActivityForResult(intent, PICK_PART_REQUEST);
     }
 }

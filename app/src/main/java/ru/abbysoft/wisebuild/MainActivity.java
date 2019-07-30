@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import ru.abbysoft.wisebuild.assembly.CreateAssemblyActivity;
-import ru.abbysoft.wisebuild.browser.PartBrowserActivity;
+import ru.abbysoft.wisebuild.browser.BrowserActivity;
 import ru.abbysoft.wisebuild.model.CPU;
 import ru.abbysoft.wisebuild.model.ComputerPart;
 import ru.abbysoft.wisebuild.model.MemoryModule;
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void browsePartsButtonClicked(View view) {
-        Intent intent = new Intent(this, PartBrowserActivity.class);
+        Intent intent = new Intent(this, BrowserActivity.class);
         startActivity(intent);
     }
 

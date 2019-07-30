@@ -104,7 +104,7 @@ public class CreateAssemblyAdapter
         private void addNewPart() {
             assert (activity != null);
 
-            //PartBrowserActivity.launchForPickPartFrom(activity, type);
+            //BrowserActivity.launchForPickPartFrom(activity, type);
 
             // mocking data received from PartBrowser,
             // unless it not implemented
