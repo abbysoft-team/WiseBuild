@@ -13,7 +13,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.view.View;
 
-import ru.abbysoft.wisebuild.PartCreationActivity;
+import ru.abbysoft.wisebuild.PartParametersActivity;
 import ru.abbysoft.wisebuild.R;
 import ru.abbysoft.wisebuild.model.ComputerPart;
 
@@ -50,7 +50,7 @@ public class BrowserActivity extends AppCompatActivity {
     }
 
     public void addPartButtonClicked(View view) {
-        PartCreationActivity.launch(this,
+        PartParametersActivity.launch(this,
                 ComputerPart.ComputerPartType.values()[viewPager.getCurrentItem()]);
     }
 

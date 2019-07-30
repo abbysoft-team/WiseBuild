@@ -40,7 +40,7 @@ public class AddPartActivity extends AppCompatActivity {
      * @param view button itself
      */
     public void addMotherboard(View view) {
-        PartCreationActivity.launch(this, ComputerPart.ComputerPartType.MOTHERBOARD);
+        PartParametersActivity.launch(this, ComputerPart.ComputerPartType.MOTHERBOARD);
     }
 
     /**
@@ -49,7 +49,7 @@ public class AddPartActivity extends AppCompatActivity {
      * @param view button itself
      */
     public void addCPU(View view) {
-        PartCreationActivity.launch(this,ComputerPart.ComputerPartType.CPU);
+        PartParametersActivity.launch(this,ComputerPart.ComputerPartType.CPU);
     }
 
     /**
@@ -58,7 +58,7 @@ public class AddPartActivity extends AppCompatActivity {
      * @param view button itself
      */
     public void addMemory(View view) {
-        PartCreationActivity.launch(this,ComputerPart.ComputerPartType.MEMORY_MODULE);
+        PartParametersActivity.launch(this,ComputerPart.ComputerPartType.MEMORY_MODULE);
     }
 
     /**
