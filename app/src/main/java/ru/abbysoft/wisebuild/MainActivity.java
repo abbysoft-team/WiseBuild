@@ -14,6 +14,7 @@ import ru.abbysoft.wisebuild.model.MemoryModule;
 import ru.abbysoft.wisebuild.model.Motherboard;
 import ru.abbysoft.wisebuild.storage.DBFactory;
 import ru.abbysoft.wisebuild.storage.DBInterface;
+import ru.abbysoft.wisebuild.ui.login.LoginActivity;
 import ru.abbysoft.wisebuild.utils.ModelUtils;
 
 /**
@@ -66,5 +67,9 @@ public class MainActivity extends AppCompatActivity {
         DBFactory.getDatabase().storePart(randomOne);
 
         PartParametersActivity.launchForViewParametersOf(randomOne.getId(), this);
+    }
+
+    public void signInButtonClicked(View view) {
+        LoginActivity.startFrom(this);
     }
 }
