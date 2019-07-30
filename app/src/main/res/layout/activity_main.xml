@@ -23,6 +23,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
+            android:id="@+id/open_random_part_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="openRandomPartButtonClicked"
+            android:text="@string/open_random_part" />
+
+        <Button
             android:id="@+id/part_list_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

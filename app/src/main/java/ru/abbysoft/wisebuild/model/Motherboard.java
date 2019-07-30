@@ -21,7 +21,7 @@ public class Motherboard extends ComputerPart {
     public List<PartParameter> getParameters() {
         ArrayList<PartParameter> parameters = new ArrayList<>(1);
 
-        parameters.add(new PartParameter("type", socketType.name()));
+        parameters.add(new PartParameter("Type", socketType.name()));
 
         return parameters;
     }

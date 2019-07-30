@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,8 +16,10 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -36,24 +39,31 @@ import ru.abbysoft.wisebuild.model.CPU;
 import ru.abbysoft.wisebuild.model.ComputerPart;
 import ru.abbysoft.wisebuild.model.MemoryModule;
 import ru.abbysoft.wisebuild.model.Motherboard;
+import ru.abbysoft.wisebuild.model.PartParameter;
 import ru.abbysoft.wisebuild.storage.DBFactory;
 import ru.abbysoft.wisebuild.utils.LayoutUtils;
+import ru.abbysoft.wisebuild.utils.MiscUtils;
 
 /**
  * Specify parameters for new component
  *
  * @author apopov
  */
-public class PartCreationActivity extends AppCompatActivity implements Validator.ValidationListener {
+public class PartParametersActivity extends AppCompatActivity implements Validator.ValidationListener {
 
     public static final String PART_TYPE_EXTRA = "PART_TYPE";
+    public static final String PART_ID_EXTRA = "PART ID";
+
     private static final int NEW_IMAGE_PICKED = 1;
     private static final String LOG_TAG = "PART_CREATION_ACTIVITY";
     private static final int MAX_IMAGE_SIZE = 1000;
     private static final String IMAGE_URL_BUNDLED = "Bundled image";
 
     private volatile ComputerPart.ComputerPartType partType;
+    private ComputerPart part;
     private ImageView imageView;
+
+    private TextView headerMessage;
 
     private TextView additionalParamLabel1;
     private TextView additionalParamLabel2;
@@ -93,12 +103,23 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
         additionalParamField2 = findViewById(R.id.additional_parameter_2_field);
         additionalParamSpinnerLabel = findViewById(R.id.additional_param_spinner_label);
         additionalParamSpinner = findViewById(R.id.additional_param_spinner);
+        headerMessage = findViewById(R.id.part_creation_label);
 
         configurePriceField();
 
         getPassedExtras();
-        addAdditionalFields();
-        addValidators();
+
+        if (isExtrasNotValid()) {
+            return;
+        }
+
+        if (partBeingCreated()) {
+            addAdditionalFields();
+
+            configureViewForCreation();
+        } else {
+            configureViewForExistingPart();
+        }
     }
 
     private void configurePriceField() {
@@ -132,17 +153,32 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
     private void getPassedExtras() {
         Intent intent = getIntent();
 
+        part = getPartFromDB(intent.getLongExtra(PART_ID_EXTRA, -1));
         partType = (ComputerPart.ComputerPartType) intent.getSerializableExtra(PART_TYPE_EXTRA);
 
-        TextView headerMessage = findViewById(R.id.part_creation_label);
+        if (part == null && partType == null) {
+            partNotFound();
+        }
+    }
 
-        // TODO placeholders?
-        headerMessage.setText(
-                getString(R.string.creating_part_message, partType.getReadableName()));
+    private ComputerPart getPartFromDB(long id) {
+        ComputerPart part = DBFactory.getDatabase().getPart(id);
+
+        return part;
+    }
+
+    private void partNotFound() {
+        MiscUtils.showErrorDialogAndFinish("Error", "Part not found", this);
+    }
+
+    private boolean isExtrasNotValid() {
+        return part == null && partType == null;
     }
 
     private void addAdditionalFields() {
-        switch (partType) {
+        ComputerPart.ComputerPartType type = partType == null ? part.getType() : partType;
+
+        switch (type) {
             case CPU:
                 addFieldsForCPU();
                 break;
@@ -164,10 +200,6 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
         ((ViewManager)additionalParamSpinner.getParent())
                 .removeView(additionalParamSpinner);
 
-
-//        validator.put(additionalParamField1, new NotEmptyQuickRule());
-//        validator.put(additionalParamField2, new NotEmptyQuickRule());
-
         additionalParamLabel1.setText(getString(R.string.manufacturer));
         additionalParamLabel2.setText(getString(R.string.num_of_cores));
 
@@ -177,8 +209,6 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
     private void addFieldsForMemory() {
         ((ViewManager)additionalParamField2.getParent()).removeView(additionalParamField2);
         ((ViewManager)additionalParamLabel2.getParent()).removeView(additionalParamLabel2);
-
-//        validator.put(additionalParamField1, new NotEmptyQuickRule());
 
         additionalParamLabel1.setText(getString(R.string.num_of_cores));
         additionalParamField1.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -197,7 +227,7 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
 
     private void addFieldsForMotherboard() {
         LayoutUtils.removeViewFromLayout(additionalParamField1);
-        LayoutUtils.removeViewFromLayout(additionalParamField1);
+        LayoutUtils.removeViewFromLayout(additionalParamField2);
         LayoutUtils.removeViewFromLayout(additionalParamLabel1);
         LayoutUtils.removeViewFromLayout(additionalParamLabel2);
 
@@ -216,6 +246,68 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
     private void addValidators() {
         validator = new Validator(this);
         validator.setValidationListener(this);
+    }
+
+    private boolean partBeingCreated() {
+        return part == null;
+    }
+
+    private void configureViewForCreation() {
+        addValidators();
+
+        headerMessage.setText(
+                getString(R.string.creating_part_message, partType.getReadableName()));
+    }
+
+    private void configureViewForExistingPart() {
+        headerMessage.setText(part.getType().getReadableName());
+        nameField.setText(part.getName());
+        descriptionField.setText(descriptionField.getText());
+        String price = "$" + part.getPriceUsd();
+        priceField.setText(price);
+
+        hideUnusedViews();
+        addPartParameterFields();
+
+        // disable fields for editing
+        nameField.setKeyListener(null);
+        descriptionField.setKeyListener(null);
+        priceField.setKeyListener(null);
+    }
+
+    private void hideUnusedViews() {
+        Button saveButton = findViewById(R.id.save_component_button);
+        saveButton.setVisibility(View.INVISIBLE);
+        Button addPhotoButton = findViewById(R.id.add_photo_button);
+        addPhotoButton.setVisibility(View.INVISIBLE);
+        LayoutUtils.removeViewFromLayout(additionalParamField1);
+        LayoutUtils.removeViewFromLayout(additionalParamField2);
+        LayoutUtils.removeViewFromLayout(additionalParamLabel1);
+        LayoutUtils.removeViewFromLayout(additionalParamLabel2);
+        LayoutUtils.removeViewFromLayout(additionalParamSpinner);
+        LayoutUtils.removeViewFromLayout(additionalParamSpinnerLabel);
+    }
+
+    private void addPartParameterFields() {
+        List<PartParameter> parameters = part.getParameters();
+        ViewGroup container = findViewById(R.id.part_creation_parameters_container);
+        for (PartParameter parameter : parameters) {
+            addParameterField(parameter, container);
+        }
+    }
+
+    private void addParameterField(PartParameter parameter, ViewGroup container) {
+        TextView labelView = new TextView(this);
+        labelView.setText(parameter.getName());
+        labelView.setLayoutParams(additionalParamLabel1.getLayoutParams());
+
+        EditText editText = new EditText(this);
+        editText.setText(parameter.getValue().toString());
+        editText.setKeyListener(null);
+        editText.setLayoutParams(additionalParamField1.getLayoutParams());
+
+        container.addView(labelView);
+        container.addView(editText);
     }
 
     /**
@@ -415,5 +507,18 @@ public class PartCreationActivity extends AppCompatActivity implements Validator
         }
 
         loadImage(imageUri);
+    }
+
+    /**
+     * Launch detailed information for specific part
+     *
+     * @param partId part id in db which parameters should be displayed
+     * @param context context
+     */
+    public static void launchForViewParametersOf(long partId, Context context) {
+        Intent intent = new Intent(context, PartParametersActivity.class);
+        intent.putExtra(PART_ID_EXTRA, partId);
+
+        context.startActivity(intent);
     }
 }

@@ -9,10 +9,12 @@ import android.view.View;
 import ru.abbysoft.wisebuild.assembly.CreateAssemblyActivity;
 import ru.abbysoft.wisebuild.browser.PartBrowserActivity;
 import ru.abbysoft.wisebuild.model.CPU;
+import ru.abbysoft.wisebuild.model.ComputerPart;
 import ru.abbysoft.wisebuild.model.MemoryModule;
 import ru.abbysoft.wisebuild.model.Motherboard;
 import ru.abbysoft.wisebuild.storage.DBFactory;
 import ru.abbysoft.wisebuild.storage.DBInterface;
+import ru.abbysoft.wisebuild.utils.ModelUtils;
 
 /**
  * MainActivity class
@@ -57,5 +59,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void createAssemblyButtonClicked(View view) {
         CreateAssemblyActivity.launchActivityFrom(this);
+    }
+
+    public void openRandomPartButtonClicked(View view) {
+        ComputerPart randomOne = ModelUtils.generateRandomPart();
+        DBFactory.getDatabase().storePart(randomOne);
+
+        PartParametersActivity.launchForViewParametersOf(randomOne.getId(), this);
     }
 }

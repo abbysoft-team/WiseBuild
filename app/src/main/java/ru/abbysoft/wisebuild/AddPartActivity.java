@@ -62,8 +62,8 @@ public class AddPartActivity extends AppCompatActivity {
     }
 
     private void launchPartCreationActivity(ComputerPart.ComputerPartType partType) {
-        Intent intent = new Intent(this, PartCreationActivity.class);
-        intent.putExtra(PartCreationActivity.PART_TYPE_EXTRA, partType);
+        Intent intent = new Intent(this, PartParametersActivity.class);
+        intent.putExtra(PartParametersActivity.PART_TYPE_EXTRA, partType);
         startActivity(intent);
     }
 

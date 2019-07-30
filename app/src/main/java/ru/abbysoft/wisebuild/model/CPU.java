@@ -31,8 +31,8 @@ public class CPU extends ComputerPart {
     public List<PartParameter> getParameters() {
         ArrayList<PartParameter> parameters = new ArrayList<>(2);
 
-        parameters.add(new PartParameter("manufacturer", manufacturer));
-        parameters.add(new PartParameter("cores", cores));
+        parameters.add(new PartParameter("Manufacturer", manufacturer));
+        parameters.add(new PartParameter("Cores", cores));
 
         return parameters;
     }

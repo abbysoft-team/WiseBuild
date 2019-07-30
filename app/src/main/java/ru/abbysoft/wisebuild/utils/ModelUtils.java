@@ -18,6 +18,20 @@ public class ModelUtils {
     private static final Random RANDOM = new Random(System.currentTimeMillis());
 
     /**
+     * Generate random part of random type (except AssembledPC)
+     *
+     * @return random computer part
+     */
+    public static ComputerPart generateRandomPart() {
+        List<ComputerPart.ComputerPartType> types =
+                ComputerPart.ComputerPartType.getEntriesWithoutAssembly();
+
+        ComputerPart.ComputerPartType type = types.get(RANDOM.nextInt(types.size() - 1));
+
+        return generateRandomPartOfType(type);
+    }
+
+    /**
      * Generate random part
      *
      * AssembledPC part type is not returned
@@ -25,12 +39,7 @@ public class ModelUtils {
      * @param type type of generated part
      * @return generated random ComputerPart
      */
-    public static ComputerPart generateRandomPart(ComputerPart.ComputerPartType type) {
-//        List<ComputerPart.ComputerPartType> types =
-//                ComputerPart.ComputerPartType.getEntriesWithoutAssembly();
-//
-//        ComputerPart.ComputerPartType type = types.get(RANDOM.nextInt(types.size() - 1));
-
+    public static ComputerPart generateRandomPartOfType(ComputerPart.ComputerPartType type) {
         ComputerPart part;
         switch (type) {
             case MOTHERBOARD:
