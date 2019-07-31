@@ -25,7 +25,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vk.api.sdk.VK;
+import com.vk.api.sdk.auth.VKScope;
 import com.vk.api.sdk.utils.VKUtils;
+
+import java.util.Arrays;
 
 import ru.abbysoft.wisebuild.MainActivity;
 import ru.abbysoft.wisebuild.R;
@@ -134,6 +138,15 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Login with vk sdk api
+     *
+     * @param view view
+     */
+    public void vkLoginButtonClicked(View view) {
+        VK.login(this);
     }
 
     /**
