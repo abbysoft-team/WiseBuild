@@ -28,7 +28,7 @@
                 android:value="ru.abbysoft.wisebuild.MainActivity" />
         </activity>
         <activity
-            android:name=".browser.PartBrowserActivity"
+            android:name=".browser.BrowserActivity"
             android:label="@string/title_activity_part_list"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">

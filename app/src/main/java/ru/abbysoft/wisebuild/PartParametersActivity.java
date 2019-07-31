@@ -88,6 +88,12 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
     private Validator validator;
     private boolean validationResult;
 
+    public static void launch(Context context, ComputerPart.ComputerPartType partType) {
+        Intent intent = new Intent(context, PartParametersActivity.class);
+        intent.putExtra(PartParametersActivity.PART_TYPE_EXTRA, partType);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

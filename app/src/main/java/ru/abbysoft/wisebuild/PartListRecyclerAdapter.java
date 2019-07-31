@@ -1,4 +1,4 @@
-package ru.abbysoft.wisebuild.browser;
+package ru.abbysoft.wisebuild;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -14,17 +14,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import ru.abbysoft.wisebuild.R;
 import ru.abbysoft.wisebuild.model.ComputerPart;
 import ru.abbysoft.wisebuild.storage.DBInterface;
 
 /**
  * Adapter for computer parts list
  */
-class PartBrowserAdapter extends RecyclerView.Adapter<PartBrowserAdapter.ViewHolder> {
+class PartListRecyclerAdapter extends RecyclerView.Adapter<PartListRecyclerAdapter.ViewHolder> {
     private DBInterface db;
     private List<ComputerPart> parts;
     private Context context;
+    private ComputerPart.ComputerPartType type;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         View view;
@@ -42,10 +42,23 @@ class PartBrowserAdapter extends RecyclerView.Adapter<PartBrowserAdapter.ViewHol
         }
     }
 
-    PartBrowserAdapter(DBInterface database, Context context) {
+    PartListRecyclerAdapter(DBInterface database, Context context) {
         db = database;
         this.context = context;
         parts = database.getAllComponents();
+        type = null;
+    }
+
+    PartListRecyclerAdapter(DBInterface database, Context context, ComputerPart.ComputerPartType type) {
+        this.db = database;
+        this.context = context;
+        this.type = type;
+
+        if (type != null) {
+            this.parts = database.getComponentsOfType(type);
+        } else {
+            this.parts = database.getAllComponents();
+        }
     }
 
     @NonNull
@@ -67,7 +80,7 @@ class PartBrowserAdapter extends RecyclerView.Adapter<PartBrowserAdapter.ViewHol
         String priceText = part.getPriceUsd() != 0 ?
                 Integer.toString((int) part.getPriceUsd()) : unknownString;
 
-        holder.price.setText(priceText);
+        holder.price.setText(String.format(context.getString(R.string.price_value),priceText));
 
         if (part.getPhoto() != null) {
             holder.photo.setImageBitmap(part.getPhoto());

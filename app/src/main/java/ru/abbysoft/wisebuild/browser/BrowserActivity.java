@@ -1,32 +1,33 @@
 package ru.abbysoft.wisebuild.browser;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.view.View;
 
-import ru.abbysoft.wisebuild.AddPartActivity;
+import ru.abbysoft.wisebuild.PartParametersActivity;
 import ru.abbysoft.wisebuild.R;
 import ru.abbysoft.wisebuild.model.ComputerPart;
-import ru.abbysoft.wisebuild.storage.DBFactory;
 
-public class PartBrowserActivity extends AppCompatActivity {
+public class BrowserActivity extends AppCompatActivity {
 
     private static final int PICK_PART_REQUEST = 0;
+
+    private ViewPager viewPager;
+    private TabLayout tabs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_part_list);
+        setContentView(R.layout.browser);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -36,27 +37,26 @@ public class PartBrowserActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        setUpRecyclerView();
+
+        setUpViewPager();
     }
 
-    private void setUpRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.partRecyclerView);
-        recyclerView.setHasFixedSize(true);
+    private void setUpViewPager() {
+        this.viewPager = findViewById(R.id.browserViewPager);
+        viewPager.setAdapter(new BrowserPagerAdapter(getSupportFragmentManager()));
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        RecyclerView.Adapter adapter = new PartBrowserAdapter(DBFactory.getDatabase(), this);
-        recyclerView.setAdapter(adapter);
+        this.tabs = findViewById(R.id.browserTabs);
+        tabs.setupWithViewPager(viewPager);
     }
 
     public void addPartButtonClicked(View view) {
-        AddPartActivity.createIntentFrom(this, getClass());
+        PartParametersActivity.launch(this,
+                ComputerPart.ComputerPartType.values()[viewPager.getCurrentItem()]);
     }
 
     /**
      * Launch this activity from given context in order to recieve
-     * part back from part browser
+     * part back from part browser_content
      *
      * @param activity activity from which to launch this activity
      * @param type type of part to be picked
@@ -64,7 +64,7 @@ public class PartBrowserActivity extends AppCompatActivity {
     public static void launchForPickPartFrom(Activity activity,
                                              ComputerPart.ComputerPartType type) {
 
-        Intent intent = new Intent(activity, PartBrowserActivity.class);
+        Intent intent = new Intent(activity, BrowserActivity.class);
         activity.startActivityForResult(intent, PICK_PART_REQUEST);
     }
 }
