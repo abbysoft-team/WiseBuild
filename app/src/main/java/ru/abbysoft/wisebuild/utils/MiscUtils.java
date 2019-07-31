@@ -5,7 +5,21 @@ import android.content.Context;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.vk.api.sdk.VK;
+import com.vk.api.sdk.VKApiCallback;
+import com.vk.api.sdk.VKApiManager;
+import com.vk.api.sdk.exceptions.VKApiException;
+import com.vk.api.sdk.exceptions.VKApiExecutionException;
+import com.vk.api.sdk.internal.ApiCommand;
+import com.vk.api.sdk.requests.VKRequest;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+
 import ru.abbysoft.wisebuild.R;
+import ru.abbysoft.wisebuild.api.vk.AccountInfoRequest;
+import ru.abbysoft.wisebuild.model.VkUser;
 
 /**
  * Misc helper functions
@@ -30,5 +44,17 @@ public class MiscUtils {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    /**
+     * Get logged user name
+     *
+     * Method access network api so it is async
+     * provide callback to get result of operation
+     *
+     * @param callback callback for request
+     */
+    public static void getUserNameAsync(VKApiCallback<VkUser> callback) {
+        VK.execute(new AccountInfoRequest(), callback);
     }
 }
