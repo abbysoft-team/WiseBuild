@@ -216,7 +216,7 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         ((ViewManager)additionalParamField2.getParent()).removeView(additionalParamField2);
         ((ViewManager)additionalParamLabel2.getParent()).removeView(additionalParamLabel2);
 
-        additionalParamLabel1.setText(getString(R.string.num_of_cores));
+        additionalParamLabel1.setText(getString(R.string.capacity_mb));
         additionalParamField1.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         additionalParamSpinnerLabel.setText(getString(R.string.type));

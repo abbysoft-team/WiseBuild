@@ -126,7 +126,7 @@ public class CreateAssemblyActivity extends AppCompatActivity implements PartLis
         pc.setMotherboard(motherboard);
 
         DBFactory.getDatabase().storePart(pc);
-        
+
         MiscUtils.showMessageDialogAndFinish("Success",
                 "Assembly saved successfully", this);
     }
