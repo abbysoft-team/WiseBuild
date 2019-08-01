@@ -27,7 +27,7 @@
     <Button
         android:id="@+id/add_memory_button"
         android:layout_width="300dp"
-        android:layout_height="0dp"
+        android:layout_height="70dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="38dp"
@@ -44,7 +44,7 @@
     <Button
         android:id="@+id/add_motherboard_button"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="100dp"
@@ -61,7 +61,7 @@
     <Button
         android:id="@+id/add_cpu_button"
         android:layout_width="300dp"
-        android:layout_height="0dp"
+        android:layout_height="70dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="35dp"

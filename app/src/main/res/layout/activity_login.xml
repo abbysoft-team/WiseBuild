@@ -29,6 +29,7 @@
 
     <Button
         android:id="@+id/button2"
+        style="@style/AppTheme.ButtonColored"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="8dp"

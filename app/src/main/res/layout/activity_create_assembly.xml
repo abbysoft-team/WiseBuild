@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp">
 
         <TextView
             android:id="@+id/assembly_activity_header"
@@ -39,6 +40,7 @@
             android:layout_height="17dp"
             android:layout_marginTop="12dp"
             android:text="@string/total"
+            android:textColor="@color/colorTextSecondary"
             app:layout_constraintStart_toStartOf="@+id/assembly_total_price"
             app:layout_constraintTop_toBottomOf="@+id/assembly_parts_recycler" />
 
@@ -50,7 +52,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
             android:text="12524$"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorTextSecondary"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/assembly_total_price_label" />
@@ -62,7 +64,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:text="259755"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorTextSecondary"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/assembly_total_price" />
@@ -72,11 +74,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/performance_score"
+            android:textColor="@color/colorTextSecondary"
             app:layout_constraintStart_toStartOf="@+id/assembly_total_price2"
             app:layout_constraintTop_toTopOf="@+id/assembly_total_price_label" />
 
         <Button
             android:id="@+id/assembly_save_button"
+            style="@style/AppTheme.ButtonColored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -85,6 +89,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:onClick="saveAssembly"
+            android:padding="10dp"
             android:text="@string/save_assembly"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -15,8 +16,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,49 +25,50 @@
 
         <Button
             android:id="@+id/sign_in_button"
-            android:layout_width="match_parent"
+            style="@style/AppTheme.ButtonColored"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:onClick="signInButtonClicked"
             android:text="@string/action_sign_in" />
 
         <Button
             android:id="@+id/open_random_part_button"
-            android:layout_width="match_parent"
+            style="@style/AppTheme.Button"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:onClick="openRandomPartButtonClicked"
             android:text="@string/open_random_part" />
 
         <Button
             android:id="@+id/part_list_button"
-            android:layout_width="wrap_content"
+            style="@style/AppTheme.Button"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:onClick="browsePartsButtonClicked"
             android:text="@string/browse_parts" />
 
         <Button
             android:id="@+id/add_part_button"
-            android:layout_width="wrap_content"
+            style="@style/AppTheme.Button"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
             android:onClick="addPartButtonClicked"
             android:text="@string/add_part" />
 
         <Button
             android:id="@+id/button"
-            android:layout_width="wrap_content"
+            style="@style/AppTheme.Button"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:onClick="createAssemblyButtonClicked"
@@ -82,8 +84,9 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:textSize="35sp"
         android:text="@string/welcome_message"
+        android:textColor="#651FFF"
+        android:textSize="35sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
