@@ -26,6 +26,7 @@ import ru.abbysoft.wisebuild.model.CPU;
 import ru.abbysoft.wisebuild.model.ComputerPart;
 import ru.abbysoft.wisebuild.model.MemoryModule;
 import ru.abbysoft.wisebuild.model.Motherboard;
+import ru.abbysoft.wisebuild.utils.MiscUtils;
 
 public class CreateAssemblyActivity extends AppCompatActivity implements PartListener {
 
@@ -123,7 +124,8 @@ public class CreateAssemblyActivity extends AppCompatActivity implements PartLis
 
         pc.setMotherboard(motherboard);
 
-        Log.i(LOG_TAG, pc.toString());
+        MiscUtils.showMessageDialogAndFinish("Success",
+                "Assembly saved successfully", this);
     }
 
     private boolean validateView() {
