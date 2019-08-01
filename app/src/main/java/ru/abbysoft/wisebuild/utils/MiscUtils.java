@@ -2,7 +2,10 @@ package ru.abbysoft.wisebuild.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.vk.api.sdk.VK;
@@ -82,4 +85,17 @@ public class MiscUtils {
         VK.execute(new AccountInfoRequest(), callback);
     }
 
+    /**
+     * Get price int from field that contains currency
+     * @param priceField some field that contains currency value
+     * @return value in int
+     */
+    public static Integer getPriceFromCurrencyField(@NonNull TextView priceField) {
+        String text = priceField.getText().toString();
+
+        text = text.replaceAll("\\D", "");
+        text = text.trim();
+
+        return Integer.parseInt(text);
+    }
 }

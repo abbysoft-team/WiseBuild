@@ -331,7 +331,7 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         String description = descriptionField.getText().toString().trim();
         Integer price = null;
         if (!priceField.getText().toString().trim().isEmpty()) {
-            price = Integer.parseInt(priceField.getText().toString());
+            price = MiscUtils.getPriceFromCurrencyField(priceField);
         }
 
         ComputerPart part = null;
