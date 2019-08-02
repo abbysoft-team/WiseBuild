@@ -17,7 +17,7 @@ public class Motherboard extends ComputerPart {
     }
 
     @Override
-    public List<PartParameter> getParameters() {
+    public List<PartParameter> getTypeParameters() {
         ArrayList<PartParameter> parameters = new ArrayList<>(1);
 
         parameters.add(new PartParameter("Type", socketType.name()));

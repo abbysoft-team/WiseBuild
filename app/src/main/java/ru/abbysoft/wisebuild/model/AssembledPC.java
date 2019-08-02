@@ -59,7 +59,7 @@ public class AssembledPC extends ComputerPart {
     }
 
     @Override
-    public List<PartParameter> getParameters() {
+    public List<PartParameter> getTypeParameters() {
         return Collections.emptyList();
     }
 

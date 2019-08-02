@@ -295,7 +295,7 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
     }
 
     private void addPartParameterFields() {
-        List<PartParameter> parameters = part.getParameters();
+        List<PartParameter> parameters = part.getTypeParameters();
         ViewGroup container = findViewById(R.id.part_creation_parameters_container);
         for (PartParameter parameter : parameters) {
             addParameterField(parameter, container);

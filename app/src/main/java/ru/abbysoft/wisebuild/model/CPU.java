@@ -28,7 +28,7 @@ public class CPU extends ComputerPart {
     }
 
     @Override
-    public List<PartParameter> getParameters() {
+    public List<PartParameter> getTypeParameters() {
         ArrayList<PartParameter> parameters = new ArrayList<>(2);
 
         parameters.add(new PartParameter("Manufacturer", manufacturer));

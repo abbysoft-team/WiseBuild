@@ -133,7 +133,7 @@ public class CreateAssemblyAdapter
         }
 
         private void removeExtraParametersViews() {
-            int requiredParameters = currentPart.getParameters().size();
+            int requiredParameters = currentPart.getTypeParameters().size();
             for (int i = requiredParameters; i < parameterLabels.size(); i++) {
                 LayoutUtils.removeViewFromLayout(parameterLabels.get(i));
                 LayoutUtils.removeViewFromLayout(parameters.get(i));
@@ -141,7 +141,7 @@ public class CreateAssemblyAdapter
         }
 
         private void fillParameters() {
-            List<PartParameter> partParameters = currentPart.getParameters();
+            List<PartParameter> partParameters = currentPart.getTypeParameters();
             int parameterCount = partParameters.size();
 
             PartParameter nextParameter;

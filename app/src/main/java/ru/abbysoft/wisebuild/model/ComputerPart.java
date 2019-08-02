@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +24,7 @@ public abstract class ComputerPart {
     private final String name;
     private final String trimmedName;
     private volatile String description;
+    private volatile Date releaseDate;
     private volatile Bitmap photo;
     private volatile long priceUsd;
     private final ComputerPartType type;
@@ -47,6 +49,27 @@ public abstract class ComputerPart {
     }
 
     /**
+     * Get all part parameters, common and type specific
+     *
+     * @return all part parameters
+     */
+    public List<PartParameter> getParameters() {
+        List<PartParameter> parameters = new ArrayList<>();
+
+        parameters.add(new PartParameter("name", name));
+        parameters.add(new PartParameter("trimmedName", trimmedName));
+        parameters.add(new PartParameter("description", description));
+        parameters.add(new PartParameter("photo", photo));
+        parameters.add(new PartParameter("priceUsd", priceUsd));
+        parameters.add(new PartParameter("type", type));
+        parameters.add(new PartParameter("releaseDate", releaseDate));
+
+        parameters.addAll(getTypeParameters());
+
+        return parameters;
+    }
+
+    /**
      * Return additional parameters of any concrete part
      *
      * Derived classes must use addParam() to specify this
@@ -54,7 +77,7 @@ public abstract class ComputerPart {
      * some features of this part.
      * @return parameters of part
      */
-    public abstract List<PartParameter> getParameters();
+    public abstract List<PartParameter> getTypeParameters();
 
     public String getFullName() {
         return name;
@@ -94,6 +117,14 @@ public abstract class ComputerPart {
 
     public long getId() {
         return id;
+    }
+
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     public enum ComputerPartType {
