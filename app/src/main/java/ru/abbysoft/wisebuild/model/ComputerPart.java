@@ -2,6 +2,8 @@ package ru.abbysoft.wisebuild.model;
 
 import android.graphics.Bitmap;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,7 @@ import java.util.List;
 public abstract class ComputerPart {
 
     private static long nextID = 0;
+    private static int MAX_TRIMMED_NAME_LENGTH = 20;
 
     /**
      * unique part identifier
@@ -18,15 +21,29 @@ public abstract class ComputerPart {
     private final long id;
 
     private final String name;
+    private final String trimmedName;
     private volatile String description;
     private volatile Bitmap photo;
     private volatile long priceUsd;
     private final ComputerPartType type;
 
-    protected ComputerPart(String name, ComputerPartType type) {
+    protected ComputerPart(@NonNull String name, @NonNull ComputerPartType type) {
         this.name = name;
+        this.trimmedName = createTrimmedName();
         this.type = type;
         this.id = nextID++;
+    }
+
+    private String createTrimmedName() {
+        if (name.length() <= MAX_TRIMMED_NAME_LENGTH) {
+            return getFullName();
+        }
+
+
+        String trimmed = name.substring(0, MAX_TRIMMED_NAME_LENGTH);
+        trimmed += "...";
+
+        return trimmed;
     }
 
     /**
@@ -39,8 +56,12 @@ public abstract class ComputerPart {
      */
     public abstract List<PartParameter> getParameters();
 
-    public String getName() {
+    public String getFullName() {
         return name;
+    }
+
+    public String getTrimmedName() {
+        return trimmedName;
     }
 
     public String getDescription() {

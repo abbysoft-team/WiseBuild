@@ -121,7 +121,7 @@ public class CreateAssemblyAdapter
             LayoutUtils.removeViewFromLayout(noPartContainer);
             LayoutUtils.addViewToLayout(partContainer, layoutContainer);
 
-            partName.setText(currentPart.getName());
+            partName.setText(currentPart.getTrimmedName());
             partPrice.setText(String.valueOf(currentPart.getPriceUsd()));
 
             updateParameters();

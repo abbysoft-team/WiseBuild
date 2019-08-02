@@ -267,7 +267,7 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
 
     private void configureViewForExistingPart() {
         headerMessage.setText(part.getType().getReadableName());
-        nameField.setText(part.getName());
+        nameField.setText(part.getFullName());
         descriptionField.setText(descriptionField.getText());
         String price = "$" + part.getPriceUsd();
         priceField.setText(price);

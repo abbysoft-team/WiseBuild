@@ -46,7 +46,7 @@ public class MemoryModule extends ComputerPart {
 
     @Override
     public String toString() {
-        return String.format("%s with %d mb of %s memory", getName(), getCapacityMb(), type.name);
+        return String.format("%s with %d mb of %s memory", getFullName(), getCapacityMb(), type.name);
     }
 
     /**

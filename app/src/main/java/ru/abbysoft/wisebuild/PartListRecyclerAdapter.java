@@ -74,7 +74,7 @@ class PartListRecyclerAdapter extends RecyclerView.Adapter<PartListRecyclerAdapt
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ComputerPart part = parts.get(position);
-        holder.name.setText(part.getName());
+        holder.name.setText(part.getTrimmedName());
 
         String unknownString = this.context.getString(R.string.unknown);
         String priceText = part.getPriceUsd() != 0 ?
