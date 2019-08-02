@@ -9,14 +9,12 @@ import java.util.List;
  */
 public class CPU extends ComputerPart {
 
-    private final String manufacturer;
-    private final int cores;
+    private String manufacturer;
+    private int cores;
 
-    public CPU(String name, String manufacturer, int cores) {
-        super(name, ComputerPartType.CPU);
+    public CPU() {
+        super(ComputerPartType.CPU);
 
-        this.manufacturer = manufacturer;
-        this.cores = cores;
     }
 
     public String getManufacturer() {
@@ -25,6 +23,14 @@ public class CPU extends ComputerPart {
 
     public int getCores() {
         return cores;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
+    public void setCores(int cores) {
+        this.cores = cores;
     }
 
     @Override

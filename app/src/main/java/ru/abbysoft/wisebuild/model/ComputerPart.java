@@ -10,42 +10,32 @@ import java.util.List;
 
 /**
  * Abstract computer part component
+ *
+ * WARNING:
+ * All derived part types must have constructor with 0 arguments!
+ *
+ * @author apopov
  */
 public abstract class ComputerPart {
 
     private static long nextID = 0;
-    private static int MAX_TRIMMED_NAME_LENGTH = 20;
 
     /**
      * unique part identifier
      */
     private final long id;
 
-    private final String name;
-    private final String trimmedName;
+    private volatile String name;
+    private volatile String trimmedName;
     private volatile String description;
     private volatile Date releaseDate;
     private volatile Bitmap photo;
     private volatile long priceUsd;
     private final ComputerPartType type;
 
-    protected ComputerPart(@NonNull String name, @NonNull ComputerPartType type) {
-        this.name = name;
-        this.trimmedName = createTrimmedName();
+    protected ComputerPart(@NonNull ComputerPartType type) {
         this.type = type;
         this.id = nextID++;
-    }
-
-    private String createTrimmedName() {
-        if (name.length() <= MAX_TRIMMED_NAME_LENGTH) {
-            return getFullName();
-        }
-
-
-        String trimmed = name.substring(0, MAX_TRIMMED_NAME_LENGTH);
-        trimmed += "...";
-
-        return trimmed;
     }
 
     /**
@@ -85,6 +75,24 @@ public abstract class ComputerPart {
 
     public String getTrimmedName() {
         return trimmedName;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        this.trimmedName = createTrimmedName();
+    }
+
+    private String createTrimmedName() {
+        int MAX_TRIMMED_NAME_LENGTH = 20;
+        if (name.length() <= MAX_TRIMMED_NAME_LENGTH) {
+            return getFullName();
+        }
+
+
+        String trimmed = name.substring(0, MAX_TRIMMED_NAME_LENGTH);
+        trimmed += "...";
+
+        return trimmed;
     }
 
     public String getDescription() {

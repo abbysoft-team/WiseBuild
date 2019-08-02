@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -100,32 +101,114 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         setContentView(R.layout.activity_part_creation);
 
         imageView = findViewById(R.id.new_component_image);
-        nameField = findViewById(R.id.part_name_field);
-        descriptionField = findViewById(R.id.part_description_field);
-        priceField = findViewById(R.id.part_price_field);
-        additionalParamLabel1 = findViewById(R.id.additional_parameter_1_label);
-        additionalParamLabel2 = findViewById(R.id.additional_parameter_2_label);
-        additionalParamField1 = findViewById(R.id.additional_parameter_1_field);
-        additionalParamField2 = findViewById(R.id.additional_parameter_2_field);
-        additionalParamSpinnerLabel = findViewById(R.id.additional_param_spinner_label);
-        additionalParamSpinner = findViewById(R.id.additional_param_spinner);
-        headerMessage = findViewById(R.id.part_creation_label);
 
-        configurePriceField();
+        //configurePriceField();
 
         getPassedExtras();
-
         if (isExtrasNotValid()) {
             return;
         }
 
-        if (partBeingCreated()) {
-            addAdditionalFields();
-
-            configureViewForCreation();
-        } else {
-            configureViewForExistingPart();
+        try {
+            addParameterFields();
+        } catch (Exception e) {
+            return;
         }
+
+        if (partBeingCreated()) {
+            //configureViewForCreation();
+        } else {
+            //configureViewForExistingPart();
+        }
+    }
+
+    private void getPassedExtras() {
+        Intent intent = getIntent();
+
+        part = getPartFromDB(intent.getLongExtra(PART_ID_EXTRA, -1));
+        partType = (ComputerPart.ComputerPartType) intent.getSerializableExtra(PART_TYPE_EXTRA);
+
+        if (part == null && partType == null) {
+            partNotFound();
+        }
+    }
+
+    private ComputerPart getPartFromDB(long id) {
+        ComputerPart part = DBFactory.getDatabase().getPart(id);
+
+        return part;
+    }
+
+    private void partNotFound() {
+        MiscUtils.showErrorDialogAndFinish("Error", "Part not found", this);
+    }
+
+    private boolean isExtrasNotValid() {
+        return part == null && partType == null;
+    }
+
+    private void addParameterFields() {
+        ComputerPart partWithFields = part == null ? createEmptyPartOfRequiredType() : part;
+        List<PartParameter> partParameters = partWithFields.getParameters();
+        createPartParameterFields(partParameters);
+    }
+
+    private ComputerPart createEmptyPartOfRequiredType() {
+        try {
+            return (ComputerPart) partType.getObjectClass().newInstance();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+
+        Log.e(LOG_TAG, "Cannot create part for PartView activity");
+        finish();
+        throw new IllegalStateException();
+    }
+
+    private void createPartParameterFields(List<PartParameter> parameters) {
+        for (PartParameter parameter : parameters) {
+            addParameterField(parameter);
+        }
+    }
+
+    private void addParameterField(PartParameter parameter) {
+        ViewGroup container = findViewById(R.id.part_creation_parameters_container);
+        TextView referenceLabel = findViewById(R.id.part_creation_reference_label);
+        TextView referenceField = findViewById(R.id.part_creation_reference_field);
+        ViewGroup referenceContainer = findViewById(R.id.part_creation_reference_container);
+        ViewGroup referenceLabelContainer = findViewById(R.id.part_creation_param_label_container);
+        ViewGroup referenceFieldContainer = findViewById(R.id.part_creation_field_container);
+
+        TextView labelView = new TextView(this);
+        labelView.setText(parameter.getName());
+        labelView.setLayoutParams(referenceLabel.getLayoutParams());
+
+        EditText editText = new EditText(this);
+        editText.setText(parameter.getValueAsString());
+        editText.setKeyListener(null);
+        editText.setLayoutParams(referenceField.getLayoutParams());
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.HORIZONTAL);
+        layout.setLayoutParams(referenceContainer.getLayoutParams());
+
+        LinearLayout labelContainer = new LinearLayout(this);
+        labelContainer.setOrientation(LinearLayout.VERTICAL);
+        labelContainer.setLayoutParams(referenceLabelContainer.getLayoutParams());
+
+        LinearLayout fieldContainer = new LinearLayout(this);
+        fieldContainer.setOrientation(LinearLayout.VERTICAL);
+        fieldContainer.setLayoutParams(referenceFieldContainer.getLayoutParams());
+
+        labelContainer.addView(labelView);
+        fieldContainer.addView(editText);
+
+        layout.addView(labelContainer);
+        layout.addView(fieldContainer);
+
+        container.addView(layout);
     }
 
     private void configurePriceField() {
@@ -154,31 +237,6 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
                 priceField.setSelection(text.length());
             }
         });
-    }
-
-    private void getPassedExtras() {
-        Intent intent = getIntent();
-
-        part = getPartFromDB(intent.getLongExtra(PART_ID_EXTRA, -1));
-        partType = (ComputerPart.ComputerPartType) intent.getSerializableExtra(PART_TYPE_EXTRA);
-
-        if (part == null && partType == null) {
-            partNotFound();
-        }
-    }
-
-    private ComputerPart getPartFromDB(long id) {
-        ComputerPart part = DBFactory.getDatabase().getPart(id);
-
-        return part;
-    }
-
-    private void partNotFound() {
-        MiscUtils.showErrorDialogAndFinish("Error", "Part not found", this);
-    }
-
-    private boolean isExtrasNotValid() {
-        return part == null && partType == null;
     }
 
     private void addAdditionalFields() {
@@ -273,7 +331,7 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         priceField.setText(price);
 
         hideUnusedViews();
-        addPartParameterFields();
+//        addPartParameterFields();
 
         // disable fields for editing
         nameField.setKeyListener(null);
@@ -294,28 +352,6 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         LayoutUtils.removeViewFromLayout(additionalParamSpinnerLabel);
     }
 
-    private void addPartParameterFields() {
-        List<PartParameter> parameters = part.getTypeParameters();
-        ViewGroup container = findViewById(R.id.part_creation_parameters_container);
-        for (PartParameter parameter : parameters) {
-            addParameterField(parameter, container);
-        }
-    }
-
-    private void addParameterField(PartParameter parameter, ViewGroup container) {
-        TextView labelView = new TextView(this);
-        labelView.setText(parameter.getName());
-        labelView.setLayoutParams(additionalParamLabel1.getLayoutParams());
-
-        EditText editText = new EditText(this);
-        editText.setText(parameter.getValue().toString());
-        editText.setKeyListener(null);
-        editText.setLayoutParams(additionalParamField1.getLayoutParams());
-
-        container.addView(labelView);
-        container.addView(editText);
-    }
-
     /**
      * Save component with current parameters
      *
@@ -334,21 +370,21 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
             price = MiscUtils.getPriceFromCurrencyField(priceField);
         }
 
-        ComputerPart part = null;
-        switch (partType) {
-            case CPU:
-                part = getCPUPart(name);
-                break;
-            case MOTHERBOARD:
-                part = getMotherboardPart(name);
-                break;
-            case MEMORY_MODULE:
-                part = getMemoryPart(name);
-                break;
-
-                default:
-                    break;
-        }
+//        ComputerPart part = null;
+//        switch (partType) {
+//            case CPU:
+//                part = getCPUPart(name);
+//                break;
+//            case MOTHERBOARD:
+//                part = getMotherboardPart(name);
+//                break;
+//            case MEMORY_MODULE:
+//                part = getMemoryPart(name);
+//                break;
+//
+//                default:
+//                    break;
+//        }
 
         part.setDescription(description);
         part.setPhoto(currentImage);
@@ -361,28 +397,28 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         DBFactory.getDatabase().storePart(part);
         showSaveSuccessMessage();
     }
-
-    private ComputerPart getCPUPart(String name) {
-        String manufacturer = additionalParamField1.getText().toString();
-        int cores = Integer.parseInt(additionalParamField2.getText().toString());
-
-        return new CPU(name, manufacturer, cores);
-    }
-
-    private ComputerPart getMotherboardPart(String name) {
-        Motherboard.SocketType socket =
-                (Motherboard.SocketType) additionalParamSpinner.getSelectedItem();
-
-        return new Motherboard(name, socket);
-    }
-
-    private ComputerPart getMemoryPart(String name) {
-        int capacity = Integer.parseInt(additionalParamField1.getText().toString());
-        MemoryModule.MemoryType type =
-                (MemoryModule.MemoryType) additionalParamSpinner.getSelectedItem();
-
-        return new MemoryModule(name, type, capacity);
-    }
+//
+//    private ComputerPart getCPUPart(String name) {
+//        String manufacturer = additionalParamField1.getText().toString();
+//        int cores = Integer.parseInt(additionalParamField2.getText().toString());
+//
+//        return new CPU(name, manufacturer, cores);
+//    }
+//
+//    private ComputerPart getMotherboardPart(String name) {
+//        Motherboard.SocketType socket =
+//                (Motherboard.SocketType) additionalParamSpinner.getSelectedItem();
+//
+//        return new Motherboard(name, socket);
+//    }
+//
+//    private ComputerPart getMemoryPart(String name) {
+//        int capacity = Integer.parseInt(additionalParamField1.getText().toString());
+//        MemoryModule.MemoryType type =
+//                (MemoryModule.MemoryType) additionalParamSpinner.getSelectedItem();
+//
+//        return new MemoryModule(name, type, capacity);
+//    }
 
     /**
      * Choose image for component

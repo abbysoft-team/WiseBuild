@@ -113,7 +113,8 @@ public class CreateAssemblyActivity extends AppCompatActivity implements PartLis
             return;
         }
 
-        AssembledPC pc = new AssembledPC(new Date().toString());
+        AssembledPC pc = new AssembledPC();
+        pc.setName(new Date().toString());
         pc.setCpu(cpu);
 
         try {

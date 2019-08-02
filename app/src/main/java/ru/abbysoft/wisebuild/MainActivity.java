@@ -53,11 +53,9 @@ public class MainActivity extends AppCompatActivity {
     private void createTestData() {
         DBInterface db = DBFactory.getDatabase();
 
-        db.storePart(new CPU("Intel core i3", "Intel", 2));
-        db.storePart(new CPU("Intel core i5", "Intel", 4));
-        db.storePart(new CPU("Intel core i7", "Intel", 8));
-        db.storePart(new Motherboard("Asus MX243", Motherboard.SocketType.LGA1155));
-        db.storePart(new MemoryModule("Samsung S400488", MemoryModule.MemoryType.DDR4, 8000));
+        for (int i = 0; i < 50; i++) {
+            db.storePart(ModelUtils.generateRandomPart());
+        }
     }
 
     /**

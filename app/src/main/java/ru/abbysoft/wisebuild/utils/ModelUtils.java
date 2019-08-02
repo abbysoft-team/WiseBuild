@@ -66,22 +66,43 @@ public class ModelUtils {
                 "i3 3450", "i9 9800K", "Ryzen 7 3400X", "FX 8200"};
         String[] manufactures = {"Intel", "AMD", "ARM", "Elbrus"};
 
-        return new CPU(names[RANDOM.nextInt(names.length)],
-                manufactures[RANDOM.nextInt(manufactures.length)], RANDOM.nextInt(64));
+        String name = names[RANDOM.nextInt(names.length)];
+        String manufacturer = manufactures[RANDOM.nextInt(manufactures.length)];
+        int cores = RANDOM.nextInt(64);
+
+        CPU cpu = new CPU();
+        cpu.setName(name);
+        cpu.setManufacturer(manufacturer);
+        cpu.setCores(cores);
+
+        return cpu;
     }
 
     private static Motherboard generateRandomMotherboard() {
         Motherboard.SocketType[] socketTypes = Motherboard.SocketType.values();
         Motherboard.SocketType type = socketTypes[RANDOM.nextInt(socketTypes.length)];
 
-        return new Motherboard("Motherboard" + RANDOM.nextInt(), type);
+        String name = "Motherboard-" + RANDOM.nextInt(5000);
+        Motherboard motherboard = new Motherboard();
+        motherboard.setName(name);
+        motherboard.setSocketType(type);
+
+        return motherboard;
     }
 
     private static MemoryModule generateRandomMemory() {
         String[] names = {"Patriot", "Kingston", "Samsung", "Apple", "Elbrus"};
         MemoryModule.MemoryType[] types = MemoryModule.MemoryType.values();
 
-        return new MemoryModule(names[RANDOM.nextInt(names.length)],
-                types[RANDOM.nextInt(types.length)], RANDOM.nextInt(32));
+        String name = names[RANDOM.nextInt(names.length)];
+        int capacity = RANDOM.nextInt(32 * 1024);
+        MemoryModule.MemoryType type = types[RANDOM.nextInt(types.length)];
+
+        MemoryModule module = new MemoryModule();
+        module.setName(name);
+        module.setMemoryType(type);
+        module.setCapacityMb(capacity);
+
+        return module;
     }
 }

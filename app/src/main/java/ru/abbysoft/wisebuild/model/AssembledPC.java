@@ -19,11 +19,9 @@ public class AssembledPC extends ComputerPart {
 
     /**
      * Constructor
-     *
-     * @param name computer name
      */
-    public AssembledPC(String name) {
-        super(name, ComputerPartType.ASSEMBLED_PC);
+    public AssembledPC() {
+        super(ComputerPartType.ASSEMBLED_PC);
 
         memoryModules = new ArrayList<>(getMaxMemoryModules());
     }

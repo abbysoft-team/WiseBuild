@@ -30,4 +30,8 @@ public class PartParameter {
     public Class getValueClass() {
         return value.getClass();
     }
+
+    public String getValueAsString() {
+        return value == null ? "" : value.toString();
+    }
 }

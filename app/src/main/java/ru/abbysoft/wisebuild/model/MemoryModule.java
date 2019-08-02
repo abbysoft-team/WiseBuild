@@ -9,29 +9,30 @@ import java.util.List;
  */
 public class MemoryModule extends ComputerPart {
 
-    private final MemoryType type;
-    private final int capacityMb;
+    private MemoryType type;
+    private int capacityMb;
 
     /**
      * Default constructor
-     *
-     * @param name component name
-     * @param type type of memory
-     * @param capacityMb capacity in MB
      */
-    public MemoryModule(String name, MemoryType type, int capacityMb) {
-        super(name, ComputerPartType.MEMORY_MODULE);
-
-        this.type = type;
-        this.capacityMb = capacityMb;
+    public MemoryModule() {
+        super(ComputerPartType.MEMORY_MODULE);
     }
 
     public MemoryType getMemoryType() {
         return type;
     }
 
+    public void setMemoryType(MemoryType type) {
+        this.type = type;
+    }
+
     public int getCapacityMb() {
         return capacityMb;
+    }
+
+    public void setCapacityMb(int capacityMb) {
+        this.capacityMb = capacityMb;
     }
 
     @Override
@@ -46,7 +47,8 @@ public class MemoryModule extends ComputerPart {
 
     @Override
     public String toString() {
-        return String.format("%s with %d mb of %s memory", getFullName(), getCapacityMb(), type.name);
+        return String.format("%s with %d mb of %s memory", getFullName(), getCapacityMb(),
+                type != null ? type.name : "");
     }
 
     /**

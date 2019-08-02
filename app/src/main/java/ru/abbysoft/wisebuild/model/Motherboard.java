@@ -8,26 +8,26 @@ import java.util.List;
  */
 public class Motherboard extends ComputerPart {
 
-    private final SocketType socketType;
+    private SocketType socketType;
 
-    public Motherboard(String name, SocketType socketType) {
-        super(name, ComputerPartType.MOTHERBOARD);
-
-        this.socketType = socketType;
+    public Motherboard() {
+        super(ComputerPartType.MOTHERBOARD);
     }
 
     @Override
     public List<PartParameter> getTypeParameters() {
         ArrayList<PartParameter> parameters = new ArrayList<>(1);
 
-        parameters.add(new PartParameter("Type", socketType.name()));
+        parameters.add(new PartParameter("Type",
+                socketType != null ? socketType.name() : ""));
 
         return parameters;
     }
 
     @Override
     public String toString() {
-        return String.format("%s %s", getFullName(), socketType.name());
+        return String.format("%s %s", getFullName(),
+                socketType != null ? socketType.name() : "");
     }
 
 
@@ -39,5 +39,9 @@ public class Motherboard extends ComputerPart {
 
     public SocketType getSocketType() {
         return socketType;
+    }
+
+    public void setSocketType(SocketType type) {
+        socketType = type;
     }
 }
