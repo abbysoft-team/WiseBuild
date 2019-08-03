@@ -1,10 +1,5 @@
 package ru.abbysoft.wisebuild.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import ru.abbysoft.wisebuild.databinding.FieldMapping;
-
 /**
  * Processor component model object
  *
@@ -33,16 +28,6 @@ public class CPU extends ComputerPart {
 
     public void setCores(int cores) {
         this.cores = cores;
-    }
-
-    @Override
-    public List<FieldMapping> getTypeParameters() {
-        ArrayList<FieldMapping> parameters = new ArrayList<>(2);
-
-        parameters.add(new FieldMapping("Manufacturer", manufacturer, String.class));
-        parameters.add(new FieldMapping("Cores", cores, int.class));
-
-        return parameters;
     }
 
     @Override
