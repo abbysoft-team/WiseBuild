@@ -34,13 +34,13 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.List;
 
-import ru.abbysoft.wisebuild.model.CPU;
 import ru.abbysoft.wisebuild.model.ComputerPart;
 import ru.abbysoft.wisebuild.model.MemoryModule;
 import ru.abbysoft.wisebuild.model.Motherboard;
-import ru.abbysoft.wisebuild.model.PartParameter;
+import ru.abbysoft.wisebuild.databinding.FieldMapping;
 import ru.abbysoft.wisebuild.storage.DBFactory;
 import ru.abbysoft.wisebuild.utils.LayoutUtils;
 import ru.abbysoft.wisebuild.utils.MiscUtils;
@@ -112,13 +112,7 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         try {
             addParameterFields();
         } catch (Exception e) {
-            return;
-        }
-
-        if (partBeingCreated()) {
-            //configureViewForCreation();
-        } else {
-            //configureViewForExistingPart();
+            e.printStackTrace();
         }
     }
 
@@ -147,10 +141,10 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         return part == null && partType == null;
     }
 
-    private void addParameterFields() {
+    private void addParameterFields() throws Exception {
         ComputerPart partWithFields = part == null ? createEmptyPartOfRequiredType() : part;
-        List<PartParameter> partParameters = partWithFields.getParameters();
-        createPartParameterFields(partParameters);
+        List<FieldMapping> fieldMappings = partWithFields.getParameters();
+        createPartParameterFields(fieldMappings);
     }
 
     private ComputerPart createEmptyPartOfRequiredType() {
@@ -167,16 +161,15 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         throw new IllegalStateException();
     }
 
-    private void createPartParameterFields(List<PartParameter> parameters) {
-        for (PartParameter parameter : parameters) {
+    private void createPartParameterFields(List<FieldMapping> parameters) throws Exception {
+        for (FieldMapping parameter : parameters) {
             addParameterField(parameter);
         }
     }
 
-    private void addParameterField(PartParameter parameter) {
+    private void addParameterField(FieldMapping parameter) throws Exception {
         ViewGroup container = findViewById(R.id.part_creation_parameters_container);
         TextView referenceLabel = findViewById(R.id.part_creation_reference_label);
-        TextView referenceField = findViewById(R.id.part_creation_reference_field);
         ViewGroup referenceContainer = findViewById(R.id.part_creation_reference_container);
         ViewGroup referenceLabelContainer = findViewById(R.id.part_creation_param_label_container);
         ViewGroup referenceFieldContainer = findViewById(R.id.part_creation_field_container);
@@ -185,10 +178,13 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         labelView.setText(parameter.getName());
         labelView.setLayoutParams(referenceLabel.getLayoutParams());
 
-        EditText editText = new EditText(this);
-        editText.setText(parameter.getValueAsString());
-        editText.setKeyListener(null);
-        editText.setLayoutParams(referenceField.getLayoutParams());
+        View editText;
+
+        if (partBeingCreated()) {
+            editText = configureViewForCreation(parameter);
+        } else {
+            editText = configureViewForExistingPart(parameter);
+        }
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.HORIZONTAL);
@@ -209,6 +205,53 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         layout.addView(fieldContainer);
 
         container.addView(layout);
+    }
+
+    private boolean partBeingCreated() {
+        return part == null;
+    }
+
+    private View configureViewForExistingPart(FieldMapping parameter) {
+        EditText field = getEditText();
+        field.setText(parameter.getValueAsString());
+        field.setKeyListener(null);
+
+        return field;
+    }
+
+    private View configureViewForCreation(FieldMapping parameter) throws Exception {
+        boolean parameterIsEnum = Enum.class.isAssignableFrom(parameter.getValueClass());
+        if (parameterIsEnum) {
+            return getSpinner(parameter.getValueClass());
+        } else {
+            return parameter.applyFormat(getEditText());
+        }
+    }
+
+    private EditText getEditText() {
+        TextView referenceField = findViewById(R.id.part_creation_reference_field);
+
+        EditText field = new EditText(this);
+        field.setLayoutParams(referenceField.getLayoutParams());
+        return field;
+    }
+
+    private Spinner getSpinner(Class enumClass) throws Exception {
+        Spinner spinner = new Spinner(this);
+
+        Method method = enumClass.getDeclaredMethod("values");
+        Object[] values = (Object[]) method.invoke(null);
+
+        if (values == null) {
+            throw new Exception("Reflection fail in getSpinner()");
+        }
+
+        ArrayAdapter<Object> adapter =
+                new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, values);
+
+        spinner.setAdapter(adapter);
+
+        return spinner;
     }
 
     private void configurePriceField() {
@@ -237,25 +280,6 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
                 priceField.setSelection(text.length());
             }
         });
-    }
-
-    private void addAdditionalFields() {
-        ComputerPart.ComputerPartType type = partType == null ? part.getType() : partType;
-
-        switch (type) {
-            case CPU:
-                addFieldsForCPU();
-                break;
-            case MEMORY_MODULE:
-                addFieldsForMemory();
-                break;
-            case MOTHERBOARD:
-                addFieldsForMotherboard();
-                break;
-
-                default:
-                    break;
-        }
     }
 
     private void addFieldsForCPU() {
@@ -312,33 +336,6 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         validator.setValidationListener(this);
     }
 
-    private boolean partBeingCreated() {
-        return part == null;
-    }
-
-    private void configureViewForCreation() {
-        addValidators();
-
-        headerMessage.setText(
-                getString(R.string.creating_part_message, partType.getReadableName()));
-    }
-
-    private void configureViewForExistingPart() {
-        headerMessage.setText(part.getType().getReadableName());
-        nameField.setText(part.getFullName());
-        descriptionField.setText(descriptionField.getText());
-        String price = "$" + part.getPriceUsd();
-        priceField.setText(price);
-
-        hideUnusedViews();
-//        addPartParameterFields();
-
-        // disable fields for editing
-        nameField.setKeyListener(null);
-        descriptionField.setKeyListener(null);
-        priceField.setKeyListener(null);
-    }
-
     private void hideUnusedViews() {
         Button saveButton = findViewById(R.id.save_component_button);
         saveButton.setVisibility(View.INVISIBLE);
@@ -358,67 +355,15 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
      * @param view button
      */
     public void savePart(View view) {
-        validator.validate();
-        if (!validationResult) {
-            return;
-        }
-
-        String name = nameField.getText().toString().trim();
-        String description = descriptionField.getText().toString().trim();
-        Integer price = null;
-        if (!priceField.getText().toString().trim().isEmpty()) {
-            price = MiscUtils.getPriceFromCurrencyField(priceField);
-        }
-
-//        ComputerPart part = null;
-//        switch (partType) {
-//            case CPU:
-//                part = getCPUPart(name);
-//                break;
-//            case MOTHERBOARD:
-//                part = getMotherboardPart(name);
-//                break;
-//            case MEMORY_MODULE:
-//                part = getMemoryPart(name);
-//                break;
-//
-//                default:
-//                    break;
+        //validator.validate();
+//        if (!validationResult) {
+//            return;
 //        }
-
-        part.setDescription(description);
-        part.setPhoto(currentImage);
-
-        if (price != null) {
-            part.setPriceUsd(price);
-        }
 
         // actuall saving
         DBFactory.getDatabase().storePart(part);
         showSaveSuccessMessage();
     }
-//
-//    private ComputerPart getCPUPart(String name) {
-//        String manufacturer = additionalParamField1.getText().toString();
-//        int cores = Integer.parseInt(additionalParamField2.getText().toString());
-//
-//        return new CPU(name, manufacturer, cores);
-//    }
-//
-//    private ComputerPart getMotherboardPart(String name) {
-//        Motherboard.SocketType socket =
-//                (Motherboard.SocketType) additionalParamSpinner.getSelectedItem();
-//
-//        return new Motherboard(name, socket);
-//    }
-//
-//    private ComputerPart getMemoryPart(String name) {
-//        int capacity = Integer.parseInt(additionalParamField1.getText().toString());
-//        MemoryModule.MemoryType type =
-//                (MemoryModule.MemoryType) additionalParamSpinner.getSelectedItem();
-//
-//        return new MemoryModule(name, type, capacity);
-//    }
 
     /**
      * Choose image for component

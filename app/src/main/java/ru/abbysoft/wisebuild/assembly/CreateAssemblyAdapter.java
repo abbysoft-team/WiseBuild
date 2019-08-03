@@ -18,7 +18,7 @@ import java.util.Set;
 
 import ru.abbysoft.wisebuild.R;
 import ru.abbysoft.wisebuild.model.ComputerPart;
-import ru.abbysoft.wisebuild.model.PartParameter;
+import ru.abbysoft.wisebuild.databinding.FieldMapping;
 import ru.abbysoft.wisebuild.utils.LayoutUtils;
 import ru.abbysoft.wisebuild.utils.ModelUtils;
 
@@ -141,12 +141,12 @@ public class CreateAssemblyAdapter
         }
 
         private void fillParameters() {
-            List<PartParameter> partParameters = currentPart.getTypeParameters();
-            int parameterCount = partParameters.size();
+            List<FieldMapping> fieldMappings = currentPart.getTypeParameters();
+            int parameterCount = fieldMappings.size();
 
-            PartParameter nextParameter;
+            FieldMapping nextParameter;
             for (int i = 0; i < parameterCount; i++) {
-                nextParameter = partParameters.get(i);
+                nextParameter = fieldMappings.get(i);
                 parameterLabels.get(i).setText(nextParameter.getName());
                 parameters.get(i).setText(nextParameter.getValue().toString());
             }

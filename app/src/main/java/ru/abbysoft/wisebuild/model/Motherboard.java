@@ -3,6 +3,8 @@ package ru.abbysoft.wisebuild.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.abbysoft.wisebuild.databinding.FieldMapping;
+
 /**
  * Motherboard part
  */
@@ -15,11 +17,11 @@ public class Motherboard extends ComputerPart {
     }
 
     @Override
-    public List<PartParameter> getTypeParameters() {
-        ArrayList<PartParameter> parameters = new ArrayList<>(1);
+    public List<FieldMapping> getTypeParameters() {
+        ArrayList<FieldMapping> parameters = new ArrayList<>(1);
 
-        parameters.add(new PartParameter("Type",
-                socketType != null ? socketType.name() : ""));
+        parameters.add(new FieldMapping("Type",
+                socketType != null ? socketType.name() : "", SocketType.class));
 
         return parameters;
     }

@@ -5,8 +5,9 @@ import android.graphics.Bitmap;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import ru.abbysoft.wisebuild.databinding.FieldMapping;
 
 /**
  * Abstract computer part component
@@ -28,9 +29,10 @@ public abstract class ComputerPart {
     private volatile String name;
     private volatile String trimmedName;
     private volatile String description;
-    private volatile Date releaseDate;
+    private volatile int releaseYear;
+    private volatile int releaseQuartal;
     private volatile Bitmap photo;
-    private volatile long priceUsd;
+    private volatile float priceUsd;
     private final ComputerPartType type;
 
     protected ComputerPart(@NonNull ComputerPartType type) {
@@ -43,16 +45,17 @@ public abstract class ComputerPart {
      *
      * @return all part parameters
      */
-    public List<PartParameter> getParameters() {
-        List<PartParameter> parameters = new ArrayList<>();
+    public List<FieldMapping> getParameters() {
+        List<FieldMapping> parameters = new ArrayList<>();
 
-        parameters.add(new PartParameter("name", name));
-        parameters.add(new PartParameter("trimmedName", trimmedName));
-        parameters.add(new PartParameter("description", description));
-        parameters.add(new PartParameter("photo", photo));
-        parameters.add(new PartParameter("priceUsd", priceUsd));
-        parameters.add(new PartParameter("type", type));
-        parameters.add(new PartParameter("releaseDate", releaseDate));
+        parameters.add(new FieldMapping("name", name, String.class));
+        parameters.add(new FieldMapping("description", description, String.class));
+
+        parameters.add(new FieldMapping("priceUsd", priceUsd, float.class)
+                .setFieldType(FieldMapping.FieldType.PRICE));
+
+        parameters.add(new FieldMapping("releaseYear", releaseYear, int.class));
+        parameters.add(new FieldMapping("releaseQuartal", releaseQuartal, int.class));
 
         parameters.addAll(getTypeParameters());
 
@@ -67,7 +70,7 @@ public abstract class ComputerPart {
      * some features of this part.
      * @return parameters of part
      */
-    public abstract List<PartParameter> getTypeParameters();
+    public abstract List<FieldMapping> getTypeParameters();
 
     public String getFullName() {
         return name;
@@ -107,11 +110,11 @@ public abstract class ComputerPart {
         this.photo = photo;
     }
 
-    public long getPriceUsd() {
+    public float getPriceUsd() {
         return priceUsd;
     }
 
-    public void setPriceUsd(long priceUsd) {
+    public void setPriceUsd(float priceUsd) {
         this.priceUsd = priceUsd;
     }
 
@@ -127,12 +130,20 @@ public abstract class ComputerPart {
         return id;
     }
 
-    public Date getReleaseDate() {
-        return releaseDate;
+    public int getReleaseYear() {
+        return releaseYear;
     }
 
-    public void setReleaseDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
+    public void getReleaseYear(int releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
+    public int getReleaseQuartal() {
+        return releaseQuartal;
+    }
+
+    public void setReleaseQuartal(int releaseQuartal) {
+        this.releaseQuartal = releaseQuartal;
     }
 
     public enum ComputerPartType {

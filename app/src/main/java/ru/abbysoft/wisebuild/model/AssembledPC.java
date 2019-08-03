@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import ru.abbysoft.wisebuild.databinding.FieldMapping;
 import ru.abbysoft.wisebuild.exception.SlotLimitException;
 
 /**
@@ -57,7 +58,7 @@ public class AssembledPC extends ComputerPart {
     }
 
     @Override
-    public List<PartParameter> getTypeParameters() {
+    public List<FieldMapping> getTypeParameters() {
         return Collections.emptyList();
     }
 

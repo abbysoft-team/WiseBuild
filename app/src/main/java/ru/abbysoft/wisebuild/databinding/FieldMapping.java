@@ -1,4 +1,4 @@
-package ru.abbysoft.wisebuild.model;
+package ru.abbysoft.wisebuild.databinding;
 
 import android.text.InputType;
 import android.widget.EditText;
@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
  *
  * @author apopov
  */
-public class PartParameter {
+public class FieldMapping {
 
     private final String name;
     private final Object value;
@@ -26,7 +26,7 @@ public class PartParameter {
      * @param value
      * @param valueClass
      */
-    public PartParameter(String name, Object value, @NonNull Class valueClass) {
+    public FieldMapping(String name, Object value, @NonNull Class valueClass) {
         this.name = name;
         this.value = value;
         this.valueClass = valueClass;
@@ -59,7 +59,7 @@ public class PartParameter {
      * Set field input type
      * @param inputType input type from InputType
      */
-    public PartParameter setInputType(int inputType) {
+    public FieldMapping setInputType(int inputType) {
         this.inputType = inputType;
 
         return this;
@@ -92,7 +92,7 @@ public class PartParameter {
         return fieldType;
     }
 
-    public PartParameter setFieldType(FieldType fieldType) {
+    public FieldMapping setFieldType(FieldType fieldType) {
         this.fieldType = fieldType;
 
         return this;

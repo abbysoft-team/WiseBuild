@@ -3,6 +3,8 @@ package ru.abbysoft.wisebuild.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.abbysoft.wisebuild.databinding.FieldMapping;
+
 /**
  * MemoryModule part
  *
@@ -36,11 +38,11 @@ public class MemoryModule extends ComputerPart {
     }
 
     @Override
-    public List<PartParameter> getTypeParameters() {
-        ArrayList<PartParameter> parameters = new ArrayList<>(2);
+    public List<FieldMapping> getTypeParameters() {
+        ArrayList<FieldMapping> parameters = new ArrayList<>(2);
 
-        parameters.add(new PartParameter("Type", type.getName()));
-        parameters.add(new PartParameter("Capacity (mb)", capacityMb));
+        parameters.add(new FieldMapping("Type", type.getName(), MemoryType.class));
+        parameters.add(new FieldMapping("Capacity (mb)", capacityMb, int.class));
 
         return parameters;
     }
