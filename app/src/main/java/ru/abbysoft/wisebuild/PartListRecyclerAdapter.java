@@ -25,6 +25,7 @@ class PartListRecyclerAdapter extends RecyclerView.Adapter<PartListRecyclerAdapt
     private List<ComputerPart> parts;
     private Context context;
     private ComputerPart.ComputerPartType type;
+    private PartListFragment.OnPartListItemClickedListener clickedListener;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         View view;
@@ -88,19 +89,16 @@ class PartListRecyclerAdapter extends RecyclerView.Adapter<PartListRecyclerAdapt
             holder.photo.setImageResource(getDrawableResourceForPartType(part.getType()));
         }
 
-        holder.view.setOnClickListener((View view) -> {
-            onPartClicked(position);
-        });
+        // Activity custom listener
+        if (this.clickedListener != null) {
+            holder.view.setOnClickListener((View view) -> {
+                this.clickedListener.onPartListItemClicked(part.getId());
+            });
+        }
     }
 
-    private void onPartClicked(int position) {
-        ComputerPart part = parts.get(position);
-
-        Toast toast = Toast.makeText(
-                context,
-                "Part " + position + " clicked! Part info not implemented yet.",
-                Toast.LENGTH_SHORT);
-        toast.show();
+    void setPartClickedListener(PartListFragment.OnPartListItemClickedListener partClickedListener) {
+        this.clickedListener = partClickedListener;
     }
 
     private int getDrawableResourceForPartType(ComputerPart.ComputerPartType type) {

@@ -9,13 +9,21 @@ import ru.abbysoft.wisebuild.PartListFragment;
 import ru.abbysoft.wisebuild.model.ComputerPart;
 
 public class BrowserPagerAdapter extends FragmentPagerAdapter {
-    public BrowserPagerAdapter(FragmentManager fm) {
+    private PartListFragment.OnPartListItemClickedListener clickedListener;
+
+    BrowserPagerAdapter(FragmentManager fm, PartListFragment.OnPartListItemClickedListener clickedListener) {
         super(fm);
+
+        this.clickedListener = clickedListener;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return PartListFragment.newInstance(ComputerPart.ComputerPartType.values()[position]);
+        PartListFragment fragment = PartListFragment.newInstance(
+                ComputerPart.ComputerPartType.values()[position]);
+
+        fragment.setPartClickedListener(this.clickedListener);
+        return fragment;
     }
 
     @Override

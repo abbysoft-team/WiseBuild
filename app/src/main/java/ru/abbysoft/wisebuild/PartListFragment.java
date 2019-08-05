@@ -23,9 +23,19 @@ public class PartListFragment extends Fragment {
     private static final String ARG_PART_TYPE = "ARG_PART_TYPE";
 
     private ComputerPart.ComputerPartType type;
+    private PartListRecyclerAdapter adapter;
+    private OnPartListItemClickedListener clickListener;
 
     public PartListFragment() {
         // Required empty public constructor
+    }
+
+    public interface OnPartListItemClickedListener {
+        void onPartListItemClicked(long id);
+    }
+
+    public void setPartClickedListener(OnPartListItemClickedListener partClickedListener) {
+        this.clickListener = partClickedListener;
     }
 
     /**
@@ -60,7 +70,8 @@ public class PartListFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        RecyclerView.Adapter adapter = new PartListRecyclerAdapter(DBFactory.getDatabase(), getActivity(), type);
+        this.adapter = new PartListRecyclerAdapter(DBFactory.getDatabase(), getActivity(), type);
+        this.adapter.setPartClickedListener(this.clickListener);
         recyclerView.setAdapter(adapter);
     }
 

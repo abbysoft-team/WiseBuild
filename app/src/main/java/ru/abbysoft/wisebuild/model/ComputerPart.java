@@ -97,17 +97,19 @@ public abstract class ComputerPart {
     }
 
     public enum ComputerPartType {
-        CPU("CPU", ru.abbysoft.wisebuild.model.CPU.class),
-        MEMORY_MODULE("Memory module", MemoryModule.class),
-        MOTHERBOARD("Motherboard", Motherboard.class),
-        ASSEMBLED_PC("Assembled PC", AssembledPC.class);
+        CPU("CPU", ru.abbysoft.wisebuild.model.CPU.class, 0),
+        MEMORY_MODULE("Memory module", MemoryModule.class, 1),
+        MOTHERBOARD("Motherboard", Motherboard.class, 2),
+        ASSEMBLED_PC("Assembled PC", AssembledPC.class, 3);
 
         private final String readableName;
         private final Class objectClass;
+        private final int id;
 
-        ComputerPartType(String name, Class objectClass) {
+        ComputerPartType(String name, Class objectClass, int id) {
             this.readableName = name;
             this.objectClass = objectClass;
+            this.id = id;
         }
 
         public static List<ComputerPartType> getEntriesWithoutAssembly() {
@@ -126,6 +128,10 @@ public abstract class ComputerPart {
 
         public Class getObjectClass() {
             return objectClass;
+        }
+
+        public int getId() {
+            return id;
         }
     }
 }

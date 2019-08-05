@@ -5,14 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.vk.api.sdk.VK;
 import com.vk.api.sdk.VKApiCallback;
 import com.vk.api.sdk.exceptions.VKApiExecutionException;
+import com.vk.api.sdk.utils.VKUtils;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
 
 import ru.abbysoft.wisebuild.assembly.CreateAssemblyActivity;
 import ru.abbysoft.wisebuild.browser.BrowserActivity;
@@ -44,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
         welcomeMessage = findViewById(R.id.main_activity_header);
         welcomeMessage.setVisibility(View.INVISIBLE);
 
+        String[] fingerPrints = VKUtils.getCertificateFingerprint(this, this.getPackageName());
+        Log.v("MainActivity", "FingerPrints: " + Arrays.toString(fingerPrints));
+
         createTestData();
     }
 
@@ -69,8 +76,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void browsePartsButtonClicked(View view) {
-        Intent intent = new Intent(this, BrowserActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, BrowserActivity.class);
+//        startActivity(intent);
+        BrowserActivity.launchForPickPartFrom(this, ComputerPart.ComputerPartType.CPU);
     }
 
     public void createAssemblyButtonClicked(View view) {

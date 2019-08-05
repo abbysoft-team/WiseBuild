@@ -52,4 +52,6 @@
     <string name="login_with_vk">Login with VK</string>
     <string name="welcome_message">Welcome, %s</string>
     <string name="capacity_mb">Capacity (mb)</string>
+    <string name="select_part">Select a part</string>
+    <string name="part_browser">Part browser</string>
 </resources>
