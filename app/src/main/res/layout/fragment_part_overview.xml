@@ -11,6 +11,9 @@
         <variable
             name="containerEmpty"
             type="Boolean" />
+        <variable
+            name="currentPart"
+            type="ru.abbysoft.wisebuild.model.ComputerPart" />
     </data>
 
     <LinearLayout
@@ -145,14 +148,13 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/assembly_part_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="24dp"
                     android:layout_marginRight="24dp"
                     android:layout_marginBottom="8dp"
-                    android:text="1999$"
+                    android:text="@{'$' + String.valueOf(currentPart.priceUsd)}"
                     android:textColor="?attr/colorPrimaryDark"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -169,15 +171,14 @@
                     android:contentDescription="@string/part_photo"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:srcCompat="@mipmap/ic_launcher_round"
-                    tools:srcCompat="@mipmap/ic_launcher_round" />
+                    app:setImageOrPlaceholder="@{currentPart.photo}" />
 
                 <TextView
                     android:id="@+id/assembly_part_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="Intel Pentium G2020"
+                    android:text="@{currentPart.trimmedName}"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@+id/assembly_part_photo"
                     app:layout_constraintStart_toStartOf="@+id/assembly_part_photo" />

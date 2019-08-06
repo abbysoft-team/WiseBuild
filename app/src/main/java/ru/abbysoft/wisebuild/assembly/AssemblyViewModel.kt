@@ -16,13 +16,31 @@ class AssemblyViewModel : ViewModel() {
 
     val nextAction : MutableLiveData<AssemblyAction> = MutableLiveData()
 
-    val cpuUnits : ArrayList<CPU> = ArrayList()
-    val memoryModules : ArrayList<MemoryModule> = ArrayList()
-    val motherboards : ArrayList<Motherboard> = ArrayList()
+    private val cpuUnits : ArrayList<CPU> = ArrayList()
+    private val memoryModules : ArrayList<MemoryModule> = ArrayList()
+    private val motherboards : ArrayList<Motherboard> = ArrayList()
 
-    var currentCpu : CPU? = null
-    var currentMotherboard : Motherboard? = null
-    var currentMemory : MemoryModule? = null
+    var currentCpu : MutableLiveData<CPU> = MutableLiveData()
+    var currentMotherboard : MutableLiveData<Motherboard> = MutableLiveData()
+    var currentMemory : MutableLiveData<MemoryModule> = MutableLiveData()
+
+    var currentParts : MutableLiveData<ArrayList<ComputerPart?>> = MutableLiveData()
+
+    fun calculateTotalPrice() : Long {
+        var price : Long = 0
+
+        if (currentParts.value == null) {
+            return 0
+        }
+
+        for (part in currentParts.value as ArrayList<ComputerPart?>) {
+            if (part != null) {
+                price += part.priceUsd
+            }
+        }
+
+        return price
+    }
 
     fun addButtonClicked(type : ComputerPart.ComputerPartType) {
         nextAction.value = when (type) {
@@ -33,7 +51,7 @@ class AssemblyViewModel : ViewModel() {
         }
     }
 
-    fun saveAssemblyClicked() {
+    fun saveAssembly() {
         nextAction.value = AssemblyAction.SAVE_ASSEMBLY
     }
 
@@ -44,19 +62,26 @@ class AssemblyViewModel : ViewModel() {
     fun newPartAdded(part: ComputerPart, partType: ComputerPart.ComputerPartType) {
         when (partType) {
             ComputerPart.ComputerPartType.CPU -> {
-                currentCpu = part as CPU
-                cpuUnits.add(currentCpu as CPU)
+                currentCpu.value = part as CPU
+                cpuUnits.add(part)
             }
             ComputerPart.ComputerPartType.MEMORY_MODULE -> {
-                currentMemory = part as MemoryModule
+                currentMemory.value = part as MemoryModule
                 memoryModules.add(part)
             }
             ComputerPart.ComputerPartType.MOTHERBOARD -> {
-                currentMotherboard = part as Motherboard
-                motherboards.add(currentMotherboard as Motherboard)
+                currentMotherboard.value = part as Motherboard
+                motherboards.add(part)
             }
             ComputerPart.ComputerPartType.ASSEMBLED_PC -> {}
         }
+
+        val parts = ArrayList<ComputerPart?>()
+        parts.add(currentMemory.value)
+        parts.add(currentCpu.value)
+        parts.add(currentMotherboard.value)
+
+        currentParts.value = parts
     }
 
     enum class AssemblyAction {

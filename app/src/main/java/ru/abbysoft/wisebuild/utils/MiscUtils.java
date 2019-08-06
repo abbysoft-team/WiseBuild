@@ -63,10 +63,26 @@ public class MiscUtils {
      * @param iconId icon id for dialog
      */
     public static void showDialogAndFinish(String title, String message, Activity activity, int iconId) {
+        showDialog(title, message, activity, iconId, true);
+    }
+
+    /**
+     * Show error dialog
+     *
+     * @param error error message
+     */
+    public static void showErrorDialog(String error, Activity activity) {
+        showDialog("Error", error, activity, android.R.drawable.ic_dialog_alert, false);
+    }
+
+    private static void showDialog(String title, String message, Activity activity,
+                                   int iconId, boolean finish) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setMessage(message);
         builder.setTitle(title);
-        builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> activity.finish());
+        builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+            if (finish) activity.finish();
+        });
         builder.setIcon(iconId);
 
         AlertDialog dialog = builder.create();

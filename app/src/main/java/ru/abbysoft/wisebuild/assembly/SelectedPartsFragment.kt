@@ -1,19 +1,19 @@
 package ru.abbysoft.wisebuild.assembly
 
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import ru.abbysoft.wisebuild.R
-import ru.abbysoft.wisebuild.browser.BrowserActivity
 import ru.abbysoft.wisebuild.databinding.FragmentPartOverviewBinding
 import ru.abbysoft.wisebuild.model.ComputerPart
-import ru.abbysoft.wisebuild.storage.DBFactory
 import ru.abbysoft.wisebuild.utils.ModelUtils
 import java.lang.IllegalStateException
 
@@ -24,11 +24,11 @@ import java.lang.IllegalStateException
  */
 class SelectedPartsFragment(private val partType: ComputerPart.ComputerPartType): Fragment() {
 
-    lateinit var binding : FragmentPartOverviewBinding
+    private lateinit var binding : FragmentPartOverviewBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val model = ViewModelProviders.of(this)[AssemblyViewModel::class.java]
+        val model = ViewModelProviders.of(activity as FragmentActivity)[AssemblyViewModel::class.java]
 
         binding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_part_overview, container, false)
@@ -36,6 +36,7 @@ class SelectedPartsFragment(private val partType: ComputerPart.ComputerPartType)
         binding.partType = partType
         binding.containerEmpty = true
         binding.viewModel = model
+        binding.lifecycleOwner = viewLifecycleOwner
 
         subscribeOnActions(model)
 
@@ -65,9 +66,11 @@ class SelectedPartsFragment(private val partType: ComputerPart.ComputerPartType)
         //TODO implement browser pick action
         //BrowserActivity.launchForPickPartFrom(activity, partType)
 
-        val model = ViewModelProviders.of(this)[AssemblyViewModel::class.java]
-        model.newPartAdded(ModelUtils.generateRandomPartOfType(partType), partType)
+        val model = ViewModelProviders.of(activity as FragmentActivity)[AssemblyViewModel::class.java]
+        val part = ModelUtils.generateRandomPartOfType(partType)
+        model.newPartAdded(part, partType)
 
+        binding.currentPart = part
         binding.containerEmpty = false
     }
 
