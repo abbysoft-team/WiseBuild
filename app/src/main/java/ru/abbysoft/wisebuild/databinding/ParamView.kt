@@ -1,5 +1,6 @@
 package ru.abbysoft.wisebuild.databinding
 
+import android.content.Context
 import android.view.View
 
 /**
@@ -11,7 +12,7 @@ import android.view.View
  *
  * @author apopov
  */
-abstract class ParamView (private val param : ParamDescription) {
+abstract class ParamView (val param : ParamDescription) {
 
     /**
      * Return underlying android view
@@ -50,4 +51,22 @@ abstract class ParamView (private val param : ParamDescription) {
      * Get value of view
      */
     protected abstract fun getViewValue() : Any?
+    
+    companion object {
+        /**
+         * Create ParamView for specified parameter
+         * 
+         * @param context context
+         * @param param parameter
+         * @return null if valueClass of param does not supported
+         */
+        fun createFor(context : Context, param : ParamDescription) : ParamView? =
+            when (param.valueClass) {
+                Number::class.java -> ParamEditTextView(context, param)
+                String::class.java -> ParamEditTextView(context, param)
+                Enum::class.java -> SpinnerParamView(context, param)
+                else -> null
+            }
+        
+    }
 }

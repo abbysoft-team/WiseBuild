@@ -19,6 +19,7 @@ import com.vk.api.sdk.requests.VKRequest;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import ru.abbysoft.wisebuild.R;
 import ru.abbysoft.wisebuild.api.vk.AccountInfoRequest;
@@ -113,5 +114,18 @@ public class MiscUtils {
         text = text.trim();
 
         return Integer.parseInt(text);
+    }
+
+    /**
+     * Get available values of given enum through reflection api
+     * @param enumClass enum class
+     * @return available values of given enum
+     * @throws NoSuchMethodException cannot get values of enum
+     * @throws InvocationTargetException cannot get values of enum
+     * @throws IllegalAccessException cannot get values of enum
+     */
+    public static Enum<?>[] getEnumValues(Class<?> enumClass) throws NoSuchMethodException,
+            InvocationTargetException, IllegalAccessException {
+        return (Enum<?>[]) enumClass.getMethod("values").invoke(null);
     }
 }
