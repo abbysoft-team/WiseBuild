@@ -1,6 +1,11 @@
 package ru.abbysoft.wisebuild.model;
 
 
+import java.util.ArrayList;
+
+import ru.abbysoft.wisebuild.databinding.ParamDescription;
+import ru.abbysoft.wisebuild.utils.ModelUtils;
+
 /**
  * Motherboard part
  */
@@ -31,5 +36,14 @@ public class Motherboard extends ComputerPart {
 
     public void setSocketType(SocketType type) {
         socketType = type;
+    }
+
+    @Override
+    public ArrayList<ParamDescription> getTypeParams() {
+        ArrayList<ParamDescription> params = new ArrayList<>(3);
+
+        params.add(ModelUtils.createParameter("socketType", SocketType.class));
+
+        return params;
     }
 }

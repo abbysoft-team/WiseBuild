@@ -3,6 +3,8 @@ package ru.abbysoft.wisebuild.utils;
 import java.util.List;
 import java.util.Random;
 
+import ru.abbysoft.wisebuild.databinding.ParamDescription;
+import ru.abbysoft.wisebuild.databinding.ReflectionAccessor;
 import ru.abbysoft.wisebuild.model.CPU;
 import ru.abbysoft.wisebuild.model.ComputerPart;
 import ru.abbysoft.wisebuild.model.MemoryModule;
@@ -104,5 +106,60 @@ public class ModelUtils {
         module.setCapacityMb(capacity);
 
         return module;
+    }
+
+    /**
+     * Create int parameter with default values
+     * @param name name of model property
+     * @return description of property
+     */
+    public static ParamDescription createIntParameter(String name) {
+        return createParameter(name, int.class);
+    }
+
+    /**
+     * Create long parameter with default values
+     * @param name name of model property
+     * @return description of property
+     */
+    public static ParamDescription createLongParameter(String name) {
+        return createParameter(name, long.class);
+    }
+
+    /**
+     * Create float parameter with default values
+     * @param name name of model property
+     * @return description of property
+     */
+    public static ParamDescription createFloatParameter(String name) {
+        return createParameter(name, float.class);
+    }
+
+    /**
+     * Create double parameter with default values
+     * @param name name of model property
+     * @return description of property
+     */
+    public static ParamDescription createDoubleParameter(String name) {
+        return createParameter(name, double.class);
+    }
+
+    /**
+     * Create string parameter with default values
+     * @param name name of model property
+     * @return description of property
+     */
+    public static ParamDescription createStringParameter(String name) {
+        return createParameter(name, String.class);
+    }
+
+    /**
+     * Create parameter with default values
+     * @param name name of model property
+     * @param claz class of model property value
+     * @return description of property
+     */
+    public static ParamDescription createParameter(String name, Class<? extends Object> claz) {
+        return new ParamDescription(name, claz, new ReflectionAccessor(name));
     }
 }

@@ -1,5 +1,10 @@
 package ru.abbysoft.wisebuild.model;
 
+import java.util.ArrayList;
+
+import ru.abbysoft.wisebuild.databinding.ParamDescription;
+import ru.abbysoft.wisebuild.utils.ModelUtils;
+
 /**
  * Processor component model object
  *
@@ -33,5 +38,15 @@ public class CPU extends ComputerPart {
     @Override
     public String toString() {
         return String.format("%s %s with %d cores", manufacturer, getFullName(), cores);
+    }
+
+    @Override
+    public ArrayList<ParamDescription> getTypeParams() {
+        ArrayList<ParamDescription> params = new ArrayList<>(3);
+
+        params.add(ModelUtils.createStringParameter("manufacturer"));
+        params.add(ModelUtils.createIntParameter("cores"));
+
+        return params;
     }
 }

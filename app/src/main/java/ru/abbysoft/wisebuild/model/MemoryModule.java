@@ -3,6 +3,9 @@ package ru.abbysoft.wisebuild.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.abbysoft.wisebuild.databinding.ParamDescription;
+import ru.abbysoft.wisebuild.utils.ModelUtils;
+
 /**
  * MemoryModule part
  *
@@ -39,6 +42,16 @@ public class MemoryModule extends ComputerPart {
     public String toString() {
         return String.format("%s with %d mb of %s memory", getFullName(), getCapacityMb(),
                 type != null ? type.name : "");
+    }
+
+    @Override
+    public ArrayList<ParamDescription> getTypeParams() {
+        ArrayList<ParamDescription> params = new ArrayList<>(3);
+
+        params.add(ModelUtils.createParameter("type", MemoryType.class));
+        params.add(ModelUtils.createIntParameter("capacityMb"));
+
+        return params;
     }
 
     /**

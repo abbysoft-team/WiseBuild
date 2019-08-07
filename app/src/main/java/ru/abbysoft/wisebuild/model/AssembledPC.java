@@ -2,6 +2,7 @@ package ru.abbysoft.wisebuild.model;
 
 import java.util.ArrayList;
 
+import ru.abbysoft.wisebuild.databinding.ParamDescription;
 import ru.abbysoft.wisebuild.exception.SlotLimitException;
 
 /**
@@ -60,5 +61,10 @@ public class AssembledPC extends ComputerPart {
                 getFullName(), cpu == null ? "" : cpu.toString(),
                 memoryModules.isEmpty() ? "" : memoryModules.get(0).toString(),
                 motherboard == null ? "" : motherboard.toString());
+    }
+
+    @Override
+    public ArrayList<ParamDescription> getTypeParams() {
+        return new ArrayList<>();
     }
 }

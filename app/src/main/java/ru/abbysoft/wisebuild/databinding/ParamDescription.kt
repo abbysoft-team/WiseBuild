@@ -8,5 +8,5 @@ package ru.abbysoft.wisebuild.databinding
  * @author apopov
  */
 data class ParamDescription(val name : String,
-                            val valueClass : Class<Any>,
+                            val valueClass : Class<out Any>,
                             val accessor : Accessor)

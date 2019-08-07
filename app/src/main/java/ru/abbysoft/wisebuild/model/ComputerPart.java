@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import ru.abbysoft.wisebuild.databinding.ParamDescription;
+import ru.abbysoft.wisebuild.utils.ModelUtils;
+
 /**
  * Abstract computer part component
  *
@@ -37,6 +40,21 @@ public abstract class ComputerPart {
         this.type = type;
         this.id = nextID++;
     }
+
+    public ArrayList<ParamDescription> getAllParameters() {
+        ArrayList<ParamDescription> params = new ArrayList<>(10);
+
+        params.add(ModelUtils.createStringParameter("name"));
+        params.add(ModelUtils.createStringParameter("description"));
+        params.add(ModelUtils.createParameter("releaseDate", Date.class));
+        params.add(ModelUtils.createLongParameter("priceUsd"));
+
+        params.addAll(getTypeParams());
+
+        return params;
+    }
+
+    public abstract ArrayList<ParamDescription> getTypeParams();
 
     public String getFullName() {
         return name;
