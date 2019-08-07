@@ -16,7 +16,7 @@ interface Accessor {
      * @param inputObject object from which to get property
      * @return parameter of input object which this accessor describes
      */
-    fun get(inputObject : Any) : Any
+    fun get(inputObject : Any) : Any?
 
     /**
      * Set property of specified object
@@ -24,5 +24,5 @@ interface Accessor {
      * @param inputObject object containing specified param
      * @param value value of parameter
      */
-    fun set(inputObject : Any, value : Any)
+    fun set(inputObject : Any, value : Any?)
 }
