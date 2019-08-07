@@ -1,8 +1,6 @@
 package ru.abbysoft.wisebuild.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import ru.abbysoft.wisebuild.exception.SlotLimitException;
 
