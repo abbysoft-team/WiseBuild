@@ -5,6 +5,7 @@ import android.text.InputType
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import java.util.*
 
 /**
  * EditText with mapped {@link ParamDescription} to it
@@ -22,6 +23,7 @@ class ParamEditTextView(private val context : Context,
             Long::class.java -> createNumericField(false)
             Double::class.java -> createNumericField(true)
             Float::class.java -> createNumericField(true)
+            Date::class.java -> createDateField()
             else -> createSingleLineField()
         }
 
@@ -41,6 +43,11 @@ class ParamEditTextView(private val context : Context,
         return editText
     }
 
+    private fun createDateField() : EditText {
+        val editText = EditText(context)
+        editText.inputType = InputType.TYPE_CLASS_DATETIME or InputType.TYPE_DATETIME_VARIATION_DATE
+        return editText
+    }
     override fun getView(): View {
         return editText
     }

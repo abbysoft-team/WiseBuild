@@ -2,6 +2,7 @@ package ru.abbysoft.wisebuild.databinding
 
 import android.content.Context
 import android.view.View
+import java.util.*
 
 /**
  * View that have underlying mapped parameter {@link ParamDescription}
@@ -55,18 +56,26 @@ abstract class ParamView (val param : ParamDescription) {
     companion object {
         /**
          * Create ParamView for specified parameter
-         * 
+         *
          * @param context context
          * @param param parameter
          * @return null if valueClass of param does not supported
          */
-        fun createFor(context : Context, param : ParamDescription) : ParamView? =
-            when (param.valueClass) {
-                Number::class.java -> ParamEditTextView(context, param)
-                String::class.java -> ParamEditTextView(context, param)
-                Enum::class.java -> SpinnerParamView(context, param)
-                else -> null
+        fun createFor(context: Context, param: ParamDescription): ParamView? {
+            val claz = param.valueClass
+
+            if (String::class.java.isAssignableFrom(claz)) {
+                return ParamEditTextView(context, param)
+            } else if (claz == Long::class.java || claz == Int::class.java
+                    || claz == Double::class.java || claz == Float::class.java) {
+                return ParamEditTextView(context, param)
+            } else if (Enum::class.java.isAssignableFrom(claz)) {
+                return SpinnerParamView(context, param)
+            } else if (Date::class.java.isAssignableFrom(claz)) {
+                return ParamEditTextView(context, param)
             }
-        
+
+            return null
+        }
     }
 }

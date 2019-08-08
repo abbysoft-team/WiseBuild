@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import ru.abbysoft.wisebuild.databinding.ParamDescription;
@@ -31,7 +30,8 @@ public abstract class ComputerPart {
     private volatile String name;
     private volatile String trimmedName;
     private volatile String description;
-    private volatile Date releaseDate;
+    private volatile int releaseYear;
+    private volatile int releaseQuarter;
     private volatile Bitmap photo;
     private volatile long priceUsd;
     private final ComputerPartType type;
@@ -46,8 +46,9 @@ public abstract class ComputerPart {
 
         params.add(ModelUtils.createStringParameter("name"));
         params.add(ModelUtils.createStringParameter("description"));
-        params.add(ModelUtils.createParameter("releaseDate", Date.class));
         params.add(ModelUtils.createLongParameter("priceUsd"));
+        params.add(ModelUtils.createIntParameter("releaseYear"));
+        params.add(ModelUtils.createIntParameter("releaseQuarter"));
 
         params.addAll(getTypeParams());
 
@@ -56,7 +57,7 @@ public abstract class ComputerPart {
 
     public abstract ArrayList<ParamDescription> getTypeParams();
 
-    public String getFullName() {
+    public String getName() {
         return name;
     }
 
@@ -72,7 +73,7 @@ public abstract class ComputerPart {
     private String createTrimmedName() {
         int MAX_TRIMMED_NAME_LENGTH = 20;
         if (name.length() <= MAX_TRIMMED_NAME_LENGTH) {
-            return getFullName();
+            return getName();
         }
 
 
@@ -114,12 +115,20 @@ public abstract class ComputerPart {
         return id;
     }
 
-    public Date getReleaseDate() {
-        return releaseDate;
+    public int getReleaseYear() {
+        return releaseYear;
     }
 
-    public void setReleaseDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
+    public void setReleaseYear(int releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
+    public int getReleaseQuarter() {
+        return releaseQuarter;
+    }
+
+    public void setReleaseQuarter(int releaseQuarter) {
+        this.releaseQuarter = releaseQuarter;
     }
 
     public enum ComputerPartType {

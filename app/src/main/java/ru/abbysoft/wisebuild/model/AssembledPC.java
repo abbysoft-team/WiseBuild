@@ -58,7 +58,7 @@ public class AssembledPC extends ComputerPart {
     @Override
     public String toString() {
         return String.format("PC (%s) { CPU [%s], Memory [%s], Motherboard [%s]",
-                getFullName(), cpu == null ? "" : cpu.toString(),
+                getName(), cpu == null ? "" : cpu.toString(),
                 memoryModules.isEmpty() ? "" : memoryModules.get(0).toString(),
                 motherboard == null ? "" : motherboard.toString());
     }

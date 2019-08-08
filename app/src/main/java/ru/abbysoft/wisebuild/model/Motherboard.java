@@ -19,7 +19,7 @@ public class Motherboard extends ComputerPart {
 
     @Override
     public String toString() {
-        return String.format("%s %s", getFullName(),
+        return String.format("%s %s", getName(),
                 socketType != null ? socketType.name() : "");
     }
 

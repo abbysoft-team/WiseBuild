@@ -1,7 +1,6 @@
 package ru.abbysoft.wisebuild.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ru.abbysoft.wisebuild.databinding.ParamDescription;
 import ru.abbysoft.wisebuild.utils.ModelUtils;
@@ -40,7 +39,7 @@ public class MemoryModule extends ComputerPart {
 
     @Override
     public String toString() {
-        return String.format("%s with %d mb of %s memory", getFullName(), getCapacityMb(),
+        return String.format("%s with %d mb of %s memory", getName(), getCapacityMb(),
                 type != null ? type.name : "");
     }
 

@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import ru.abbysoft.wisebuild.R;
 import ru.abbysoft.wisebuild.api.vk.AccountInfoRequest;
 import ru.abbysoft.wisebuild.assembly.CreateAssemblyActivity;
+import ru.abbysoft.wisebuild.model.ComputerPart;
 import ru.abbysoft.wisebuild.model.VkUser;
 
 /**
@@ -127,5 +128,29 @@ public class MiscUtils {
     public static Enum<?>[] getEnumValues(Class<?> enumClass) throws NoSuchMethodException,
             InvocationTargetException, IllegalAccessException {
         return (Enum<?>[]) enumClass.getMethod("values").invoke(null);
+    }
+
+    public static ComputerPart instantiatePartOfType(ComputerPart.ComputerPartType partType)
+            throws InstantiationException, IllegalAccessException {
+        return (ComputerPart) partType.getObjectClass().newInstance();
+    }
+
+    @NotNull
+    public static String getGetterName(@NotNull String fieldName, Class<?> claz) {
+        if (claz == boolean.class) {
+            return "is" + capitalizeFirstChar(fieldName);
+        } else {
+            return "get" + capitalizeFirstChar(fieldName);
+        }
+    }
+
+    @NotNull
+    public static String getSetterName(@NotNull String fieldName) {
+        return "set" + fieldName;
+    }
+
+    public static String capitalizeFirstChar(@NotNull String string) {
+        String firstLetter = "" + string.charAt(0);
+        return firstLetter.toUpperCase() + string.substring(1);
     }
 }
