@@ -61,7 +61,7 @@ public class BrowserActivity extends AppCompatActivity implements PartListFragme
 
         String partType = getIntent().getStringExtra(PART_TYPE_EXTRA);
         if (partType != null) {
-            this.viewPager.setCurrentItem(ComputerPart.ComputerPartType.valueOf(partType).getId());
+            this.viewPager.setCurrentItem(ComputerPart.ComputerPartType.valueOf(partType).ordinal());
         }
 
         BrowserPagerAdapter adapter = new BrowserPagerAdapter(getSupportFragmentManager(), this);
