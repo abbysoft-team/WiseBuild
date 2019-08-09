@@ -218,10 +218,12 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
             layout.setOrientation(LinearLayout.HORIZONTAL);
 
             TextView textView = new TextView(this);
-            textView.setText(description.getName());
-            textView.setLayoutParams(new TableLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 3f));
+            textView.setText(MiscUtils.capitalizeFirstChar(description.getName()));
+            textView.setLayoutParams(new TableLayout.LayoutParams
+                    (0, ViewGroup.LayoutParams.WRAP_CONTENT, 3f));
 
-            view.getView().setLayoutParams(new TableLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 2f));
+            view.getView().setLayoutParams(new TableLayout.LayoutParams
+                    (0, ViewGroup.LayoutParams.WRAP_CONTENT, 2f));
 
 
             layout.addView(textView);

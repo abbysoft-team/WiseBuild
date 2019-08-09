@@ -29,6 +29,12 @@ abstract class ParamView (val param : ParamDescription) {
      */
     fun setInput(inputObject : Any) {
         val propertyValue = param.accessor.get(inputObject)
+
+        // if property is not set it will be null or -1 for numbers
+        if (propertyValue == null || propertyValue == -1) {
+            return
+        }
+
         setViewValue(propertyValue)
     }
 

@@ -11,7 +11,7 @@ import ru.abbysoft.wisebuild.utils.ModelUtils;
  */
 public class MemoryModule extends ComputerPart {
 
-    private MemoryType type;
+    private MemoryType memoryType;
     private int capacityMb;
 
     /**
@@ -22,11 +22,11 @@ public class MemoryModule extends ComputerPart {
     }
 
     public MemoryType getMemoryType() {
-        return type;
+        return memoryType;
     }
 
     public void setMemoryType(MemoryType type) {
-        this.type = type;
+        this.memoryType = type;
     }
 
     public int getCapacityMb() {
@@ -40,21 +40,21 @@ public class MemoryModule extends ComputerPart {
     @Override
     public String toString() {
         return String.format("%s with %d mb of %s memory", getName(), getCapacityMb(),
-                type != null ? type.name : "");
+                memoryType != null ? memoryType.name : "");
     }
 
     @Override
     public ArrayList<ParamDescription> getTypeParams() {
         ArrayList<ParamDescription> params = new ArrayList<>(3);
 
-        params.add(ModelUtils.createParameter("type", MemoryType.class));
+        params.add(ModelUtils.createParameter("memoryType", MemoryType.class));
         params.add(ModelUtils.createIntParameter("capacityMb"));
 
         return params;
     }
 
     /**
-     * Memory type
+     * Memory memoryType
      */
     public enum MemoryType {
         DDR("DDR"),

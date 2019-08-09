@@ -2,6 +2,7 @@ package ru.abbysoft.wisebuild.databinding
 
 import android.util.Log
 import ru.abbysoft.wisebuild.utils.MiscUtils
+import java.lang.IllegalStateException
 import java.lang.reflect.Method
 
 /**
@@ -35,7 +36,7 @@ class ReflectionAccessor(private val fieldName : String) : Accessor {
         }
 
         Log.e(LOG_TAG, "cannot access field $fieldName")
-        return null
+        throw IllegalStateException("Reflection accessor for field $fieldName is wrong")
     }
 
     private fun getMethodFromClass(claz : Class<Any>, name : String) : Method? {

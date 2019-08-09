@@ -39,6 +39,9 @@ public abstract class ComputerPart {
     protected ComputerPart(@NonNull ComputerPartType type) {
         this.type = type;
         this.id = nextID++;
+
+        this.releaseQuarter = -1;
+        this.releaseYear = -1;
     }
 
     public ArrayList<ParamDescription> getAllParameters() {
