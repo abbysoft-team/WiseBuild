@@ -6,10 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import ru.abbysoft.wisebuild.model.ComputerPart;
+import ru.abbysoft.wisebuild.utils.MiscUtils;
+import ru.abbysoft.wisebuild.utils.ModelUtils;
 
 public class AddPartActivity extends AppCompatActivity {
     /**
@@ -32,6 +40,33 @@ public class AddPartActivity extends AppCompatActivity {
         // get parent component if exists
         parentActivity = getIntent().getParcelableExtra(PARENT_CLASS_COMPONENT_EXTRA);
 
+        addNewComponentButtons();
+    }
+
+    private void addNewComponentButtons() {
+        List<ComputerPart.ComputerPartType> types
+                = ComputerPart.ComputerPartType.Companion.getEntriesWithoutAssembly();
+
+        for (ComputerPart.ComputerPartType type : types) {
+            addButtonForType(type);
+        }
+
+    }
+
+    private void addButtonForType(ComputerPart.ComputerPartType type) {
+        ViewGroup container = findViewById(R.id.add_part_container);
+        Button referenceButton = findViewById(R.id.add_part_reference_button);
+
+        Button button = new Button(this);
+        button.setLayoutParams(referenceButton.getLayoutParams());
+        button.setText(type.getReadableName());
+        button.setTextSize(Math.max(15, (referenceButton.getTextSize() / 1.7f)));
+        button.setOnClickListener((view -> {
+            PartParametersActivity.launch(this, type);
+        }));
+        button.setTextColor(referenceButton.getTextColors());
+        button.setBackground(referenceButton.getBackground());
+        container.addView(button);
     }
 
     /**
