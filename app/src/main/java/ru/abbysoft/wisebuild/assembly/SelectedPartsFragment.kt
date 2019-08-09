@@ -63,7 +63,7 @@ class SelectedPartsFragment(private val partType: ComputerPart.ComputerPartType)
         ComputerPart.ComputerPartType.CPU -> AssemblyViewModel.AssemblyAction.ADD_CPU
         ComputerPart.ComputerPartType.MEMORY_MODULE -> AssemblyViewModel.AssemblyAction.ADD_MEMORY
         ComputerPart.ComputerPartType.MOTHERBOARD -> AssemblyViewModel.AssemblyAction.ADD_MOTHERBOARD
-        ComputerPart.ComputerPartType.ASSEMBLED_PC -> throw IllegalStateException()
+        else -> throw IllegalStateException()
     }
 
     private fun addPart() {

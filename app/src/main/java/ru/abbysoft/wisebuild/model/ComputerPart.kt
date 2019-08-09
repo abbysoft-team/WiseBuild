@@ -79,7 +79,8 @@ abstract class ComputerPart protected constructor(val type: ComputerPartType) {
         CPU("CPU", ru.abbysoft.wisebuild.model.CPU::class.java),
         MEMORY_MODULE("Memory module", MemoryModule::class.java),
         MOTHERBOARD("Motherboard", Motherboard::class.java),
-        ASSEMBLED_PC("Assembled PC", AssembledPC::class.java);
+        ASSEMBLED_PC("Assembled PC", AssembledPC::class.java),
+        VIDEO_CARD("Video card", VideoCard::class.java);
 
 
         companion object {

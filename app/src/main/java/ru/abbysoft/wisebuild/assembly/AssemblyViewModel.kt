@@ -47,7 +47,7 @@ class AssemblyViewModel : ViewModel() {
             ComputerPart.ComputerPartType.CPU -> AssemblyAction.ADD_CPU
             ComputerPart.ComputerPartType.MEMORY_MODULE -> AssemblyAction.ADD_MEMORY
             ComputerPart.ComputerPartType.MOTHERBOARD -> AssemblyAction.ADD_MOTHERBOARD
-            ComputerPart.ComputerPartType.ASSEMBLED_PC -> {AssemblyAction.NOTHING}
+            else -> {AssemblyAction.NOTHING}
         }
     }
 
@@ -73,7 +73,7 @@ class AssemblyViewModel : ViewModel() {
                 currentMotherboard.value = part as Motherboard
                 motherboards.add(part)
             }
-            ComputerPart.ComputerPartType.ASSEMBLED_PC -> {}
+            else -> {}
         }
 
         val parts = ArrayList<ComputerPart?>()
