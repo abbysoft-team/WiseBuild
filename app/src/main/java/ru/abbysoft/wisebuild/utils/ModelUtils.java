@@ -26,7 +26,7 @@ public class ModelUtils {
      */
     public static ComputerPart generateRandomPart() {
         List<ComputerPart.ComputerPartType> types =
-                ComputerPart.ComputerPartType.getEntriesWithoutAssembly();
+                ComputerPart.ComputerPartType.Companion.getEntriesWithoutAssembly();
 
         ComputerPart.ComputerPartType type = types.get(RANDOM.nextInt(types.size()));
 

@@ -5,6 +5,7 @@ import android.text.InputType
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import ru.abbysoft.wisebuild.utils.MiscUtils
 import java.util.*
 
 /**
@@ -33,6 +34,10 @@ class ParamEditTextView(private val context : Context,
                 if (realNumber) InputType.TYPE_CLASS_NUMBER
                 else InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         editText.inputType = inputType
+
+        if (param.paramCategory == ParamCategory.PRICE) {
+            MiscUtils.configureAsPriceField(editText)
+        }
 
         return editText
     }

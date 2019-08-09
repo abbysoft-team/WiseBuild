@@ -9,4 +9,12 @@ package ru.abbysoft.wisebuild.databinding
  */
 data class ParamDescription(val name : String,
                             val valueClass : Class<out Any>,
-                            val accessor : Accessor)
+                            val accessor : Accessor) {
+
+    var paramCategory : ParamCategory? = ParamCategory.NONE
+}
+
+enum class ParamCategory {
+    NONE,
+    PRICE
+}

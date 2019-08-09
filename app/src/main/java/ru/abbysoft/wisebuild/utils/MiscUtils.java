@@ -2,6 +2,8 @@ package ru.abbysoft.wisebuild.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -152,5 +154,40 @@ public class MiscUtils {
     public static String capitalizeFirstChar(@NotNull String string) {
         String firstLetter = "" + string.charAt(0);
         return firstLetter.toUpperCase() + string.substring(1);
+    }
+
+    /**
+     * Configure specified field as price field
+     *
+     * to the left of field value will be added currency sign
+     *
+     * @param editText field
+     */
+    public static void configureAsPriceField(@NotNull EditText editText) {
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String text = editText.getText().toString();
+
+                if (text.isEmpty()) {
+                    return;
+                }
+                if (text.startsWith("$")) {
+                    return;
+                }
+                if (text.contains("$")) {
+                    text = text.replace("$", "");
+                }
+
+                text = "$" + text;
+                editText.setText(text.trim());
+                editText.setSelection(text.length());
+            }
+        });
     }
 }

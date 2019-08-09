@@ -174,31 +174,7 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
 
 //
 //    private void configurePriceField() {
-//        priceField.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//                String text = priceField.getText().toString();
-//
-//                if (text.isEmpty()) {
-//                    return;
-//                }
-//                if (text.startsWith("$")) {
-//                    return;
-//                }
-//                if (text.contains("$")) {
-//                    text = text.replace("$", "");
-//                }
-//
-//                text = "$" + text;
-//                priceField.setText(text.trim());
-//                priceField.setSelection(text.length());
-//            }
-//        });
+
 //    }
 
     private ArrayList<ParamView> addFields() {
