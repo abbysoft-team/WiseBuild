@@ -2,10 +2,7 @@ package ru.abbysoft.wisebuild.assembly
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.abbysoft.wisebuild.model.CPU
-import ru.abbysoft.wisebuild.model.ComputerPart
-import ru.abbysoft.wisebuild.model.MemoryModule
-import ru.abbysoft.wisebuild.model.Motherboard
+import ru.abbysoft.wisebuild.model.*
 
 /**
  * All model data and data manipulations of #CreateAssemblyActivity
@@ -19,10 +16,12 @@ class AssemblyViewModel : ViewModel() {
     private val cpuUnits : ArrayList<CPU> = ArrayList()
     private val memoryModules : ArrayList<MemoryModule> = ArrayList()
     private val motherboards : ArrayList<Motherboard> = ArrayList()
+    private val videocards : ArrayList<VideoCard> = ArrayList()
 
     var currentCpu : MutableLiveData<CPU> = MutableLiveData()
     var currentMotherboard : MutableLiveData<Motherboard> = MutableLiveData()
     var currentMemory : MutableLiveData<MemoryModule> = MutableLiveData()
+    var currentVideocard : MutableLiveData<VideoCard> = MutableLiveData()
 
     var currentParts : MutableLiveData<ArrayList<ComputerPart?>> = MutableLiveData()
 
@@ -47,6 +46,7 @@ class AssemblyViewModel : ViewModel() {
             ComputerPart.ComputerPartType.CPU -> AssemblyAction.ADD_CPU
             ComputerPart.ComputerPartType.MEMORY_MODULE -> AssemblyAction.ADD_MEMORY
             ComputerPart.ComputerPartType.MOTHERBOARD -> AssemblyAction.ADD_MOTHERBOARD
+            ComputerPart.ComputerPartType.VIDEO_CARD -> AssemblyAction.ADD_VIDEO_CARD
             else -> {AssemblyAction.NOTHING}
         }
     }
@@ -73,6 +73,10 @@ class AssemblyViewModel : ViewModel() {
                 currentMotherboard.value = part as Motherboard
                 motherboards.add(part)
             }
+            ComputerPart.ComputerPartType.VIDEO_CARD -> {
+                currentVideocard.value = part as VideoCard
+                videocards.add(part)
+            }
             else -> {}
         }
 
@@ -80,6 +84,7 @@ class AssemblyViewModel : ViewModel() {
         parts.add(currentMemory.value)
         parts.add(currentCpu.value)
         parts.add(currentMotherboard.value)
+        parts.add(currentVideocard.value)
 
         currentParts.value = parts
     }
@@ -89,6 +94,7 @@ class AssemblyViewModel : ViewModel() {
         ADD_CPU,
         ADD_MOTHERBOARD,
         ADD_MEMORY,
+        ADD_VIDEO_CARD,
         SAVE_ASSEMBLY
     }
 }

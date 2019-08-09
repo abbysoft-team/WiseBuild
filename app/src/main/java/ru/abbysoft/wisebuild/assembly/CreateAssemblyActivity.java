@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import ru.abbysoft.wisebuild.R;
@@ -24,17 +25,25 @@ import ru.abbysoft.wisebuild.storage.DBFactory;
 import ru.abbysoft.wisebuild.utils.MiscUtils;
 
 public class CreateAssemblyActivity extends AppCompatActivity {
+    private static final String LOG_TAG = CreateAssemblyActivity.class.toString();
 
-    private SelectedPartsFragment cpuFragment =
-            SelectedPartsFragment.Companion.newInstance(ComputerPart.ComputerPartType.CPU);
-    private SelectedPartsFragment memoryFragment =
-            SelectedPartsFragment.Companion.newInstance(ComputerPart.ComputerPartType.MEMORY_MODULE);
-    private SelectedPartsFragment motherboardFragment =
-            SelectedPartsFragment.Companion.newInstance(ComputerPart.ComputerPartType.MOTHERBOARD);
-
+    private ArrayList<SelectedPartsFragment> partTypeFragments = createFragments();
     private ActivityCreateAssemblyBinding binding;
 
-    private static final String LOG_TAG = CreateAssemblyActivity.class.toString();
+    private ArrayList<SelectedPartsFragment> createFragments() {
+        ArrayList<SelectedPartsFragment> fragments = new ArrayList<>(10);
+
+        for (ComputerPart.ComputerPartType type
+                : ComputerPart.ComputerPartType.Companion.getEntriesWithoutAssembly()) {
+            fragments.add(createFragment(type));
+        }
+
+        return fragments;
+    }
+
+    private SelectedPartsFragment createFragment(ComputerPart.ComputerPartType type) {
+        return SelectedPartsFragment.Companion.newInstance(type);
+    }
 
     /**
      * Create intent and launch this activity
@@ -76,11 +85,11 @@ public class CreateAssemblyActivity extends AppCompatActivity {
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
 
-        transaction
-                .add(R.id.assembly_memory_fragment_container, memoryFragment)
-                .add(R.id.assembly_motherboard_fragment_container, motherboardFragment)
-                .add(R.id.assembly_cpu_fragment_container, cpuFragment)
-                .commit();
+        for (SelectedPartsFragment fragment : partTypeFragments) {
+            transaction.add(R.id.assembly_fragment_container, fragment);
+        }
+
+        transaction.commit();
     }
 
     private void saveAssembly() throws SlotLimitException {

@@ -15,6 +15,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         tools:context=".assembly.CreateAssemblyActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,7 +46,7 @@
                 android:text="@string/total"
                 android:textColor="@color/colorTextSecondary"
                 app:layout_constraintStart_toStartOf="@+id/assembly_total_price"
-                app:layout_constraintTop_toBottomOf="@+id/assembly_motherboard_fragment_container" />
+                app:layout_constraintTop_toBottomOf="@+id/assembly_fragment_container" />
 
             <TextView
                 android:id="@+id/assembly_total_price"
@@ -90,52 +92,25 @@
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:padding="10dp"
                 android:onClick="@{() -> viewModel.saveAssembly()}"
+                android:padding="10dp"
                 android:text="@string/save_assembly"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/assembly_total_price2" />
 
-            <FrameLayout
-                android:id="@+id/assembly_cpu_fragment_container"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/assembly_activity_header" />
+            <LinearLayout
+                android:id="@+id/assembly_fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/assembly_activity_header">
 
-            <FrameLayout
-                android:id="@+id/assembly_memory_fragment_container"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/assembly_cpu_fragment_container" />
 
-            <FrameLayout
-                android:id="@+id/assembly_motherboard_fragment_container"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/assembly_memory_fragment_container" />
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
