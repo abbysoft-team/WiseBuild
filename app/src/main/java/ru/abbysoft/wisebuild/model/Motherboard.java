@@ -1,33 +1,26 @@
 package ru.abbysoft.wisebuild.model;
 
+
 import java.util.ArrayList;
-import java.util.List;
+
+import ru.abbysoft.wisebuild.databinding.ParamDescription;
+import ru.abbysoft.wisebuild.utils.ModelUtils;
 
 /**
  * Motherboard part
  */
 public class Motherboard extends ComputerPart {
 
-    private final SocketType socketType;
+    private SocketType socketType;
 
-    public Motherboard(String name, SocketType socketType) {
-        super(name, ComputerPartType.MOTHERBOARD);
-
-        this.socketType = socketType;
-    }
-
-    @Override
-    public List<PartParameter> getParameters() {
-        ArrayList<PartParameter> parameters = new ArrayList<>(1);
-
-        parameters.add(new PartParameter("Type", socketType.name()));
-
-        return parameters;
+    public Motherboard() {
+        super(ComputerPartType.MOTHERBOARD);
     }
 
     @Override
     public String toString() {
-        return String.format("%s %s", getFullName(), socketType.name());
+        return String.format("%s %s", getName(),
+                socketType != null ? socketType.name() : "");
     }
 
 
@@ -39,5 +32,18 @@ public class Motherboard extends ComputerPart {
 
     public SocketType getSocketType() {
         return socketType;
+    }
+
+    public void setSocketType(SocketType type) {
+        socketType = type;
+    }
+
+    @Override
+    public ArrayList<ParamDescription> getTypeParams() {
+        ArrayList<ParamDescription> params = new ArrayList<>(3);
+
+        params.add(ModelUtils.createParameter("socketType", SocketType.class));
+
+        return params;
     }
 }

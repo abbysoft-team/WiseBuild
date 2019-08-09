@@ -1,7 +1,9 @@
 package ru.abbysoft.wisebuild.model;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import ru.abbysoft.wisebuild.databinding.ParamDescription;
+import ru.abbysoft.wisebuild.utils.ModelUtils;
 
 /**
  * MemoryModule part
@@ -9,48 +11,50 @@ import java.util.List;
  */
 public class MemoryModule extends ComputerPart {
 
-    private final MemoryType type;
-    private final int capacityMb;
+    private MemoryType memoryType;
+    private int capacityMb;
 
     /**
      * Default constructor
-     *
-     * @param name component name
-     * @param type type of memory
-     * @param capacityMb capacity in MB
      */
-    public MemoryModule(String name, MemoryType type, int capacityMb) {
-        super(name, ComputerPartType.MEMORY_MODULE);
-
-        this.type = type;
-        this.capacityMb = capacityMb;
+    public MemoryModule() {
+        super(ComputerPartType.MEMORY_MODULE);
     }
 
     public MemoryType getMemoryType() {
-        return type;
+        return memoryType;
+    }
+
+    public void setMemoryType(MemoryType type) {
+        this.memoryType = type;
     }
 
     public int getCapacityMb() {
         return capacityMb;
     }
 
-    @Override
-    public List<PartParameter> getParameters() {
-        ArrayList<PartParameter> parameters = new ArrayList<>(2);
-
-        parameters.add(new PartParameter("Type", type.getName()));
-        parameters.add(new PartParameter("Capacity (mb)", capacityMb));
-
-        return parameters;
+    public void setCapacityMb(int capacityMb) {
+        this.capacityMb = capacityMb;
     }
 
     @Override
     public String toString() {
-        return String.format("%s with %d mb of %s memory", getFullName(), getCapacityMb(), type.name);
+        return String.format("%s with %d mb of %s memory", getName(), getCapacityMb(),
+                memoryType != null ? memoryType.name : "");
+    }
+
+    @Override
+    public ArrayList<ParamDescription> getTypeParams() {
+        ArrayList<ParamDescription> params = new ArrayList<>(3);
+
+        params.add(ModelUtils.createParameter("memoryType", MemoryType.class));
+        params.add(ModelUtils.createIntParameter("capacityMb"));
+
+        return params;
     }
 
     /**
-     * Memory type
+     * Memory memoryType
      */
     public enum MemoryType {
         DDR("DDR"),

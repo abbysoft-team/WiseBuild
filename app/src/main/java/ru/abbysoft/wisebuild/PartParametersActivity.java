@@ -11,37 +11,29 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewManager;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import ru.abbysoft.wisebuild.model.CPU;
+import ru.abbysoft.wisebuild.databinding.ParamDescription;
+import ru.abbysoft.wisebuild.databinding.ParamView;
 import ru.abbysoft.wisebuild.model.ComputerPart;
-import ru.abbysoft.wisebuild.model.MemoryModule;
-import ru.abbysoft.wisebuild.model.Motherboard;
-import ru.abbysoft.wisebuild.model.PartParameter;
 import ru.abbysoft.wisebuild.storage.DBFactory;
-import ru.abbysoft.wisebuild.utils.LayoutUtils;
 import ru.abbysoft.wisebuild.utils.MiscUtils;
 
 /**
@@ -65,28 +57,13 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
 
     private TextView headerMessage;
 
-    private TextView additionalParamLabel1;
-    private TextView additionalParamLabel2;
-    private TextView additionalParamSpinnerLabel;
-
-    @NotEmpty
-    private EditText additionalParamField1;
-
-    @NotEmpty
-    private EditText additionalParamField2;
-
-    private Spinner additionalParamSpinner;
-
-    @NotEmpty
-    private EditText nameField;
-
-    private EditText descriptionField;
-    private EditText priceField;
-
     private Bitmap currentImage;
     private Uri currentImageUri;
     private Validator validator;
     private boolean validationResult;
+    private boolean partBeingCreated;
+
+    private ArrayList<ParamView> paramViews;
 
     public static void launch(Context context, ComputerPart.ComputerPartType partType) {
         Intent intent = new Intent(context, PartParametersActivity.class);
@@ -100,60 +77,24 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         setContentView(R.layout.activity_part_creation);
 
         imageView = findViewById(R.id.new_component_image);
-        nameField = findViewById(R.id.part_name_field);
-        descriptionField = findViewById(R.id.part_description_field);
-        priceField = findViewById(R.id.part_price_field);
-        additionalParamLabel1 = findViewById(R.id.additional_parameter_1_label);
-        additionalParamLabel2 = findViewById(R.id.additional_parameter_2_label);
-        additionalParamField1 = findViewById(R.id.additional_parameter_1_field);
-        additionalParamField2 = findViewById(R.id.additional_parameter_2_field);
-        additionalParamSpinnerLabel = findViewById(R.id.additional_param_spinner_label);
-        additionalParamSpinner = findViewById(R.id.additional_param_spinner);
         headerMessage = findViewById(R.id.part_creation_label);
-
-        configurePriceField();
+        validator = new Validator(this);
+        validator.setValidationListener(this);
 
         getPassedExtras();
-
         if (isExtrasNotValid()) {
             return;
         }
 
-        if (partBeingCreated()) {
-            addAdditionalFields();
+        paramViews = addFields();
 
+        if (partBeingCreated) {
             configureViewForCreation();
         } else {
             configureViewForExistingPart();
         }
-    }
 
-    private void configurePriceField() {
-        priceField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                String text = priceField.getText().toString();
-
-                if (text.isEmpty()) {
-                    return;
-                }
-                if (text.startsWith("$")) {
-                    return;
-                }
-                if (text.contains("$")) {
-                    text = text.replace("$", "");
-                }
-
-                text = "$" + text;
-                priceField.setText(text.trim());
-                priceField.setSelection(text.length());
-            }
-        });
+        setData(part);
     }
 
     private void getPassedExtras() {
@@ -165,6 +106,26 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         if (part == null && partType == null) {
             partNotFound();
         }
+        if (part == null) {
+            part = setPartFromType();
+            partBeingCreated = true;
+        } else {
+            partBeingCreated = false;
+        }
+    }
+
+    private ComputerPart setPartFromType() {
+        try {
+            return MiscUtils.instantiatePartOfType(partType);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+            partNotFound();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            partNotFound();
+        }
+
+        return part;
     }
 
     private ComputerPart getPartFromDB(long id) {
@@ -181,139 +142,69 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         return part == null && partType == null;
     }
 
-    private void addAdditionalFields() {
-        ComputerPart.ComputerPartType type = partType == null ? part.getType() : partType;
+    private ArrayList<ParamView> addFields() {
+        View referenceContainer = findViewById(R.id.part_creation_reference_container);
+        ViewGroup container = findViewById(R.id.part_creation_parameters_container);
 
-        switch (type) {
-            case CPU:
-                addFieldsForCPU();
-                break;
-            case MEMORY_MODULE:
-                addFieldsForMemory();
-                break;
-            case MOTHERBOARD:
-                addFieldsForMotherboard();
-                break;
+        ArrayList<ParamView> params = new ArrayList<>(10);
 
-                default:
-                    break;
+        ParamView view;
+        for (ParamDescription description : part.getAllParameters()) {
+            view = ParamView.Companion.createFor(this, description);
+            if (view == null) continue;
+
+            // add field to layout
+            LinearLayout layout = new LinearLayout(this);
+            layout.setLayoutParams(referenceContainer.getLayoutParams());
+            layout.setOrientation(LinearLayout.HORIZONTAL);
+
+            TextView textView = new TextView(this);
+            textView.setText(MiscUtils.capitalizeFirstChar(description.getName()));
+            textView.setLayoutParams(new TableLayout.LayoutParams
+                    (0, ViewGroup.LayoutParams.WRAP_CONTENT, 3f));
+
+            view.getView().setLayoutParams(new TableLayout.LayoutParams
+                    (0, ViewGroup.LayoutParams.WRAP_CONTENT, 2f));
+            view.configureValidation(validator);
+
+            layout.addView(textView);
+            layout.addView(view.getView());
+
+            container.addView(layout);
+            params.add(view);
         }
-    }
 
-    private void addFieldsForCPU() {
-        ((ViewManager)additionalParamSpinnerLabel.getParent())
-                .removeView(additionalParamSpinnerLabel);
-        ((ViewManager)additionalParamSpinner.getParent())
-                .removeView(additionalParamSpinner);
+        referenceContainer.setVisibility(View.GONE);
 
-        additionalParamLabel1.setText(getString(R.string.manufacturer));
-        additionalParamLabel2.setText(getString(R.string.num_of_cores));
-
-        additionalParamField2.setInputType(InputType.TYPE_CLASS_NUMBER);
-    }
-
-    private void addFieldsForMemory() {
-        ((ViewManager)additionalParamField2.getParent()).removeView(additionalParamField2);
-        ((ViewManager)additionalParamLabel2.getParent()).removeView(additionalParamLabel2);
-
-        additionalParamLabel1.setText(getString(R.string.capacity_mb));
-        additionalParamField1.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-        additionalParamSpinnerLabel.setText(getString(R.string.type));
-
-        configureSpinnerForMemory();
-    }
-
-    private void configureSpinnerForMemory() {
-        MemoryModule.MemoryType[] array = MemoryModule.MemoryType.values();
-        ArrayAdapter<MemoryModule.MemoryType> adapter =
-                new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, array);
-        additionalParamSpinner.setAdapter(adapter);
-    }
-
-    private void addFieldsForMotherboard() {
-        LayoutUtils.removeViewFromLayout(additionalParamField1);
-        LayoutUtils.removeViewFromLayout(additionalParamField2);
-        LayoutUtils.removeViewFromLayout(additionalParamLabel1);
-        LayoutUtils.removeViewFromLayout(additionalParamLabel2);
-
-        additionalParamSpinnerLabel.setText(getString(R.string.socket));
-
-        configureSpinnerForMotherboard();
-    }
-
-    private void configureSpinnerForMotherboard() {
-        Motherboard.SocketType[] array = Motherboard.SocketType.values();
-        ArrayAdapter<Motherboard.SocketType> adapter =
-                new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, array);
-        additionalParamSpinner.setAdapter(adapter);
-    }
-
-    private void addValidators() {
-        validator = new Validator(this);
-        validator.setValidationListener(this);
-    }
-
-    private boolean partBeingCreated() {
-        return part == null;
+        return params;
     }
 
     private void configureViewForCreation() {
-        addValidators();
-
         headerMessage.setText(
                 getString(R.string.creating_part_message, partType.getReadableName()));
     }
 
     private void configureViewForExistingPart() {
-        headerMessage.setText(part.getType().getReadableName());
-        nameField.setText(part.getFullName());
-        descriptionField.setText(descriptionField.getText());
-        String price = "$" + part.getPriceUsd();
-        priceField.setText(price);
+        headerMessage.setText(part.getTrimmedName());
 
-        hideUnusedViews();
-        addPartParameterFields();
-
-        // disable fields for editing
-        nameField.setKeyListener(null);
-        descriptionField.setKeyListener(null);
-        priceField.setKeyListener(null);
+        disableAllFields();
+        hideSaveButton();
     }
 
-    private void hideUnusedViews() {
-        Button saveButton = findViewById(R.id.save_component_button);
-        saveButton.setVisibility(View.INVISIBLE);
-        Button addPhotoButton = findViewById(R.id.add_photo_button);
-        addPhotoButton.setVisibility(View.INVISIBLE);
-        LayoutUtils.removeViewFromLayout(additionalParamField1);
-        LayoutUtils.removeViewFromLayout(additionalParamField2);
-        LayoutUtils.removeViewFromLayout(additionalParamLabel1);
-        LayoutUtils.removeViewFromLayout(additionalParamLabel2);
-        LayoutUtils.removeViewFromLayout(additionalParamSpinner);
-        LayoutUtils.removeViewFromLayout(additionalParamSpinnerLabel);
-    }
-
-    private void addPartParameterFields() {
-        List<PartParameter> parameters = part.getParameters();
-        ViewGroup container = findViewById(R.id.part_creation_parameters_container);
-        for (PartParameter parameter : parameters) {
-            addParameterField(parameter, container);
+    private void disableAllFields() {
+        for (ParamView view : paramViews) {
+            view.getView().setEnabled(false);
         }
     }
 
-    private void addParameterField(PartParameter parameter, ViewGroup container) {
-        TextView labelView = new TextView(this);
-        labelView.setText(parameter.getName());
-        labelView.setLayoutParams(additionalParamLabel1.getLayoutParams());
+    private void hideSaveButton() {
+        findViewById(R.id.save_component_button).setVisibility(View.INVISIBLE);
+    }
 
-        EditText editText = new EditText(this);
-        editText.setText(parameter.getValue().toString());
-        editText.setKeyListener(null);
-        editText.setLayoutParams(additionalParamField1.getLayoutParams());
-
-        container.addView(labelView);
-        container.addView(editText);
+    private void setData(ComputerPart part) {
+        for (ParamView paramView : paramViews) {
+            paramView.setInput(part);
+        }
     }
 
     /**
@@ -327,61 +218,17 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
             return;
         }
 
-        String name = nameField.getText().toString().trim();
-        String description = descriptionField.getText().toString().trim();
-        Integer price = null;
-        if (!priceField.getText().toString().trim().isEmpty()) {
-            price = MiscUtils.getPriceFromCurrencyField(priceField);
-        }
-
-        ComputerPart part = null;
-        switch (partType) {
-            case CPU:
-                part = getCPUPart(name);
-                break;
-            case MOTHERBOARD:
-                part = getMotherboardPart(name);
-                break;
-            case MEMORY_MODULE:
-                part = getMemoryPart(name);
-                break;
-
-                default:
-                    break;
-        }
-
-        part.setDescription(description);
-        part.setPhoto(currentImage);
-
-        if (price != null) {
-            part.setPriceUsd(price);
-        }
+        setParametersFor(part);
 
         // actuall saving
         DBFactory.getDatabase().storePart(part);
         showSaveSuccessMessage();
     }
 
-    private ComputerPart getCPUPart(String name) {
-        String manufacturer = additionalParamField1.getText().toString();
-        int cores = Integer.parseInt(additionalParamField2.getText().toString());
-
-        return new CPU(name, manufacturer, cores);
-    }
-
-    private ComputerPart getMotherboardPart(String name) {
-        Motherboard.SocketType socket =
-                (Motherboard.SocketType) additionalParamSpinner.getSelectedItem();
-
-        return new Motherboard(name, socket);
-    }
-
-    private ComputerPart getMemoryPart(String name) {
-        int capacity = Integer.parseInt(additionalParamField1.getText().toString());
-        MemoryModule.MemoryType type =
-                (MemoryModule.MemoryType) additionalParamSpinner.getSelectedItem();
-
-        return new MemoryModule(name, type, capacity);
+    private void setParametersFor(ComputerPart part) {
+        for (ParamView view : paramViews) {
+            view.setProperty(part);
+        }
     }
 
     /**

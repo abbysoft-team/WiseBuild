@@ -1,9 +1,8 @@
 package ru.abbysoft.wisebuild.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
+import ru.abbysoft.wisebuild.databinding.ParamDescription;
 import ru.abbysoft.wisebuild.exception.SlotLimitException;
 
 /**
@@ -19,11 +18,9 @@ public class AssembledPC extends ComputerPart {
 
     /**
      * Constructor
-     *
-     * @param name computer name
      */
-    public AssembledPC(String name) {
-        super(name, ComputerPartType.ASSEMBLED_PC);
+    public AssembledPC() {
+        super(ComputerPartType.ASSEMBLED_PC);
 
         memoryModules = new ArrayList<>(getMaxMemoryModules());
     }
@@ -59,15 +56,15 @@ public class AssembledPC extends ComputerPart {
     }
 
     @Override
-    public List<PartParameter> getParameters() {
-        return Collections.emptyList();
+    public String toString() {
+        return String.format("PC (%s) { CPU [%s], Memory [%s], Motherboard [%s]",
+                getName(), cpu == null ? "" : cpu.toString(),
+                memoryModules.isEmpty() ? "" : memoryModules.get(0).toString(),
+                motherboard == null ? "" : motherboard.toString());
     }
 
     @Override
-    public String toString() {
-        return String.format("PC (%s) { CPU [%s], Memory [%s], Motherboard [%s]",
-                getFullName(), cpu == null ? "" : cpu.toString(),
-                memoryModules.isEmpty() ? "" : memoryModules.get(0).toString(),
-                motherboard == null ? "" : motherboard.toString());
+    public ArrayList<ParamDescription> getTypeParams() {
+        return new ArrayList<>();
     }
 }

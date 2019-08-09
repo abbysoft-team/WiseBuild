@@ -1,100 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".assembly.CreateAssemblyActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+        <variable
+            name="viewModel"
+            type="ru.abbysoft.wisebuild.assembly.AssemblyViewModel" />
+        <variable
+            name="totalPrice"
+            type="Long" />
+    </data>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp">
+        android:layout_height="match_parent"
+        tools:context=".assembly.CreateAssemblyActivity">
 
-        <TextView
-            android:id="@+id/assembly_activity_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="@string/assembly_activity_header"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/assembly_parts_recycler"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/assembly_activity_header" />
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="10dp">
 
-        <TextView
-            android:id="@+id/assembly_total_price_label"
-            android:layout_width="wrap_content"
-            android:layout_height="17dp"
-            android:layout_marginTop="12dp"
-            android:text="@string/total"
-            android:textColor="@color/colorTextSecondary"
-            app:layout_constraintStart_toStartOf="@+id/assembly_total_price"
-            app:layout_constraintTop_toBottomOf="@+id/assembly_parts_recycler" />
+            <TextView
+                android:id="@+id/assembly_activity_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/assembly_activity_header"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/assembly_total_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
-            android:text="12524$"
-            android:textColor="@color/colorTextSecondary"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/assembly_total_price_label" />
+            <TextView
+                android:id="@+id/assembly_total_price_label"
+                android:layout_width="wrap_content"
+                android:layout_height="17dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/total"
+                android:textColor="@color/colorTextSecondary"
+                app:layout_constraintStart_toStartOf="@+id/assembly_total_price"
+                app:layout_constraintTop_toBottomOf="@+id/assembly_motherboard_fragment_container" />
 
-        <TextView
-            android:id="@+id/assembly_total_price2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:text="259755"
-            android:textColor="@color/colorTextSecondary"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/assembly_total_price" />
+            <TextView
+                android:id="@+id/assembly_total_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:text="@{'$' + String.valueOf(totalPrice)}"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/assembly_total_price_label" />
 
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/performance_score"
-            android:textColor="@color/colorTextSecondary"
-            app:layout_constraintStart_toStartOf="@+id/assembly_total_price2"
-            app:layout_constraintTop_toTopOf="@+id/assembly_total_price_label" />
+            <TextView
+                android:id="@+id/assembly_total_price2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:text="259755"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/assembly_total_price" />
 
-        <Button
-            android:id="@+id/assembly_save_button"
-            style="@style/AppTheme.ButtonColored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:onClick="saveAssembly"
-            android:padding="10dp"
-            android:text="@string/save_assembly"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/assembly_total_price2" />
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/performance_score"
+                android:textColor="@color/colorTextSecondary"
+                app:layout_constraintStart_toStartOf="@+id/assembly_total_price2"
+                app:layout_constraintTop_toTopOf="@+id/assembly_total_price_label" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+            <Button
+                android:id="@+id/assembly_save_button"
+                style="@style/AppTheme.ButtonColored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:padding="10dp"
+                android:onClick="@{() -> viewModel.saveAssembly()}"
+                android:text="@string/save_assembly"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/assembly_total_price2" />
+
+            <FrameLayout
+                android:id="@+id/assembly_cpu_fragment_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/assembly_activity_header" />
+
+            <FrameLayout
+                android:id="@+id/assembly_memory_fragment_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/assembly_cpu_fragment_container" />
+
+            <FrameLayout
+                android:id="@+id/assembly_motherboard_fragment_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/assembly_memory_fragment_container" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

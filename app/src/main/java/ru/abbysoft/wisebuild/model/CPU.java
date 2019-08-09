@@ -1,7 +1,9 @@
 package ru.abbysoft.wisebuild.model;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import ru.abbysoft.wisebuild.databinding.ParamDescription;
+import ru.abbysoft.wisebuild.utils.ModelUtils;
 
 /**
  * Processor component model object
@@ -9,14 +11,12 @@ import java.util.List;
  */
 public class CPU extends ComputerPart {
 
-    private final String manufacturer;
-    private final int cores;
+    private String manufacturer;
+    private int cores;
 
-    public CPU(String name, String manufacturer, int cores) {
-        super(name, ComputerPartType.CPU);
+    public CPU() {
+        super(ComputerPartType.CPU);
 
-        this.manufacturer = manufacturer;
-        this.cores = cores;
     }
 
     public String getManufacturer() {
@@ -27,18 +27,26 @@ public class CPU extends ComputerPart {
         return cores;
     }
 
-    @Override
-    public List<PartParameter> getParameters() {
-        ArrayList<PartParameter> parameters = new ArrayList<>(2);
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
 
-        parameters.add(new PartParameter("Manufacturer", manufacturer));
-        parameters.add(new PartParameter("Cores", cores));
-
-        return parameters;
+    public void setCores(int cores) {
+        this.cores = cores;
     }
 
     @Override
     public String toString() {
-        return String.format("%s %s with %d cores", manufacturer, getFullName(), cores);
+        return String.format("%s %s with %d cores", manufacturer, getName(), cores);
+    }
+
+    @Override
+    public ArrayList<ParamDescription> getTypeParams() {
+        ArrayList<ParamDescription> params = new ArrayList<>(3);
+
+        params.add(ModelUtils.createStringParameter("manufacturer"));
+        params.add(ModelUtils.createIntParameter("cores"));
+
+        return params;
     }
 }
