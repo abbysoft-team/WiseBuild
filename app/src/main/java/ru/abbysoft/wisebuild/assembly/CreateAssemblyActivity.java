@@ -1,5 +1,6 @@
 package ru.abbysoft.wisebuild.assembly;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
@@ -117,5 +118,10 @@ public class CreateAssemblyActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

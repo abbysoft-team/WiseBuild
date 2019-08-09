@@ -25,9 +25,10 @@ import ru.abbysoft.wisebuild.model.ComputerPart;
 
 public class BrowserActivity extends AppCompatActivity implements PartListFragment.OnPartListItemClickedListener {
 
-    private static final int PICK_PART_REQUEST = 0;
+    public static final int PICK_PART_REQUEST = 0;
+    public static final String PART_ID_EXTRA = "PART_ID";
+
     private static final String PART_TYPE_EXTRA = "PART_TYPE";
-    private static final String PART_ID_EXTRA = "PART_ID";
 
     private ViewPager viewPager;
     private TabLayout tabs;
@@ -96,6 +97,22 @@ public class BrowserActivity extends AppCompatActivity implements PartListFragme
         activity.startActivityForResult(intent, PICK_PART_REQUEST);
     }
 
+    /**
+     * Launch this activity from given context in order to recieve
+     * part back from part browser_content
+     *
+     * @param fragment fragment from which to launch this activity
+     * @param type type of part to be picked
+     */
+    public static void launchForPickPartFrom(Fragment fragment,
+                                             ComputerPart.ComputerPartType type) {
+
+        Intent intent = new Intent(fragment.getContext(), BrowserActivity.class);
+        intent.putExtra(PART_TYPE_EXTRA, type.toString());
+
+        fragment.startActivityForResult(intent, PICK_PART_REQUEST);
+    }
+
     @Override
     public void onPartListItemClicked(long id) {
         if (!isLaunchedForPart()) {
@@ -104,7 +121,7 @@ public class BrowserActivity extends AppCompatActivity implements PartListFragme
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra(PART_ID_EXTRA, id);
-        setResult(RESULT_OK);
+        setResult(RESULT_OK, resultIntent);
 
         finish();
     }
