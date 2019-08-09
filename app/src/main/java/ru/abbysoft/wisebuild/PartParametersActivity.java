@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
@@ -18,19 +17,16 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,28 +57,11 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
 
     private TextView headerMessage;
 
-    private TextView additionalParamLabel1;
-    private TextView additionalParamLabel2;
-    private TextView additionalParamSpinnerLabel;
-
-    @NotEmpty
-    private EditText additionalParamField1;
-
-    @NotEmpty
-    private EditText additionalParamField2;
-
-    private Spinner additionalParamSpinner;
-
-    @NotEmpty
-    private EditText nameField;
-
-    private EditText descriptionField;
-    private EditText priceField;
-
     private Bitmap currentImage;
     private Uri currentImageUri;
     private Validator validator;
     private boolean validationResult;
+    private boolean partBeingCreated;
 
     private ArrayList<ParamView> paramViews;
 
@@ -99,8 +78,8 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
 
         imageView = findViewById(R.id.new_component_image);
         headerMessage = findViewById(R.id.part_creation_label);
-
-        //configurePriceField();
+        validator = new Validator(this);
+        validator.setValidationListener(this);
 
         getPassedExtras();
         if (isExtrasNotValid()) {
@@ -109,7 +88,7 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
 
         paramViews = addFields();
 
-        if (partBeingCreated()) {
+        if (partBeingCreated) {
             configureViewForCreation();
         } else {
             configureViewForExistingPart();
@@ -128,13 +107,16 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
             partNotFound();
         }
         if (part == null) {
-            setPartFromType();
+            part = setPartFromType();
+            partBeingCreated = true;
+        } else {
+            partBeingCreated = false;
         }
     }
 
-    private void setPartFromType() {
+    private ComputerPart setPartFromType() {
         try {
-            part = MiscUtils.instantiatePartOfType(partType);
+            return MiscUtils.instantiatePartOfType(partType);
         } catch (InstantiationException e) {
             e.printStackTrace();
             partNotFound();
@@ -142,6 +124,8 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
             e.printStackTrace();
             partNotFound();
         }
+
+        return part;
     }
 
     private ComputerPart getPartFromDB(long id) {
@@ -157,25 +141,6 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
     private boolean isExtrasNotValid() {
         return part == null && partType == null;
     }
-
-    private ComputerPart createEmptyPartOfRequiredType() {
-        try {
-            return (ComputerPart) partType.getObjectClass().newInstance();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
-
-        Log.e(LOG_TAG, "Cannot create part for PartView activity");
-        finish();
-        throw new IllegalStateException();
-    }
-
-//
-//    private void configurePriceField() {
-
-//    }
 
     private ArrayList<ParamView> addFields() {
         View referenceContainer = findViewById(R.id.part_creation_reference_container);
@@ -200,7 +165,7 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
 
             view.getView().setLayoutParams(new TableLayout.LayoutParams
                     (0, ViewGroup.LayoutParams.WRAP_CONTENT, 2f));
-
+            view.configureValidation(validator);
 
             layout.addView(textView);
             layout.addView(view.getView());
@@ -214,13 +179,7 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
         return params;
     }
 
-    private boolean partBeingCreated() {
-        return part == null;
-    }
-
     private void configureViewForCreation() {
-        //addValidators();
-
         headerMessage.setText(
                 getString(R.string.creating_part_message, partType.getReadableName()));
     }
@@ -259,9 +218,17 @@ public class PartParametersActivity extends AppCompatActivity implements Validat
             return;
         }
 
+        setParametersFor(part);
+
         // actuall saving
         DBFactory.getDatabase().storePart(part);
         showSaveSuccessMessage();
+    }
+
+    private void setParametersFor(ComputerPart part) {
+        for (ParamView view : paramViews) {
+            view.setProperty(part);
+        }
     }
 
     /**

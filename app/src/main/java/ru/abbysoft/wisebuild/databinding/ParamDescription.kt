@@ -11,7 +11,8 @@ data class ParamDescription(val name : String,
                             val valueClass : Class<out Any>,
                             val accessor : Accessor) {
 
-    var paramCategory : ParamCategory? = ParamCategory.NONE
+    var paramCategory : ParamCategory = ParamCategory.NONE
+    var required : Boolean = false
 }
 
 enum class ParamCategory {

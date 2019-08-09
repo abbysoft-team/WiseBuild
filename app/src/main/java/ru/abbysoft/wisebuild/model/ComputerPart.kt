@@ -39,10 +39,12 @@ abstract class ComputerPart protected constructor(val type: ComputerPartType) {
         get() {
             val params = ArrayList<ParamDescription>(10)
 
-            params.add(ModelUtils.createStringParameter("name"))
+            params.add(ModelUtils.createStringParameter("name").apply { required = true })
             params.add(ModelUtils.createStringParameter("description"))
             params.add(ModelUtils.createLongParameter("priceUsd")
-                    .apply { paramCategory = ParamCategory.PRICE })
+                    .apply {
+                        paramCategory = ParamCategory.PRICE
+                        required = true })
             params.add(ModelUtils.createIntParameter("releaseYear"))
             params.add(ModelUtils.createIntParameter("releaseQuarter"))
 

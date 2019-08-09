@@ -2,7 +2,11 @@ package ru.abbysoft.wisebuild.databinding
 
 import android.content.Context
 import android.view.View
+import com.mobsandgeeks.saripaar.QuickRule
+import com.mobsandgeeks.saripaar.Validator
+import ru.abbysoft.wisebuild.validation.NotEmptyQuickRule
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * View that have underlying mapped parameter {@link ParamDescription}
@@ -29,7 +33,6 @@ abstract class ParamView (val param : ParamDescription) {
      */
     fun setInput(inputObject : Any) {
         val propertyValue = param.accessor.get(inputObject)
-
         // if property is not set it will be null or -1 for numbers
         if (propertyValue == null || propertyValue == -1) {
             return
@@ -51,14 +54,27 @@ abstract class ParamView (val param : ParamDescription) {
      */
     fun setProperty(inputObject: Any) {
         val propertyValue = getViewValue()
-        param.accessor.set(inputObject, propertyValue)
+        val convertedValue = convertFromViewValueToPropertyClass(propertyValue)
+        convertedValue?.let { param.accessor.set(inputObject, convertedValue) }
     }
 
     /**
      * Get value of view
      */
     protected abstract fun getViewValue() : Any?
-    
+
+    /**
+     * Convert from view value type to parameter value type
+     */
+    protected abstract fun convertFromViewValueToPropertyClass(propertyValue: Any?) : Any?
+
+    /**
+     * Configure validation rules for this view
+     *
+     * @param validator validationContext
+     */
+    abstract fun configureValidation(validator: Validator)
+
     companion object {
         /**
          * Create ParamView for specified parameter

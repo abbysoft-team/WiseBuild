@@ -19,9 +19,11 @@ import com.vk.api.sdk.internal.ApiCommand;
 import com.vk.api.sdk.requests.VKRequest;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 
 import ru.abbysoft.wisebuild.R;
 import ru.abbysoft.wisebuild.api.vk.AccountInfoRequest;
@@ -148,7 +150,7 @@ public class MiscUtils {
 
     @NotNull
     public static String getSetterName(@NotNull String fieldName) {
-        return "set" + fieldName;
+        return "set" + capitalizeFirstChar(fieldName);
     }
 
     public static String capitalizeFirstChar(@NotNull String string) {
@@ -189,5 +191,31 @@ public class MiscUtils {
                 editText.setSelection(text.length());
             }
         });
+    }
+
+    /**
+     * Convert string to another class
+     * @param string
+     * @param claz
+     * @return
+     */
+    public static Object convertString(@NotNull String string, @NotNull Class<?> claz) {
+        if (int.class.isAssignableFrom(claz)) {
+            return Integer.parseInt(string);
+        }
+        if (long.class.isAssignableFrom(claz)) {
+            return Long.parseLong(string);
+        }
+        if (float.class.isAssignableFrom(claz)) {
+            return Float.parseFloat(string);
+        }
+        if (double.class.isAssignableFrom(claz)) {
+            return Double.parseDouble(string);
+        }
+        if (String.class.isAssignableFrom(claz)) {
+            return string;
+        }
+
+        return new UnsupportedOperationException("Cannot convert string to " + claz.getName());
     }
 }

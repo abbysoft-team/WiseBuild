@@ -24,7 +24,7 @@ class ReflectionAccessor(private val fieldName : String) : Accessor {
         return getter?.let { it(inputObject) }
     }
 
-    private fun getMethodFromAllSuperclasses(inputObject: Any, name : String): Method? {
+    private fun getMethodFromAllSuperclasses(inputObject: Any, name : String): Method {
         var claz: Class<in Any>? = inputObject.javaClass
         var method: Method?
         while (claz != null) {
@@ -42,16 +42,20 @@ class ReflectionAccessor(private val fieldName : String) : Accessor {
     private fun getMethodFromClass(claz : Class<Any>, name : String) : Method? {
         try {
             val methods = claz.declaredMethods
-            return claz.getDeclaredMethod(name)
+            for (method in methods) {
+                if (method.name == name) {
+                    return method
+                }
+            }
         } catch (e : NoSuchMethodException) {
         }
 
         return null
     }
 
-    override fun set(inputObject: Any, value: Any?) {
-        val setter = getMethodFromAllSuperclasses(inputObject, MiscUtils.getSetterName(fieldName))
-        setter?.let { it(inputObject, value) }
+    override fun set(inputObject: Any, value: Any) {
+        val method = getMethodFromAllSuperclasses(inputObject, MiscUtils.getSetterName(fieldName))
+        method.invoke(inputObject, value)
     }
 
 

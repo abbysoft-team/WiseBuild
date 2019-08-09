@@ -5,7 +5,9 @@ import android.text.InputType
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import com.mobsandgeeks.saripaar.Validator
 import ru.abbysoft.wisebuild.utils.MiscUtils
+import ru.abbysoft.wisebuild.validation.NotEmptyQuickRule
 import java.util.*
 
 /**
@@ -15,7 +17,6 @@ import java.util.*
  */
 class ParamEditTextView(private val context : Context,
                         param : ParamDescription) : ParamView(param) {
-
     private val editText = createEditText(param)
 
     private fun createEditText(param: ParamDescription) : TextView =
@@ -53,6 +54,13 @@ class ParamEditTextView(private val context : Context,
         editText.inputType = InputType.TYPE_CLASS_DATETIME or InputType.TYPE_DATETIME_VARIATION_DATE
         return editText
     }
+
+    override fun configureValidation(validator: Validator) {
+        if (param.required) {
+            validator.put(editText, NotEmptyQuickRule())
+        }
+    }
+
     override fun getView(): View {
         return editText
     }
@@ -62,7 +70,18 @@ class ParamEditTextView(private val context : Context,
     }
 
     override fun getViewValue(): Any? {
-        return editText.text
+        if (param.paramCategory == ParamCategory.PRICE) {
+            return editText.text.toString().substring(1)
+        }
+        return editText.text.toString()
+    }
+
+    override fun convertFromViewValueToPropertyClass(propertyValue: Any?): Any? {
+        if (propertyValue == null || propertyValue == "") {
+            return null
+        }
+
+        return MiscUtils.convertString(propertyValue as String, param.valueClass)
     }
 
 

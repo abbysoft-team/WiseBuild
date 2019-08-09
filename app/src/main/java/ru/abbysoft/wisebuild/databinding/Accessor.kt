@@ -24,5 +24,5 @@ interface Accessor {
      * @param inputObject object containing specified param
      * @param value value of parameter
      */
-    fun set(inputObject : Any, value : Any?)
+    fun set(inputObject : Any, value : Any)
 }

@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.SpinnerAdapter
+import com.mobsandgeeks.saripaar.Validator
 import ru.abbysoft.wisebuild.R
 import ru.abbysoft.wisebuild.utils.MiscUtils.getEnumValues
 
@@ -15,6 +16,10 @@ import ru.abbysoft.wisebuild.utils.MiscUtils.getEnumValues
  * @author apopov
  */
 class SpinnerParamView(private val context : Context, param : ParamDescription) : ParamView(param) {
+
+    override fun configureValidation(validator: Validator) {
+        // not required for spinner
+    }
 
     private val spinnerAdapter : ArrayAdapter<Any> = createSpinnerAdapter()
     private val spinner = createSpinner(spinnerAdapter)
@@ -47,4 +52,9 @@ class SpinnerParamView(private val context : Context, param : ParamDescription) 
         return spinner.selectedItem
     }
 
+    override fun convertFromViewValueToPropertyClass(propertyValue: Any?): Any? =
+            when (propertyValue) {
+                null -> null
+                else -> propertyValue
+            }
 }
