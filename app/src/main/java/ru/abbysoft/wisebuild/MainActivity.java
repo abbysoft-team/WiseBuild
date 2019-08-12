@@ -108,8 +108,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        welcomeMessage.setVisibility(View.VISIBLE);
-
         MiscUtils.getUserNameAsync(new VKApiCallback<VkUser>() {
             @Override
             public void success(VkUser vkUser) {
@@ -129,5 +127,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void loginSuccess(VkUser user) {
         welcomeMessage.setText(getString(R.string.welcome_message, user.getFirstName()));
+        welcomeMessage.setVisibility(View.VISIBLE);
     }
 }
